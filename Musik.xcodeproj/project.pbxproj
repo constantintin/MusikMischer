@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		384B2F08277EF5A900EDBB1B /* TrackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384B2F07277EF5A900EDBB1B /* TrackView.swift */; };
 		386530BC26ADA2ED007FD3E8 /* PlaylistSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 386530BB26ADA2ED007FD3E8 /* PlaylistSelectorView.swift */; };
 		388CB4AF26ADC025002BB269 /* PlaylistSquareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388CB4AE26ADC025002BB269 /* PlaylistSquareView.swift */; };
 		470812ED2515E4D700794934 /* MusikApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470812EC2515E4D700794934 /* MusikApp.swift */; };
@@ -26,6 +27,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		384B2F07277EF5A900EDBB1B /* TrackView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackView.swift; sourceTree = "<group>"; };
 		386530BB26ADA2ED007FD3E8 /* PlaylistSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistSelectorView.swift; sourceTree = "<group>"; };
 		388CB4AE26ADC025002BB269 /* PlaylistSquareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistSquareView.swift; sourceTree = "<group>"; };
 		470812E92515E4D700794934 /* Musik.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Musik.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -105,6 +107,7 @@
 				47B9614F25169BEF0069E441 /* ExamplesListView.swift */,
 				47D86874266A26D2006F971B /* DebugMenuView.swift */,
 				388CB4AE26ADC025002BB269 /* PlaylistSquareView.swift */,
+				384B2F07277EF5A900EDBB1B /* TrackView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -216,6 +219,7 @@
 			files = (
 				4708130E2515EB6B00794934 /* ImageNames.swift in Sources */,
 				47D86875266A26D2006F971B /* DebugMenuView.swift in Sources */,
+				384B2F08277EF5A900EDBB1B /* TrackView.swift in Sources */,
 				470812EF2515E4D700794934 /* RootView.swift in Sources */,
 				47AAFC4325A0098900DC1A02 /* AlertItem.swift in Sources */,
 				47C332A7251688D9009ED5CA /* MiscellaneousUtilities.swift in Sources */,
