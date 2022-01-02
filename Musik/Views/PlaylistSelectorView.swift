@@ -50,9 +50,6 @@ struct PlaylistSelectorView: View {
 
     var body: some View {
         VStack {
-            Button("Get currently playing") {
-                retrieveCurrentlyPlaying()
-            }
             if playlists.isEmpty {
                 if isLoadingPlaylists {
                     HStack {
@@ -75,7 +72,11 @@ struct PlaylistSelectorView: View {
                 }
             }
             else {
-                TrackView(track: currentTrack.track).padding(12)
+                TrackView(track: currentTrack.track)
+                    .onTapGesture {
+                        retrieveCurrentlyPlaying()
+                    }
+                    .padding(12)
                 ScrollView(.vertical) {
                     LazyVGrid(columns: columns) {
                         ForEach(playlists, id: \.uri) { playlist in

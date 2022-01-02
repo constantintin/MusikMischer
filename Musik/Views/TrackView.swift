@@ -14,19 +14,13 @@ struct TrackView: View {
     let track: Track
     
     var body: some View {
-        Button(action: playTrack) {
-            HStack {
-                Text(trackDisplayName())
-                Spacer()
-            }
-            // Ensure the hit box extends across the entire width of the frame.
-            // See https://bit.ly/2HqNk4S
-            .contentShape(Rectangle())
+        HStack {
+            Text(trackDisplayName())
+            Spacer()
         }
-        .buttonStyle(PlainButtonStyle())
-        .alert(item: $alert) { alert in
-            Alert(title: alert.title, message: alert.message)
-        }
+        // Ensure the hit box extends across the entire width of the frame.
+        // See https://bit.ly/2HqNk4S
+        .contentShape(Rectangle())
     }
     
     /// The display name for the track. E.g., "Eclipse - Pink Floyd".
