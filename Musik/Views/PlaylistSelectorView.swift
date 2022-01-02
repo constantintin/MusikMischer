@@ -11,11 +11,18 @@ import SpotifyWebAPI
 import SpotifyExampleContent
 import Combine
 
+class CurrentTrack: ObservableObject {
+    @Published var track: Track
+    init(_ track: Track) {
+        self.track = track
+    }
+}
+
 struct PlaylistSelectorView: View {
 
     @EnvironmentObject var spotify: Spotify
 
-    @State private var currentTrack: Track = .comeTogether
+    @StateObject private var currentTrack: CurrentTrack = CurrentTrack(.comeTogether)
     @State private var playlists: [Playlist<PlaylistItemsReference>] = []
     @State private var playlistViews: [PlaylistSquareView] = []
 
@@ -68,7 +75,7 @@ struct PlaylistSelectorView: View {
                 }
             }
             else {
-                TrackView(track: currentTrack).padding(12)
+                TrackView(track: currentTrack.track).padding(12)
                 ScrollView(.vertical) {
                     LazyVGrid(columns: columns) {
                         ForEach(playlists, id: \.uri) { playlist in
@@ -112,7 +119,7 @@ struct PlaylistSelectorView: View {
             }, receiveValue: { context in
                 switch context?.item {
                 case let .some(.track(track)):
-                    currentTrack = track
+                    self.currentTrack.track = track
                 default:
                     ()
                 }

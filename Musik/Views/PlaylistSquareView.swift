@@ -22,11 +22,11 @@ struct PlaylistSquareView: View {
     @State private var selected: Bool = false
     @State private var operating: Bool = false
     
-    private var current: Track
+    @ObservedObject var current: CurrentTrack
     @State private var snapshot: String
     
     
-    init(spotify: Spotify, playlist: Playlist<PlaylistItemsReference>, current: Track) {
+    init(spotify: Spotify, playlist: Playlist<PlaylistItemsReference>, current: CurrentTrack) {
         self.spotify = spotify
         self.playlist = playlist
         self.current = current
@@ -50,8 +50,10 @@ struct PlaylistSquareView: View {
         .background(self.selected ? Color.green : Color.clear)
         .onAppear(perform: {
             loadImage()
-            isInPlaylist(track: self.current)
         })
+        .onReceive(current.$track) { track in
+            isInPlaylist(track: track)
+        }
         .onTapGesture {
             if !self.operating {
                 if self.selected {
@@ -65,7 +67,7 @@ struct PlaylistSquareView: View {
     
     func delFromPlaylist() {
         self.operating = true
-        if let uri = self.current.uri {
+        if let uri = self.current.track.uri {
             self.spotify.api.removeAllOccurrencesFromPlaylist(self.playlist.uri, of: [uri], snapshotId: self.snapshot)
                 .receive(on: RunLoop.main)
                 .sink(
@@ -83,13 +85,13 @@ struct PlaylistSquareView: View {
                     }
                 ).store(in: &cancellables)
         } else {
-            print("Current track \(self.current) has no uri")
+            print("Current track \(self.current.track) has no uri")
         }
     }
     
     func addToPlaylist() {
         self.operating = true
-        if let uri = self.current.uri {
+        if let uri = self.current.track.uri {
             self.spotify.api.addToPlaylist(self.playlist.uri, uris: [uri], position: nil)
                 .receive(on: RunLoop.main)
                 .sink(
@@ -98,7 +100,7 @@ struct PlaylistSquareView: View {
                         switch completion {
                             case .finished:
                                 self.selected.toggle()
-                                print("Added '\(self.current.name)' to '\(self.playlist.name)'")
+                                print("Added '\(self.current.track.name)' to '\(self.playlist.name)'")
                             case .failure(let error):
                                 print("Adding to playlist failed with \(error)")
                         }
@@ -108,7 +110,7 @@ struct PlaylistSquareView: View {
                     }
                 ).store(in: &cancellables)
         } else {
-            print("Current track \(self.current) has no uri")
+            print("Current track \(self.current.track) has no uri")
         }
     }
     
@@ -130,6 +132,7 @@ struct PlaylistSquareView: View {
                 }
             )
             .store(in: &cancellables)
+        self.selected = false
     }
     
     /// Loads the image for the playlist.
@@ -174,8 +177,8 @@ struct PlaylistSquare_Previews: PreviewProvider {
     static var previews: some View {
         ScrollView(.vertical) {
             VStack {
-                PlaylistSquareView(spotify: spotify, playlist: .thisIsMildHighClub, current: .comeTogether)
-                PlaylistSquareView(spotify: spotify, playlist: .thisIsRadiohead, current: .comeTogether)
+                PlaylistSquareView(spotify: spotify, playlist: .thisIsMildHighClub, current: CurrentTrack(.comeTogether))
+                PlaylistSquareView(spotify: spotify, playlist: .thisIsRadiohead, current: CurrentTrack(.comeTogether))
             }
             .environmentObject(spotify)
         }
