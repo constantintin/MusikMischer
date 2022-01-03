@@ -42,6 +42,7 @@ struct PlaylistSquareView: View {
             image
                 .resizable()
                 .aspectRatio(1, contentMode: .fill)
+                .saturation(self.selected ? 1.0 : 0.5)
             Text(self.playlist.name)
                 .lineLimit(1)
                 .truncationMode(/*@START_MENU_TOKEN@*/.tail/*@END_MENU_TOKEN@*/)
