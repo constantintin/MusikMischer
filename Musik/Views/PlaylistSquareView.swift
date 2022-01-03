@@ -46,8 +46,10 @@ struct PlaylistSquareView: View {
                 .lineLimit(1)
                 .truncationMode(/*@START_MENU_TOKEN@*/.tail/*@END_MENU_TOKEN@*/)
                 .font(.system(size: 12))
+                .padding(5)
         }
-        .background(self.selected ? Color.green : Color.clear)
+        .background(self.selected ? Color.green : Color.gray)
+        .cornerRadius(5)
         .onAppear(perform: {
             loadImage()
         })
@@ -177,7 +179,7 @@ struct PlaylistSquare_Previews: PreviewProvider {
     static var previews: some View {
         ScrollView(.vertical) {
             VStack {
-                PlaylistSquareView(spotify: spotify, playlist: .thisIsMildHighClub, current: CurrentTrack(.comeTogether))
+                PlaylistSquareView(spotify: spotify, playlist: .rockClassics, current: CurrentTrack(.comeTogether))
                 PlaylistSquareView(spotify: spotify, playlist: .thisIsRadiohead, current: CurrentTrack(.comeTogether))
             }
             .environmentObject(spotify)

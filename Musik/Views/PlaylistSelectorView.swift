@@ -19,7 +19,6 @@ class CurrentTrack: ObservableObject {
 }
 
 struct PlaylistSelectorView: View {
-
     @EnvironmentObject var spotify: Spotify
 
     @StateObject private var currentTrack: CurrentTrack = CurrentTrack(.comeTogether)
@@ -76,18 +75,18 @@ struct PlaylistSelectorView: View {
                     .onTapGesture {
                         retrieveCurrentlyPlaying()
                     }
-                    .padding(12)
+                    .padding(10)
                 ScrollView(.vertical) {
                     LazyVGrid(columns: columns) {
                         ForEach(playlists, id: \.uri) { playlist in
                             PlaylistSquareView(spotify: spotify, playlist: playlist, current: currentTrack)
                         }
                     }
-                    .padding(12)
+                    .padding(10)
                 }
             }
         }
-        .navigationTitle("Playlist Selector")
+        .navigationTitle("Select playlist")
         .navigationBarItems(trailing: refreshButton)
         .alert(item: $alert) { alert in
             Alert(title: alert.title, message: alert.message)
@@ -104,8 +103,6 @@ struct PlaylistSelectorView: View {
         .disabled(isLoadingPlaylists)
         
     }
-    
-
     
     func retrieve() {
         retrieveCurrentlyPlaying()

@@ -16,7 +16,6 @@ struct TrackView: View {
     var body: some View {
         HStack {
             Text(trackDisplayName())
-            Spacer()
         }
         // Ensure the hit box extends across the entire width of the frame.
         // See https://bit.ly/2HqNk4S
