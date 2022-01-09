@@ -20,6 +20,7 @@ class CurrentTrack: ObservableObject {
 
 struct PlaylistSelectorView: View {
     @EnvironmentObject var spotify: Spotify
+    @State private var currentUser: SpotifyUser? = nil
 
     @StateObject private var currentTrack: CurrentTrack = CurrentTrack(.comeTogether)
     @State private var playlists: [Playlist<PlaylistItemsReference>] = []
@@ -30,6 +31,9 @@ struct PlaylistSelectorView: View {
     @State private var isLoadingPlaylists = false
     @State private var couldntLoadPlaylists = false
 
+    @State private var newPlaylistName: String = ""
+    @FocusState private var newPlaylistFieldIsFocused: Bool
+    
     @State private var alert: AlertItem? = nil
 
     init() { }
@@ -84,6 +88,17 @@ struct PlaylistSelectorView: View {
                     }
                     .padding(10)
                 }
+                HStack() {
+                    TextField("New playlist's name", text: $newPlaylistName)
+                        .focused($newPlaylistFieldIsFocused)
+                        .padding(5)
+                    Button(action: addPlaylist) {
+                        Image(systemName: "plus.square")
+                            .imageScale(Image.Scale.large)
+                            .foregroundColor(Color.green)
+                            .padding(5)
+                    }
+                }
             }
         }
         .navigationTitle("Select playlist")
@@ -102,6 +117,57 @@ struct PlaylistSelectorView: View {
         }
         .disabled(isLoadingPlaylists)
         
+    }
+    
+    func addPlaylist() {
+        if let uri = currentUser?.uri {
+            spotify.api.createPlaylist(for: uri,
+                                          PlaylistDetails(name: newPlaylistName, isPublic: false, isCollaborative: nil, description: nil))
+                .receive(on: RunLoop.main)
+                .sink(receiveCompletion: { completion in
+                    print("Getting user completion: \(completion)")
+                }, receiveValue: { playlist in
+                    var snapshot = playlist.snapshotId
+                    if let uri = self.currentTrack.track.uri {
+                        self.spotify.api.addToPlaylist(playlist.uri, uris: [uri], position: nil)
+                            .receive(on: RunLoop.main)
+                            .sink(
+                                receiveCompletion: { completion in
+                                    switch completion {
+                                        case .finished:
+                                            print("Added '\(self.currentTrack.track.name)' to '\(playlist.name)'")
+                                        case .failure(let error):
+                                            print("Adding to playlist failed with \(error)")
+                                    }
+                                },
+                                receiveValue: { newSnapshot in
+                                    snapshot = newSnapshot
+                                }
+                            ).store(in: &cancellables)
+                    } else {
+                        print("Current track \(self.currentTrack.track) has no uri")
+                    }
+                    let playlistWithReference = Playlist<PlaylistItemsReference>(
+                        name: playlist.name,
+                        items: PlaylistItemsReference(href: nil, total: 0),
+                        owner: playlist.owner,
+                        isPublic: playlist.isPublic,
+                        isCollaborative: playlist.isCollaborative,
+                        description: playlist.description,
+                        snapshotId: snapshot,
+                        externalURLs: playlist.externalURLs,
+                        followers: playlist.followers,
+                        href: playlist.href,
+                        id: playlist.id,
+                        uri: playlist.uri,
+                        images: playlist.images
+                    )
+                    self.playlists.insert(playlistWithReference, at: 0)
+                })
+                .store(in: &cancellables)
+        }
+        self.newPlaylistFieldIsFocused = false
+        self.newPlaylistName = ""
     }
     
     func retrieve() {
@@ -130,7 +196,7 @@ struct PlaylistSelectorView: View {
         // Don't try to load any playlists if we're in preview mode.
         if ProcessInfo.processInfo.isPreviewing { return }
         
-        var currentUser: SpotifyUser? = nil
+        
         spotify.api.currentUserProfile()
             .receive(on: RunLoop.main)
             .sink(receiveCompletion: { completion in
