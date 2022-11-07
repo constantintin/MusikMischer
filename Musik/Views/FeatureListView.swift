@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct ExamplesListView: View {
+struct FeatureListView: View {
     
     var body: some View {
         List {
@@ -31,7 +31,7 @@ struct ExamplesListView_Previews: PreviewProvider {
     
     static var previews: some View {
         NavigationView {
-            ExamplesListView()
+            FeatureListView()
                 .environmentObject(spotify)
         }
     }
