@@ -8,6 +8,9 @@ struct FeatureListView: View {
                 "Playlist Selector", destination: PlaylistSelectorView()
             )
             NavigationLink(
+                "Playlist Random Viewer", destination: PlaylistOverView()
+            )
+            NavigationLink(
                 "Debug Menu", destination: DebugMenuView()
             )
             
@@ -18,21 +21,5 @@ struct FeatureListView: View {
         }
         .listStyle(PlainListStyle())
         
-    }
-}
-
-struct ExamplesListView_Previews: PreviewProvider {
-    
-    static let spotify: Spotify = {
-        let spotify = Spotify()
-        spotify.isAuthorized = true
-        return spotify
-    }()
-    
-    static var previews: some View {
-        NavigationView {
-            FeatureListView()
-                .environmentObject(spotify)
-        }
     }
 }

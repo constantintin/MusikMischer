@@ -24,7 +24,7 @@ struct PlaylistSelectorView: View {
 
     @StateObject private var currentTrack: CurrentTrack = CurrentTrack(.comeTogether)
     @State private var playlists: [Playlist<PlaylistItemsReference>] = []
-    @State private var playlistViews: [PlaylistSquareView] = []
+    @State private var playlistViews: [PlaylistTrackSelectionView] = []
 
     @State private var cancellables: Set<AnyCancellable> = []
 
@@ -83,7 +83,7 @@ struct PlaylistSelectorView: View {
                 ScrollView(.vertical) {
                     LazyVGrid(columns: columns) {
                         ForEach(playlists, id: \.uri) { playlist in
-                            PlaylistSquareView(spotify: spotify, playlist: playlist, current: currentTrack)
+                            PlaylistTrackSelectionView(spotify: spotify, playlist: playlist, current: currentTrack)
                         }
                     }
                     .padding(10)
