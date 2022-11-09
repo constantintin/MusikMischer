@@ -18,7 +18,7 @@ class CurrentTrack: ObservableObject {
     }
 }
 
-struct PlaylistSelectorView: View {
+struct PlaylistSorterView: View {
     @EnvironmentObject var spotify: Spotify
     @State private var currentUser: SpotifyUser? = nil
 
@@ -106,7 +106,7 @@ struct PlaylistSelectorView: View {
                 }
             }
         }
-        .navigationTitle("Sorter")
+        .navigationBarTitle("Sorter", displayMode: .inline)
         .navigationBarItems(trailing: refreshButton)
         .alert(item: $alert) { alert in
             Alert(title: alert.title, message: alert.message)
@@ -261,7 +261,7 @@ struct PlaylistsSelectorView_Previews: PreviewProvider {
 
     static var previews: some View {
         NavigationView {
-            PlaylistSelectorView(samplePlaylists: playlists)
+            PlaylistSorterView(samplePlaylists: playlists)
                 .environmentObject(spotify)
         }
     }

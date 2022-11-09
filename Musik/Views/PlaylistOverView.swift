@@ -29,51 +29,51 @@ struct PlaylistOverView: View {
     @State private var isLoadingPlaylists = false
     @State private var couldntLoadPlaylists = false
     
-var body: some View {
-    VStack {
-        if playlists.isEmpty {
-            if isLoadingPlaylists {
-                HStack {
-                    ProgressView()
-                        .padding()
-                    Text("Loading Playlists")
+    var body: some View {
+        VStack {
+            if playlists.isEmpty {
+                if isLoadingPlaylists {
+                    HStack {
+                        ProgressView()
+                            .padding()
+                        Text("Loading Playlists")
+                            .font(.title)
+                            .foregroundColor(.secondary)
+                    }
+                }
+                else if couldntLoadPlaylists {
+                    Text("Couldn't Load Playlists")
+                        .font(.title)
+                        .foregroundColor(.secondary)
+                }
+                else {
+                    Text("No Playlists Found")
                         .font(.title)
                         .foregroundColor(.secondary)
                 }
             }
-            else if couldntLoadPlaylists {
-                Text("Couldn't Load Playlists")
-                    .font(.title)
-                    .foregroundColor(.secondary)
-            }
             else {
-                Text("No Playlists Found")
-                    .font(.title)
-                    .foregroundColor(.secondary)
-            }
-        }
-        else {
-            ScrollView(.vertical) {
-                LazyVGrid(columns: columns) {
-                    ForEach(playlists, id: \.uri) { playlist in
-                        NavigationLink {
-                            PlaylistRandomView(spotify: self.spotify, playlist: playlist)
-                        } label: {
-                            PlaylistSquareView(spotify: spotify, playlist: playlist)
+                ScrollView(.vertical) {
+                    LazyVGrid(columns: columns) {
+                        ForEach(playlists, id: \.uri) { playlist in
+                            NavigationLink {
+                                PlaylistRandomView(spotify: self.spotify, playlist: playlist)
+                            } label: {
+                                PlaylistSquareView(spotify: spotify, playlist: playlist)
+                            }
                         }
                     }
+                    .padding(10)
                 }
-                .padding(10)
             }
         }
+        .navigationTitle("Queuer")
+        .navigationBarItems(trailing: refreshButton)
+        .alert(item: $alert) { alert in
+            Alert(title: alert.title, message: alert.message)
+        }
+        .onAppear(perform: retrievePlaylists)
     }
-    .navigationTitle("Queuer")
-    .navigationBarItems(trailing: refreshButton)
-    .alert(item: $alert) { alert in
-        Alert(title: alert.title, message: alert.message)
-    }
-    .onAppear(perform: retrievePlaylists)
-}
     var refreshButton: some View {
         Button(action: retrievePlaylists) {
             Image(systemName: "arrow.clockwise")
