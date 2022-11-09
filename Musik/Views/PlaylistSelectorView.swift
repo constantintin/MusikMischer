@@ -101,7 +101,7 @@ struct PlaylistSelectorView: View {
                 }
             }
         }
-        .navigationTitle("Playlist Selector")
+        .navigationTitle("Sorter")
         .navigationBarItems(trailing: refreshButton)
         .alert(item: $alert) { alert in
             Alert(title: alert.title, message: alert.message)

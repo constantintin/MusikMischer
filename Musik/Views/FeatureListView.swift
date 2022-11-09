@@ -5,10 +5,10 @@ struct FeatureListView: View {
     var body: some View {
         List {
             NavigationLink(
-                "Playlist Selector", destination: PlaylistSelectorView()
+                "Sorter", destination: PlaylistSelectorView()
             )
             NavigationLink(
-                "Playlist Random Viewer", destination: PlaylistOverView()
+                "Queuer", destination: PlaylistOverView()
             )
             NavigationLink(
                 "Debug Menu", destination: DebugMenuView()

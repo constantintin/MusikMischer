@@ -32,7 +32,7 @@ struct PlaylistRandomView: View {
         }
         .onAppear(perform: loadTracks)
         .navigationBarItems(trailing: shuffleButton)
-        .navigationTitle(self.playlist.name)
+        .navigationTitle("Q '\(self.playlist.name)'")
     }
     
     var shuffleButton: some View {
