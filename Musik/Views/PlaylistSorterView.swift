@@ -21,25 +21,25 @@ class CurrentTrack: ObservableObject {
 struct PlaylistSorterView: View {
     @EnvironmentObject var spotify: Spotify
     @State private var currentUser: SpotifyUser? = nil
-
+    
     @StateObject private var currentTrack: CurrentTrack = CurrentTrack(.comeTogether)
     @State private var playlists: [Playlist<PlaylistItemsReference>] = []
     @State private var playlistViews: [PlaylistTrackSelectionView] = []
     
     @State private var trackBackgroundOpacity = 0.0
-
+    
     @State private var cancellables: Set<AnyCancellable> = []
-
+    
     @State private var isLoadingPlaylists = false
     @State private var couldntLoadPlaylists = false
-
+    
     @State private var newPlaylistName: String = ""
     @FocusState private var newPlaylistFieldIsFocused: Bool
     
     @State private var alert: AlertItem? = nil
-
+    
     init() { }
-
+    
     /// Used only by the preview provider to provide sample data.
     fileprivate init(samplePlaylists: [Playlist<PlaylistItemsReference>]) {
         self._playlists = State(initialValue: samplePlaylists)
@@ -51,7 +51,7 @@ struct PlaylistSorterView: View {
         GridItem(.flexible()),
         GridItem(.flexible())
     ]
-
+    
     var body: some View {
         VStack {
             if playlists.isEmpty {
@@ -76,23 +76,6 @@ struct PlaylistSorterView: View {
                 }
             }
             else {
-                TrackView(opacity: $trackBackgroundOpacity, track: $currentTrack.track)
-                    .onTapGesture {
-                        self.trackBackgroundOpacity = 1.0
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                            self.trackBackgroundOpacity = 0.0
-                        }
-                        retrieveCurrentlyPlaying()
-                    }
-                    .padding(10)
-                ScrollView(.vertical) {
-                    LazyVGrid(columns: columns) {
-                        ForEach(playlists, id: \.uri) { playlist in
-                            PlaylistTrackSelectionView(spotify: spotify, playlist: playlist, current: currentTrack)
-                        }
-                    }
-                    .padding(10)
-                }
                 HStack() {
                     TextField("New playlist's name", text: $newPlaylistName)
                         .focused($newPlaylistFieldIsFocused)
@@ -104,6 +87,24 @@ struct PlaylistSorterView: View {
                             .padding(5)
                     }
                 }
+                
+                ScrollView(.vertical) {
+                    LazyVGrid(columns: columns) {
+                        ForEach(playlists, id: \.uri) { playlist in
+                            PlaylistTrackSelectionView(spotify: spotify, playlist: playlist, current: currentTrack)
+                        }
+                    }
+                    .padding(10)
+                }
+                TrackView(opacity: $trackBackgroundOpacity, track: $currentTrack.track)
+                    .onTapGesture {
+                        self.trackBackgroundOpacity = 1.0
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            self.trackBackgroundOpacity = 0.0
+                        }
+                        retrieveCurrentlyPlaying()
+                    }
+                    .padding(10)
             }
         }
         .navigationBarTitle("Sorter", displayMode: .inline)

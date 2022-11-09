@@ -11,15 +11,9 @@ struct FeatureListView: View {
                 "Queuer", destination: PlaylistOverView()
             )
             NavigationLink(
-                "Debug Menu", destination: DebugMenuView()
+                "Debug", destination: DebugMenuView()
             )
-            
-            // This is the location where you can add your own views to test out
-            // your application. Each view receives an instance of `Spotify`
-            // from the environment.
-            
         }
-        .listStyle(PlainListStyle())
-        
+        .listStyle(.inset)
     }
 }
