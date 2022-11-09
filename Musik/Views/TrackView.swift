@@ -9,14 +9,15 @@ struct TrackView: View {
     
     @State private var loadImageCancellable: AnyCancellable? = nil
     @State private var cancellables: Set<AnyCancellable> = []
-    @State private var backgroundOpacity = 0.0
+    
+    @Binding var opacity: Double
+    @Binding var track: Track
     
     @State private var didRequestImage = false
     @State private var image = Image(.spotifyAlbumPlaceholder)
 
     @State private var alert: AlertItem? = nil
-    
-    let track: Track
+
     
     var body: some View {
         HStack {
@@ -38,19 +39,17 @@ struct TrackView: View {
             // Ensure the hit box extends across the entire width of the frame.
             // See https://bit.ly/2HqNk4S
             .contentShape(Rectangle())
-            .animation(Animation.easeInOut(duration: 0.5), value: self.backgroundOpacity)
-            .background(Color.green.opacity(self.backgroundOpacity))
+            .animation(Animation.easeInOut(duration: 0.5), value: self.opacity)
+            .background(Color.green.opacity(self.opacity))
             .fixedSize(horizontal: false, vertical: true)
             .contentShape(Rectangle())
             .onAppear {
                 loadImage()
             }
-            .onTapGesture {
-                self.backgroundOpacity = 1.0
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    self.backgroundOpacity = 0.0
-                }
-            }
+            .onChange(of: self.track, perform: { _ in
+                self.didRequestImage = false
+                loadImage()
+            })
         }
     }
     
@@ -93,21 +92,5 @@ struct TrackView: View {
                     self.image = image
                 }
             )
-    }
-}
-
-struct TrackView_Previews: PreviewProvider {
-    
-    static let tracks: [Track] = [
-        .because, .comeTogether, .faces,
-        .illWind, .odeToViceroy, .reckoner,
-        .theEnd, .time
-    ]
-
-    static var previews: some View {
-        List(tracks, id: \.id) { track in
-            TrackView(track: track)
-        }
-        .environmentObject(Spotify())
     }
 }

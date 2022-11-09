@@ -116,19 +116,3 @@ struct TrackQueueableView: View {
             )
     }
 }
-
-struct TrackQueuableView_Previews: PreviewProvider {
-    
-    static let tracks: [Track] = [
-        .because, .comeTogether, .faces,
-        .illWind, .odeToViceroy, .reckoner,
-        .theEnd, .time
-    ]
-
-    static var previews: some View {
-        List(tracks, id: \.id) { track in
-            TrackView(track: track)
-        }
-        .environmentObject(Spotify())
-    }
-}
