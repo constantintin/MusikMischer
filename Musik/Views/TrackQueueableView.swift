@@ -43,7 +43,7 @@ struct TrackQueueableView: View {
                     .font(.system(size: 13))
                 Spacer()
             }
-            .animation(Animation.easeInOut(duration: 0.1), value: self.backgroundOpacity)
+            .animation(Animation.easeInOut(duration: 0.5), value: self.backgroundOpacity)
             .background(Color.green.opacity(self.backgroundOpacity))
             .fixedSize(horizontal: false, vertical: true)
             .contentShape(Rectangle())
