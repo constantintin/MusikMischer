@@ -66,14 +66,28 @@ struct QueuerOverView: View {
                     .padding(10)
                 }
             }
-            NavigationLink() {
-                LikedQueuerView(spotify: self.spotify)
-            } label: {
-                HStack {
-                    Image(systemName: "heart.fill")
-                        .font(.title)
-                        .scaleEffect(0.8)
-                    Text("Liked Songs")
+            HStack {
+                NavigationLink() {
+                    LikedQueuerView(spotify: self.spotify)
+                } label: {
+                    HStack {
+                        Image(systemName: "heart.fill")
+                            .font(.title)
+                            .scaleEffect(0.8)
+                        Text("Liked")
+                    }
+                }
+                Spacer()
+                    .frame(width: 24)
+                NavigationLink() {
+                    RecoQueuerView(spotify: self.spotify)
+                } label: {
+                    HStack {
+                        Image(systemName: "radio.fill")
+                            .font(.title)
+                            .scaleEffect(0.8)
+                        Text("Recos")
+                    }
                 }
             }
         }

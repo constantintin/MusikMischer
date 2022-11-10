@@ -77,8 +77,9 @@ struct LikedQueuerView: View {
     }
     
     func loadTracks() {
+        self.isLoadingTracks = true
+        
         spotify.api.currentUserSavedTracks()
-            // Gets all pages of playlists.
             .extendPages(spotify.api)
             .receive(on: RunLoop.main)
             .sink(
@@ -95,9 +96,6 @@ struct LikedQueuerView: View {
                             )
                     }
                 },
-                // We will receive a value for each page of playlists. You could
-                // use Combine's `collect()` operator to wait until all of the
-                // pages have been retrieved.
                 receiveValue: { savedTracksPage in
                     self.tracks += savedTracksPage.items.map(\.item)
                 }
