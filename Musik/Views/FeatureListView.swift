@@ -8,7 +8,7 @@ struct FeatureListView: View {
                 "Sorter", destination: PlaylistSorterView()
             )
             NavigationLink(
-                "Queuer", destination: PlaylistOverView()
+                "Queuer", destination: QueuerOverView()
             )
             NavigationLink(
                 "Debug", destination: DebugMenuView()

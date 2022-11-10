@@ -10,7 +10,7 @@ import SwiftUI
 import SpotifyWebAPI
 import Combine
 
-struct PlaylistOverView: View {
+struct QueuerOverView: View {
     let columns = [
         GridItem(.flexible()),
         GridItem(.flexible()),
@@ -57,13 +57,23 @@ struct PlaylistOverView: View {
                     LazyVGrid(columns: columns) {
                         ForEach(playlists, id: \.uri) { playlist in
                             NavigationLink {
-                                PlaylistRandomView(spotify: self.spotify, playlist: playlist)
+                                PlaylistQueuerView(spotify: self.spotify, playlist: playlist)
                             } label: {
-                                PlaylistSquareView(spotify: spotify, playlist: playlist)
+                                PlaylistSquareView(spotify: self.spotify, playlist: playlist)
                             }
                         }
                     }
                     .padding(10)
+                }
+            }
+            NavigationLink() {
+                LikedQueuerView(spotify: self.spotify)
+            } label: {
+                HStack {
+                    Image(systemName: "heart.fill")
+                        .font(.title)
+                        .scaleEffect(0.8)
+                    Text("Liked Songs")
                 }
             }
         }

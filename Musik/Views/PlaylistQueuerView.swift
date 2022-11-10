@@ -10,7 +10,7 @@ import SwiftUI
 import SpotifyWebAPI
 import Combine
 
-struct PlaylistRandomView: View {
+struct PlaylistQueuerView: View {
     var spotify: Spotify
     private let playlist: Playlist<PlaylistItemsReference>
     @State private var tracks: [Track] = []

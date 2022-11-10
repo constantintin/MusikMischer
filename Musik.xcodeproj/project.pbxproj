@@ -7,13 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		383BF816291A561500947742 /* PlaylistOverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 383BF815291A561500947742 /* PlaylistOverView.swift */; };
+		383BF816291A561500947742 /* QueuerOverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 383BF815291A561500947742 /* QueuerOverView.swift */; };
 		383BF818291A586700947742 /* PlaylistSquareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 383BF817291A586700947742 /* PlaylistSquareView.swift */; };
-		383BF81A291A5AA000947742 /* PlaylistRandomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 383BF819291A5AA000947742 /* PlaylistRandomView.swift */; };
+		383BF81A291A5AA000947742 /* PlaylistQueuerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 383BF819291A5AA000947742 /* PlaylistQueuerView.swift */; };
 		383BF81C291A6DFD00947742 /* TrackQueueableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 383BF81B291A6DFD00947742 /* TrackQueueableView.swift */; };
 		384B2F08277EF5A900EDBB1B /* TrackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384B2F07277EF5A900EDBB1B /* TrackView.swift */; };
 		386530BC26ADA2ED007FD3E8 /* PlaylistSorterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 386530BB26ADA2ED007FD3E8 /* PlaylistSorterView.swift */; };
 		388CB4AF26ADC025002BB269 /* PlaylistTrackSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388CB4AE26ADC025002BB269 /* PlaylistTrackSelectionView.swift */; };
+		38FE2B60291CD91F003DE4FD /* LikedQueuerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38FE2B5F291CD91F003DE4FD /* LikedQueuerView.swift */; };
 		470812ED2515E4D700794934 /* MusikApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470812EC2515E4D700794934 /* MusikApp.swift */; };
 		470812EF2515E4D700794934 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470812EE2515E4D700794934 /* RootView.swift */; };
 		470812F12515E4DA00794934 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 470812F02515E4DA00794934 /* Assets.xcassets */; };
@@ -31,13 +32,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		383BF815291A561500947742 /* PlaylistOverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistOverView.swift; sourceTree = "<group>"; };
+		383BF815291A561500947742 /* QueuerOverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueuerOverView.swift; sourceTree = "<group>"; };
 		383BF817291A586700947742 /* PlaylistSquareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistSquareView.swift; sourceTree = "<group>"; };
-		383BF819291A5AA000947742 /* PlaylistRandomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistRandomView.swift; sourceTree = "<group>"; };
+		383BF819291A5AA000947742 /* PlaylistQueuerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistQueuerView.swift; sourceTree = "<group>"; };
 		383BF81B291A6DFD00947742 /* TrackQueueableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackQueueableView.swift; sourceTree = "<group>"; };
 		384B2F07277EF5A900EDBB1B /* TrackView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackView.swift; sourceTree = "<group>"; };
 		386530BB26ADA2ED007FD3E8 /* PlaylistSorterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistSorterView.swift; sourceTree = "<group>"; };
 		388CB4AE26ADC025002BB269 /* PlaylistTrackSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistTrackSelectionView.swift; sourceTree = "<group>"; };
+		38FE2B5F291CD91F003DE4FD /* LikedQueuerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikedQueuerView.swift; sourceTree = "<group>"; };
 		470812E92515E4D700794934 /* Musik.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Musik.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		470812EC2515E4D700794934 /* MusikApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusikApp.swift; sourceTree = "<group>"; };
 		470812EE2515E4D700794934 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
@@ -117,9 +119,10 @@
 				388CB4AE26ADC025002BB269 /* PlaylistTrackSelectionView.swift */,
 				384B2F07277EF5A900EDBB1B /* TrackView.swift */,
 				383BF81B291A6DFD00947742 /* TrackQueueableView.swift */,
-				383BF815291A561500947742 /* PlaylistOverView.swift */,
+				383BF815291A561500947742 /* QueuerOverView.swift */,
 				383BF817291A586700947742 /* PlaylistSquareView.swift */,
-				383BF819291A5AA000947742 /* PlaylistRandomView.swift */,
+				383BF819291A5AA000947742 /* PlaylistQueuerView.swift */,
+				38FE2B5F291CD91F003DE4FD /* LikedQueuerView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -233,9 +236,10 @@
 				47D86875266A26D2006F971B /* DebugMenuView.swift in Sources */,
 				384B2F08277EF5A900EDBB1B /* TrackView.swift in Sources */,
 				470812EF2515E4D700794934 /* RootView.swift in Sources */,
-				383BF816291A561500947742 /* PlaylistOverView.swift in Sources */,
+				383BF816291A561500947742 /* QueuerOverView.swift in Sources */,
 				47AAFC4325A0098900DC1A02 /* AlertItem.swift in Sources */,
 				47C332A7251688D9009ED5CA /* MiscellaneousUtilities.swift in Sources */,
+				38FE2B60291CD91F003DE4FD /* LikedQueuerView.swift in Sources */,
 				383BF81C291A6DFD00947742 /* TrackQueueableView.swift in Sources */,
 				388CB4AF26ADC025002BB269 /* PlaylistTrackSelectionView.swift in Sources */,
 				4708130A2515EA2800794934 /* Spotify.swift in Sources */,
@@ -245,7 +249,7 @@
 				470812ED2515E4D700794934 /* MusikApp.swift in Sources */,
 				47B9615025169BEF0069E441 /* FeatureListView.swift in Sources */,
 				386530BC26ADA2ED007FD3E8 /* PlaylistSorterView.swift in Sources */,
-				383BF81A291A5AA000947742 /* PlaylistRandomView.swift in Sources */,
+				383BF81A291A5AA000947742 /* PlaylistQueuerView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
