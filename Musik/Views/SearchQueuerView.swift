@@ -29,7 +29,7 @@ struct SearchQueuerView: View {
     }
     
     var body: some View {
-        VStack(alignment: .leading) {
+        ScrollView(.vertical) {
             ZStack {
                 Rectangle()
                     .foregroundColor(Color.gray.opacity(0.3))
@@ -46,11 +46,9 @@ struct SearchQueuerView: View {
             .cornerRadius(13)
             .padding()
             
-            ScrollView(.vertical) {
-                LazyVStack(alignment: .leading, spacing: 10) {
-                    ForEach(self.tracks, id: \.uri) { track in
-                        TrackQueueableView(track: track)
-                    }
+            LazyVStack(alignment: .leading, spacing: 10) {
+                ForEach(self.tracks, id: \.uri) { track in
+                    TrackQueueableView(track: track)
                 }
             }
         }
