@@ -49,7 +49,7 @@ struct PlaylistTrackSelectionView: View {
                 .font(.system(size: 12))
                 .padding(5)
         }
-        .background(self.selected ? Color.green : Color.gray)
+        .background(self.selected ? Color.green : Color.gray.opacity(0.3))
         .cornerRadius(5)
         .onAppear(perform: {
             loadImage()

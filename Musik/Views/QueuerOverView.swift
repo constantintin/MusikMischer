@@ -64,6 +64,7 @@ struct QueuerOverView: View {
                             .buttonStyle(PlainButtonStyle())
                         }
                     }
+                    .padding(10)
                 }
             }
             HStack(alignment: .center) {

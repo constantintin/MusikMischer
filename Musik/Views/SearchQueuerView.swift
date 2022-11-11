@@ -32,7 +32,7 @@ struct SearchQueuerView: View {
         VStack(alignment: .leading) {
             ZStack {
                 Rectangle()
-                    .foregroundColor(.gray)
+                    .foregroundColor(Color.gray.opacity(0.3))
                 HStack {
                     Image(systemName: "magnifyingglass")
                     TextField("Search ..", text: $searchText)
