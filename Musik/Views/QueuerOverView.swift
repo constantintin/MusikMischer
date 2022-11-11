@@ -61,12 +61,24 @@ struct QueuerOverView: View {
                             } label: {
                                 PlaylistSquareView(spotify: self.spotify, playlist: playlist)
                             }
+                            .buttonStyle(PlainButtonStyle())
                         }
                     }
-                    .padding(10)
                 }
             }
             HStack {
+                NavigationLink() {
+                    RecoQueuerView(spotify: self.spotify)
+                } label: {
+                    HStack {
+                        Image(systemName: "radio.fill")
+                            .font(.title)
+                            .scaleEffect(0.8)
+                        Text("Recos")
+                    }
+                }
+                Spacer()
+                    .frame(width: 24)
                 NavigationLink() {
                     LikedQueuerView(spotify: self.spotify)
                 } label: {
@@ -80,16 +92,17 @@ struct QueuerOverView: View {
                 Spacer()
                     .frame(width: 24)
                 NavigationLink() {
-                    RecoQueuerView(spotify: self.spotify)
+                    SearchQueuerView(spotify: self.spotify)
                 } label: {
                     HStack {
-                        Image(systemName: "radio.fill")
+                        Image(systemName: "magnifyingglass")
                             .font(.title)
                             .scaleEffect(0.8)
-                        Text("Recos")
+                        Text("Search")
                     }
                 }
             }
+            .padding(5)
         }
         .navigationTitle("Queuer")
         .navigationBarItems(trailing: refreshButton)

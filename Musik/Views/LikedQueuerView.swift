@@ -91,7 +91,7 @@ struct LikedQueuerView: View {
                         case .failure(let error):
                             self.couldntLoadTracks = true
                             self.alert = AlertItem(
-                                title: "Couldn't Retrieve Playlists",
+                                title: "Couldn't Retrieve Tracks",
                                 message: error.localizedDescription
                             )
                     }

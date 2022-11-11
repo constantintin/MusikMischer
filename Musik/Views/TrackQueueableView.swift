@@ -17,7 +17,7 @@ struct TrackQueueableView: View {
     
     @State private var loadImageCancellable: AnyCancellable? = nil
     @State private var cancellables: Set<AnyCancellable> = []
-    @State private var backgroundOpacity = 0.0
+    @State private var backgroundOpacity = 0.1
     
     @State private var didRequestImage = false
     @State private var image = Image(.spotifyAlbumPlaceholder)
@@ -28,35 +28,33 @@ struct TrackQueueableView: View {
     
     var body: some View {
         HStack() {
+            image
+                .resizable()
+                .aspectRatio(1, contentMode: .fill)
+                .frame(width: 42, height: 42)
             Spacer()
                 .frame(width: 15)
-            HStack() {
-                image
-                    .resizable()
-                    .aspectRatio(1, contentMode: .fill)
-                    .frame(width: 42, height: 42)
-                Spacer()
-                    .frame(width: 15)
-                Text(trackDisplayName())
-                    .lineLimit(2)
-                    .truncationMode(/*@START_MENU_TOKEN@*/.tail/*@END_MENU_TOKEN@*/)
-                    .font(.system(size: 13))
-                Spacer()
+            Text(trackDisplayName())
+                .lineLimit(2)
+                .truncationMode(/*@START_MENU_TOKEN@*/.tail/*@END_MENU_TOKEN@*/)
+                .font(.system(size: 13))
+            Spacer()
+        }
+        .animation(Animation.easeInOut(duration: 0.3), value: self.backgroundOpacity)
+        .background(Color.green.opacity(self.backgroundOpacity))
+        .fixedSize(horizontal: false, vertical: true)
+        .cornerRadius(13)
+        .padding([.trailing, .leading], 13)
+        .contentShape(Rectangle())
+        .onAppear {
+            loadImage()
+        }
+        .onTapGesture {
+            self.backgroundOpacity = 0.7
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                self.backgroundOpacity = 0.1
             }
-            .animation(Animation.easeInOut(duration: 0.5), value: self.backgroundOpacity)
-            .background(Color.green.opacity(self.backgroundOpacity))
-            .fixedSize(horizontal: false, vertical: true)
-            .contentShape(Rectangle())
-            .onAppear {
-                loadImage()
-            }
-            .onTapGesture {
-                self.backgroundOpacity = 1.0
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    self.backgroundOpacity = 0.0
-                }
-                queueTrack()
-            }
+            queueTrack()
         }
     }
     

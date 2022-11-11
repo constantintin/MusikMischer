@@ -43,6 +43,7 @@ struct PlaylistSquareView: View {
                 .font(.system(size: 12))
                 .padding(5)
         }
+        .background(Color.gray.opacity(0.3))
         .cornerRadius(5)
         .onAppear(perform: {
             loadImage()

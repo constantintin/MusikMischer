@@ -26,7 +26,7 @@ struct PlaylistSorterView: View {
     @State private var playlists: [Playlist<PlaylistItemsReference>] = []
     @State private var playlistViews: [PlaylistTrackSelectionView] = []
     
-    @State private var trackBackgroundOpacity = 0.0
+    @State private var trackBackgroundOpacity = 0.1
     
     @State private var cancellables: Set<AnyCancellable> = []
     
@@ -98,9 +98,9 @@ struct PlaylistSorterView: View {
                 }
                 TrackView(opacity: $trackBackgroundOpacity, track: $currentTrack.track)
                     .onTapGesture {
-                        self.trackBackgroundOpacity = 1.0
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                            self.trackBackgroundOpacity = 0.0
+                        self.trackBackgroundOpacity = 0.7
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                            self.trackBackgroundOpacity = 0.1
                         }
                         retrieveCurrentlyPlaying()
                     }

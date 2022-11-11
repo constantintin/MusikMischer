@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		382BB8AB291E859B00C9AC81 /* SearchQueuerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 382BB8AA291E859B00C9AC81 /* SearchQueuerView.swift */; };
 		383BF816291A561500947742 /* QueuerOverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 383BF815291A561500947742 /* QueuerOverView.swift */; };
 		383BF818291A586700947742 /* PlaylistSquareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 383BF817291A586700947742 /* PlaylistSquareView.swift */; };
 		383BF81A291A5AA000947742 /* PlaylistQueuerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 383BF819291A5AA000947742 /* PlaylistQueuerView.swift */; };
@@ -33,6 +34,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		382BB8AA291E859B00C9AC81 /* SearchQueuerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchQueuerView.swift; sourceTree = "<group>"; };
 		383BF815291A561500947742 /* QueuerOverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueuerOverView.swift; sourceTree = "<group>"; };
 		383BF817291A586700947742 /* PlaylistSquareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistSquareView.swift; sourceTree = "<group>"; };
 		383BF819291A5AA000947742 /* PlaylistQueuerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistQueuerView.swift; sourceTree = "<group>"; };
@@ -126,6 +128,7 @@
 				383BF819291A5AA000947742 /* PlaylistQueuerView.swift */,
 				38FE2B5F291CD91F003DE4FD /* LikedQueuerView.swift */,
 				38FE2B61291D5FC3003DE4FD /* RecoQueuerView.swift */,
+				382BB8AA291E859B00C9AC81 /* SearchQueuerView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -248,6 +251,7 @@
 				4708130A2515EA2800794934 /* Spotify.swift in Sources */,
 				383BF818291A586700947742 /* PlaylistSquareView.swift in Sources */,
 				4725249B253F8B9B00F3FD13 /* LoginView.swift in Sources */,
+				382BB8AB291E859B00C9AC81 /* SearchQueuerView.swift in Sources */,
 				47C5818C255B1858007EE0CA /* SpotifyAPIExtensions.swift in Sources */,
 				38FE2B62291D5FC3003DE4FD /* RecoQueuerView.swift in Sources */,
 				470812ED2515E4D700794934 /* MusikApp.swift in Sources */,

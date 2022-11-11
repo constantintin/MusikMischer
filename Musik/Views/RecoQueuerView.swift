@@ -109,8 +109,11 @@ struct RecoQueuerView: View {
                                 }
                             )
                             .store(in: &cancellables)
+                    } else {
+                        self.isLoadingTracks = false
                     }
                 default:
+                    self.isLoadingTracks = false
                     ()
                 }
             })
