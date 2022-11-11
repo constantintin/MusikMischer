@@ -40,7 +40,7 @@ struct TrackQueueableView: View {
                 .font(.system(size: 13))
             Spacer()
         }
-        .animation(Animation.easeInOut(duration: 0.3), value: self.backgroundOpacity)
+        .animation(Animation.easeInOut(duration: 0.2), value: self.backgroundOpacity)
         .background(Color.green.opacity(self.backgroundOpacity))
         .fixedSize(horizontal: false, vertical: true)
         .cornerRadius(13)
@@ -51,7 +51,7 @@ struct TrackQueueableView: View {
         }
         .onTapGesture {
             self.backgroundOpacity = 0.7
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                 self.backgroundOpacity = 0.1
             }
             queueTrack()

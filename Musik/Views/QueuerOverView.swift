@@ -66,42 +66,44 @@ struct QueuerOverView: View {
                     }
                 }
             }
-            HStack {
+            HStack(alignment: .center) {
                 NavigationLink() {
                     RecoQueuerView(spotify: self.spotify)
                 } label: {
                     HStack {
-                        Image(systemName: "radio.fill")
-                            .font(.title)
-                            .scaleEffect(0.8)
-                        Text("Recos")
+                        Text("📻  Recos")
                     }
                 }
-                Spacer()
-                    .frame(width: 24)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(Color.gray.opacity(0.3))
+                .cornerRadius(5)
+                .buttonStyle(PlainButtonStyle())
+                
                 NavigationLink() {
                     LikedQueuerView(spotify: self.spotify)
                 } label: {
                     HStack {
-                        Image(systemName: "heart.fill")
-                            .font(.title)
-                            .scaleEffect(0.8)
-                        Text("Liked")
+                        Text("❤️  Liked")
                     }
                 }
-                Spacer()
-                    .frame(width: 24)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(Color.gray.opacity(0.3))
+                .cornerRadius(5)
+                .buttonStyle(PlainButtonStyle())
+                
                 NavigationLink() {
                     SearchQueuerView(spotify: self.spotify)
                 } label: {
                     HStack {
-                        Image(systemName: "magnifyingglass")
-                            .font(.title)
-                            .scaleEffect(0.8)
-                        Text("Search")
+                        Text("🔍  Search")
                     }
                 }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(Color.gray.opacity(0.3))
+                .cornerRadius(5)
+                .buttonStyle(PlainButtonStyle())
             }
+            .frame(maxHeight: 42)
             .padding(5)
         }
         .navigationTitle("Queuer")

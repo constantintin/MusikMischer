@@ -32,6 +32,7 @@ struct SearchQueuerView: View {
         VStack(alignment: .leading) {
             ZStack {
                 Rectangle()
+                    .foregroundColor(.gray)
                 HStack {
                     Image(systemName: "magnifyingglass")
                     TextField("Search ..", text: $searchText)
@@ -39,7 +40,6 @@ struct SearchQueuerView: View {
                             loadTracks(searchText)
                         }
                 }
-                .foregroundColor(.gray)
                 .padding(.leading, 13)
             }
             .frame(height: 40)
@@ -58,15 +58,16 @@ struct SearchQueuerView: View {
     }
     
     func loadTracks(_ searchText: String) {
-        self.tracks = []
-        self.isLoadingTracks = true
-        
-        self.spotify.api.search(query: searchText, categories: [.track])
-            .receive(on: RunLoop.main)
-            .sink(
-                receiveCompletion: { completion in
-                    self.isLoadingTracks = false
-                    switch completion {
+        if !self.searchText.isEmpty {
+            self.tracks = []
+            self.isLoadingTracks = true
+            
+            self.spotify.api.search(query: searchText, categories: [.track])
+                .receive(on: RunLoop.main)
+                .sink(
+                    receiveCompletion: { completion in
+                        self.isLoadingTracks = false
+                        switch completion {
                         case .finished:
                             self.couldntLoadTracks = false
                         case .failure(let error):
@@ -75,18 +76,19 @@ struct SearchQueuerView: View {
                                 title: "Couldn't Retrieve Tracks",
                                 message: error.localizedDescription
                             )
+                        }
+                    },
+                    receiveValue: { searchResult in
+                        if let items = searchResult.tracks?.items {
+                            self.tracks += items
+                        } else {
+                            print("Search was empty")
+                            self.couldntLoadTracks = true
+                        }
+                        
                     }
-                },
-                receiveValue: { searchResult in
-                    if let items = searchResult.tracks?.items {
-                        self.tracks += items
-                    } else {
-                        print("Search was empty")
-                        self.couldntLoadTracks = true
-                    }
-                    
-                }
-            )
-            .store(in: &cancellables)
+                )
+                .store(in: &cancellables)
+        }
     }
 }

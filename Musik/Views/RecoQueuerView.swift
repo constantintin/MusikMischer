@@ -85,7 +85,7 @@ struct RecoQueuerView: View {
                 case let .some(.track(track)):
                     if let uri = track.uri {
                         var seedTracks = [uri, uri, uri]
-                        seedTracks += context.queue.map(\.uri).compactMap{ $0 }.prefix(2)
+//                        seedTracks += context.queue.map(\.uri).compactMap{ $0 }.prefix(2)
                         let seed: TrackAttributes = TrackAttributes(seedTracks: seedTracks)
                         spotify.api.recommendations(seed)
                             .receive(on: RunLoop.main)
