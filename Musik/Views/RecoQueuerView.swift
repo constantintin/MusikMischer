@@ -20,6 +20,8 @@ struct RecoQueuerView: View {
     @State private var isLoadingTracks = false
     @State private var couldntLoadTracks = false
     
+    @State private var isWithQueue = false
+    
     @State private var alert: AlertItem? = nil
     
     init(spotify: Spotify) {
@@ -28,6 +30,14 @@ struct RecoQueuerView: View {
     
     var body: some View {
         VStack {
+            Toggle("**Reco with Queue**", isOn: $isWithQueue)
+                .onChange(of: isWithQueue) { _ in
+                    loadTracks()
+                }
+                .tint(.green)
+                .font(.body)
+                .padding([.leading, .trailing])
+            
             if tracks.isEmpty {
                 if isLoadingTracks {
                     HStack {
@@ -85,7 +95,9 @@ struct RecoQueuerView: View {
                 case let .some(.track(track)):
                     if let uri = track.uri {
                         var seedTracks = [uri, uri, uri]
-//                        seedTracks += context.queue.map(\.uri).compactMap{ $0 }.prefix(2)
+                        if isWithQueue {
+                            seedTracks += context.queue.map(\.uri).compactMap{ $0 }.prefix(2)
+                        }
                         let seed: TrackAttributes = TrackAttributes(seedTracks: seedTracks)
                         spotify.api.recommendations(seed)
                             .receive(on: RunLoop.main)
