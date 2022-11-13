@@ -47,16 +47,19 @@ struct RecoQueuerView: View {
                             .font(.title)
                             .foregroundColor(.secondary)
                     }
+                    .frame(maxHeight: .infinity)
                 }
                 else if couldntLoadTracks {
                     Text("Couldn't Load Tracks")
                         .font(.title)
                         .foregroundColor(.secondary)
+                        .frame(maxHeight: .infinity)
                 }
                 else {
                     Text("No Tracks Found")
                         .font(.title)
                         .foregroundColor(.secondary)
+                        .frame(maxHeight: .infinity)
                 }
             }
             else {

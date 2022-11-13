@@ -63,16 +63,19 @@ struct PlaylistSorterView: View {
                             .font(.title)
                             .foregroundColor(.secondary)
                     }
+                    .frame(maxHeight: .infinity)
                 }
                 else if couldntLoadPlaylists {
                     Text("Couldn't Load Playlists")
                         .font(.title)
                         .foregroundColor(.secondary)
+                        .frame(maxHeight: .infinity)
                 }
                 else {
                     Text("No Playlists Found")
                         .font(.title)
                         .foregroundColor(.secondary)
+                        .frame(maxHeight: .infinity)
                 }
             }
             else {
