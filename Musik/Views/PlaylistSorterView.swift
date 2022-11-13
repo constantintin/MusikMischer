@@ -76,19 +76,20 @@ struct PlaylistSorterView: View {
                 }
             }
             else {
-                HStack() {
-                    TextField("New playlist's name", text: $newPlaylistName)
-                        .focused($newPlaylistFieldIsFocused)
-                        .padding(5)
-                    Button(action: addPlaylist) {
-                        Image(systemName: "plus.square")
-                            .imageScale(Image.Scale.large)
-                            .foregroundColor(Color.green)
-                            .padding(5)
-                    }
-                }
-                
                 ScrollView(.vertical) {
+                    HStack() {
+                        TextField("New playlist's name", text: $newPlaylistName)
+                            .focused($newPlaylistFieldIsFocused)
+                            .padding(5)
+                        Button(action: addPlaylist) {
+                            Image(systemName: "plus.square")
+                                .imageScale(Image.Scale.large)
+                                .foregroundColor(Color.green)
+                                .padding(5)
+                        }
+                    }
+                    .padding([.leading, .trailing], 10)
+                    
                     LazyVGrid(columns: columns) {
                         ForEach(playlists, id: \.uri) { playlist in
                             PlaylistTrackSelectionView(spotify: spotify, playlist: playlist, current: currentTrack)
