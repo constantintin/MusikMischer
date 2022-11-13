@@ -70,45 +70,10 @@ struct QueuerOverView: View {
                     .padding(10)
                 }
             }
-            HStack(alignment: .center) {
-                NavigationLink() {
-                    RecoQueuerView(spotify: self.spotify)
-                } label: {
-                    HStack {
-                        Text("📻  Recos")
-                    }
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(Color.gray.opacity(0.3))
-                .cornerRadius(5)
-                .buttonStyle(PlainButtonStyle())
-                
-                NavigationLink() {
-                    LikedQueuerView(spotify: self.spotify)
-                } label: {
-                    HStack {
-                        Text("❤️  Liked")
-                    }
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(Color.gray.opacity(0.3))
-                .cornerRadius(5)
-                .buttonStyle(PlainButtonStyle())
-                
-                NavigationLink() {
-                    SearchQueuerView(spotify: self.spotify)
-                } label: {
-                    HStack {
-                        Text("🔍  Search")
-                    }
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(Color.gray.opacity(0.3))
-                .cornerRadius(5)
-                .buttonStyle(PlainButtonStyle())
-            }
-            .frame(maxHeight: 42)
-            .padding(5)
+            queuerNavigation
+                .frame(maxHeight: 42)
+                .padding(5)
+            
         }
         .navigationTitle("Queuer")
         .navigationBarItems(trailing: refreshButton)
@@ -117,6 +82,29 @@ struct QueuerOverView: View {
         }
         .onAppear(perform: retrievePlaylists)
     }
+    
+    var queuerNavigation: some View {
+        let viewsAndTexts: [(view: AnyView, text: String)] = [
+            (AnyView(RecoQueuerView(spotify: self.spotify)), "📻  Recos"),
+            (AnyView(LikedQueuerView(spotify: self.spotify)), "❤️  Liked"),
+            (AnyView(SearchQueuerView(spotify: self.spotify)), "🔍  Search"),
+        ]
+        
+        return HStack(alignment: .center) {
+            ForEach(viewsAndTexts, id: \.text) { vt in
+                NavigationLink() {
+                    vt.view
+                } label: {
+                    Text(vt.text)
+                }
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color.gray.opacity(0.3))
+            .cornerRadius(5)
+            .buttonStyle(PlainButtonStyle())
+        }
+    }
+    
     var refreshButton: some View {
         Button(action: retrievePlaylists) {
             Image(systemName: "arrow.clockwise")
