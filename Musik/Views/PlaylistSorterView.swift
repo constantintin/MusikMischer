@@ -24,7 +24,7 @@ struct PlaylistSorterView: View {
     
     @StateObject private var currentTrack: CurrentTrack = CurrentTrack(.comeTogether)
     @State private var playlists: [Playlist<PlaylistItemsReference>] = []
-    @State private var playlistViews: [PlaylistTrackSelectionView] = []
+    @State private var playlistViews: [PlaylistSelectionView] = []
     
     @State private var trackBackgroundOpacity = 0.1
     
@@ -95,7 +95,7 @@ struct PlaylistSorterView: View {
                     
                     LazyVGrid(columns: columns) {
                         ForEach(playlists, id: \.uri) { playlist in
-                            PlaylistTrackSelectionView(spotify: spotify, playlist: playlist, current: currentTrack)
+                            PlaylistSelectionView(spotify: spotify, playlist: playlist, current: currentTrack)
                         }
                     }
                     .padding(10)

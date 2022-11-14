@@ -1,5 +1,5 @@
 //
-//  PlaylistTrackSelectionView.swift
+//  PlaylistSelectionView.swift
 //  Musik
 //
 //  Created by Constantin Loew on 25.07.21.
@@ -10,7 +10,7 @@ import SwiftUI
 import Combine
 import SpotifyWebAPI
 
-struct PlaylistTrackSelectionView: View {
+struct PlaylistSelectionView: View {
     var spotify: Spotify
     
     private let playlist: Playlist<PlaylistItemsReference>
@@ -70,6 +70,7 @@ struct PlaylistTrackSelectionView: View {
         }
     }
     
+    /// remove all occurrences of current.track from playlist
     func delFromPlaylist() {
         self.operating = true
         self.selected.toggle()
@@ -96,6 +97,7 @@ struct PlaylistTrackSelectionView: View {
         }
     }
     
+    /// add current.track to playlist
     func addToPlaylist() {
         self.operating = true
         self.selected.toggle()
@@ -118,10 +120,12 @@ struct PlaylistTrackSelectionView: View {
                     }
                 ).store(in: &cancellables)
         } else {
-            print("Current track \(self.current.track) has no uri")
+            print("Current track \(self.current.track) has no uri??")
         }
     }
     
+    /// check if track is in the playlist
+    /// after first runthrough results are cached in self.trackUris
     func isInPlaylist(track: Track) {
         if self.tracksCached {
             print("Using cached tracks for \(self.playlist.name)")
@@ -196,8 +200,8 @@ struct PlaylistTrackSelectionView_Previews: PreviewProvider {
     static var previews: some View {
         ScrollView(.vertical) {
             VStack {
-                PlaylistTrackSelectionView(spotify: spotify, playlist: .rockClassics, current: CurrentTrack(.comeTogether))
-                PlaylistTrackSelectionView(spotify: spotify, playlist: .thisIsRadiohead, current: CurrentTrack(.comeTogether))
+                PlaylistSelectionView(spotify: spotify, playlist: .rockClassics, current: CurrentTrack(.comeTogether))
+                PlaylistSelectionView(spotify: spotify, playlist: .thisIsRadiohead, current: CurrentTrack(.comeTogether))
             }
             .environmentObject(spotify)
         }

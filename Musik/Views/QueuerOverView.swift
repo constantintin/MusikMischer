@@ -22,7 +22,6 @@ struct QueuerOverView: View {
     
     @State private var alert: AlertItem? = nil
     @State private var playlists: [Playlist<PlaylistItemsReference>] = []
-    @State private var playlistViews: [PlaylistTrackSelectionView] = []
 
     @State private var cancellables: Set<AnyCancellable> = []
 

@@ -14,7 +14,7 @@
 		383BF81C291A6DFD00947742 /* TrackQueueableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 383BF81B291A6DFD00947742 /* TrackQueueableView.swift */; };
 		384B2F08277EF5A900EDBB1B /* TrackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384B2F07277EF5A900EDBB1B /* TrackView.swift */; };
 		386530BC26ADA2ED007FD3E8 /* PlaylistSorterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 386530BB26ADA2ED007FD3E8 /* PlaylistSorterView.swift */; };
-		388CB4AF26ADC025002BB269 /* PlaylistTrackSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388CB4AE26ADC025002BB269 /* PlaylistTrackSelectionView.swift */; };
+		388CB4AF26ADC025002BB269 /* PlaylistSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388CB4AE26ADC025002BB269 /* PlaylistSelectionView.swift */; };
 		38FE2B60291CD91F003DE4FD /* LikedQueuerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38FE2B5F291CD91F003DE4FD /* LikedQueuerView.swift */; };
 		38FE2B62291D5FC3003DE4FD /* RecoQueuerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38FE2B61291D5FC3003DE4FD /* RecoQueuerView.swift */; };
 		470812ED2515E4D700794934 /* MusikApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470812EC2515E4D700794934 /* MusikApp.swift */; };
@@ -41,7 +41,7 @@
 		383BF81B291A6DFD00947742 /* TrackQueueableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackQueueableView.swift; sourceTree = "<group>"; };
 		384B2F07277EF5A900EDBB1B /* TrackView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackView.swift; sourceTree = "<group>"; };
 		386530BB26ADA2ED007FD3E8 /* PlaylistSorterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistSorterView.swift; sourceTree = "<group>"; };
-		388CB4AE26ADC025002BB269 /* PlaylistTrackSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistTrackSelectionView.swift; sourceTree = "<group>"; };
+		388CB4AE26ADC025002BB269 /* PlaylistSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistSelectionView.swift; sourceTree = "<group>"; };
 		38FE2B5F291CD91F003DE4FD /* LikedQueuerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikedQueuerView.swift; sourceTree = "<group>"; };
 		38FE2B61291D5FC3003DE4FD /* RecoQueuerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecoQueuerView.swift; sourceTree = "<group>"; };
 		470812E92515E4D700794934 /* Musik.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Musik.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -120,7 +120,7 @@
 				4725249A253F8B9B00F3FD13 /* LoginView.swift */,
 				47B9614F25169BEF0069E441 /* FeatureListView.swift */,
 				47D86874266A26D2006F971B /* DebugMenuView.swift */,
-				388CB4AE26ADC025002BB269 /* PlaylistTrackSelectionView.swift */,
+				388CB4AE26ADC025002BB269 /* PlaylistSelectionView.swift */,
 				384B2F07277EF5A900EDBB1B /* TrackView.swift */,
 				383BF81B291A6DFD00947742 /* TrackQueueableView.swift */,
 				383BF815291A561500947742 /* QueuerOverView.swift */,
@@ -247,7 +247,7 @@
 				47C332A7251688D9009ED5CA /* MiscellaneousUtilities.swift in Sources */,
 				38FE2B60291CD91F003DE4FD /* LikedQueuerView.swift in Sources */,
 				383BF81C291A6DFD00947742 /* TrackQueueableView.swift in Sources */,
-				388CB4AF26ADC025002BB269 /* PlaylistTrackSelectionView.swift in Sources */,
+				388CB4AF26ADC025002BB269 /* PlaylistSelectionView.swift in Sources */,
 				4708130A2515EA2800794934 /* Spotify.swift in Sources */,
 				383BF818291A586700947742 /* PlaylistSquareView.swift in Sources */,
 				4725249B253F8B9B00F3FD13 /* LoginView.swift in Sources */,
