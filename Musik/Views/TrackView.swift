@@ -21,35 +21,32 @@ struct TrackView: View {
     
     var body: some View {
         HStack {
-            HStack {
-                image
-                    .resizable()
-                    .aspectRatio(1, contentMode: .fill)
-                    .frame(width: 42, height: 42)
-                Spacer()
-                    .frame(width: 15)
-                Text(trackDisplayName())
-                    .lineLimit(2)
-                    .truncationMode(/*@START_MENU_TOKEN@*/.tail/*@END_MENU_TOKEN@*/)
-                    .font(.system(size: 13))
-                Spacer()
-            }
-            // Ensure the hit box extends across the entire width of the frame.
-            // See https://bit.ly/2HqNk4S
-            .contentShape(Rectangle())
-            .animation(Animation.easeInOut(duration: 0.3), value: self.opacity)
-            .background(Color.green.opacity(self.opacity))
-            .cornerRadius(13)
-            .fixedSize(horizontal: false, vertical: true)
-            .contentShape(Rectangle())
-            .onAppear {
-                loadImage()
-            }
-            .onChange(of: self.track, perform: { _ in
-                self.didRequestImage = false
-                loadImage()
-            })
+            image
+                .resizable()
+                .aspectRatio(1, contentMode: .fill)
+                .frame(width: 42, height: 42)
+            Text(trackDisplayName())
+                .lineLimit(2)
+                .truncationMode(/*@START_MENU_TOKEN@*/.tail/*@END_MENU_TOKEN@*/)
+                .padding(.leading, 15)
+                .font(.system(size: 13))
+            Spacer()
         }
+        // Ensure the hit box extends across the entire width of the frame.
+        // See https://bit.ly/2HqNk4S
+        .contentShape(Rectangle())
+        .animation(Animation.easeInOut(duration: 0.3), value: self.opacity)
+        .background(Color.green.opacity(self.opacity))
+        .cornerRadius(13)
+        .fixedSize(horizontal: false, vertical: true)
+        .contentShape(Rectangle())
+        .onAppear {
+            loadImage()
+        }
+        .onChange(of: self.track, perform: { _ in
+            self.didRequestImage = false
+            loadImage()
+        })
     }
     
     /// The display name for the track. E.g., "Eclipse - Pink Floyd".
@@ -61,6 +58,7 @@ struct TrackView: View {
         return displayName
     }
     
+    /// load album image
     func loadImage() {
         // Return early if the image has already been requested. We can't just
         // check if `self.image == nil` because the image might have already
