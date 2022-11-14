@@ -1,5 +1,5 @@
 //
-//  PlaylistSelectorView.swift
+//  SorterOverView.swift
 //  Musik
 //
 //  Created by Constantin Loew on 25.07.21.
@@ -18,7 +18,7 @@ class CurrentTrack: ObservableObject {
     }
 }
 
-struct PlaylistSorterView: View {
+struct SorterOverView: View {
     @EnvironmentObject var spotify: Spotify
     @State private var currentUser: SpotifyUser? = nil
     
@@ -54,45 +54,47 @@ struct PlaylistSorterView: View {
     
     var body: some View {
         VStack {
-            if playlists.isEmpty {
-                if isLoadingPlaylists {
-                    HStack {
-                        ProgressView()
-                            .padding()
-                        Text("Loading Playlists")
+            ScrollView(.vertical) {
+                HStack() {
+                    TextField("New playlist's name", text: $newPlaylistName)
+                        .focused($newPlaylistFieldIsFocused)
+                        .padding(5)
+                    Button {
+                        addPlaylist(newPlaylistName)
+                    } label: {
+                        Image(systemName: "plus.square")
+                            .imageScale(Image.Scale.large)
+                            .foregroundColor(Color.green)
+                            .padding(5)
+                    }
+                }
+                .padding([.leading, .trailing], 10)
+                
+                if playlists.isEmpty {
+                    if isLoadingPlaylists {
+                        HStack {
+                            ProgressView()
+                                .padding()
+                            Text("Loading Playlists")
+                                .font(.title)
+                                .foregroundColor(.secondary)
+                        }
+                        .frame(maxHeight: .infinity)
+                    }
+                    else if couldntLoadPlaylists {
+                        Text("Couldn't Load Playlists")
                             .font(.title)
                             .foregroundColor(.secondary)
+                            .frame(maxHeight: .infinity)
                     }
-                    .frame(maxHeight: .infinity)
-                }
-                else if couldntLoadPlaylists {
-                    Text("Couldn't Load Playlists")
-                        .font(.title)
-                        .foregroundColor(.secondary)
-                        .frame(maxHeight: .infinity)
+                    else {
+                        Text("No Playlists Found")
+                            .font(.title)
+                            .foregroundColor(.secondary)
+                            .frame(maxHeight: .infinity)
+                    }
                 }
                 else {
-                    Text("No Playlists Found")
-                        .font(.title)
-                        .foregroundColor(.secondary)
-                        .frame(maxHeight: .infinity)
-                }
-            }
-            else {
-                ScrollView(.vertical) {
-                    HStack() {
-                        TextField("New playlist's name", text: $newPlaylistName)
-                            .focused($newPlaylistFieldIsFocused)
-                            .padding(5)
-                        Button(action: addPlaylist) {
-                            Image(systemName: "plus.square")
-                                .imageScale(Image.Scale.large)
-                                .foregroundColor(Color.green)
-                                .padding(5)
-                        }
-                    }
-                    .padding([.leading, .trailing], 10)
-                    
                     LazyVGrid(columns: columns) {
                         ForEach(playlists, id: \.uri) { playlist in
                             PlaylistSelectionView(spotify: spotify, playlist: playlist, current: currentTrack)
@@ -100,18 +102,19 @@ struct PlaylistSorterView: View {
                     }
                     .padding(10)
                 }
-                TrackView(opacity: $trackBackgroundOpacity, track: $currentTrack.track)
-                    .onTapGesture {
-                        self.trackBackgroundOpacity = 0.7
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                            self.trackBackgroundOpacity = 0.1
-                        }
-                        retrieveCurrentlyPlaying()
-                    }
-                    .padding(10)
             }
+            TrackView(opacity: $trackBackgroundOpacity, track: $currentTrack.track)
+                .onTapGesture {
+                    self.trackBackgroundOpacity = 0.7
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        self.trackBackgroundOpacity = 0.1
+                    }
+                    retrieveCurrentlyPlaying()
+                }
+                .padding([.leading, .trailing], 10)
+                .padding([.top, .bottom], 5)
         }
-        .navigationBarTitle("Sorter", displayMode: .inline)
+        .navigationBarTitle("Sorter")
         .navigationBarItems(trailing: refreshButton)
         .alert(item: $alert) { alert in
             Alert(title: alert.title, message: alert.message)
@@ -119,6 +122,7 @@ struct PlaylistSorterView: View {
         .onAppear(perform: retrieve)
     }
 
+    /// button to refresh playlists and tracks
     var refreshButton: some View {
         Button(action: retrieve) {
             Image(systemName: "arrow.clockwise")
@@ -129,10 +133,11 @@ struct PlaylistSorterView: View {
         
     }
     
-    func addPlaylist() {
+    /// create playlist 'name' , add currentTrack and add it to self.playlists
+    func addPlaylist(_ name: String) {
         if let uri = currentUser?.uri {
             spotify.api.createPlaylist(for: uri,
-                                          PlaylistDetails(name: newPlaylistName, isPublic: false, isCollaborative: nil, description: nil))
+                                          PlaylistDetails(name: name, isPublic: false, isCollaborative: nil, description: nil))
                 .receive(on: RunLoop.main)
                 .sink(receiveCompletion: { completion in
                     print("Getting user completion: \(completion)")
@@ -180,11 +185,13 @@ struct PlaylistSorterView: View {
         self.newPlaylistName = ""
     }
     
+    /// retrieve all spotify info
     func retrieve() {
         retrieveCurrentlyPlaying()
         retrievePlaylists()
     }
     
+    /// get currently playing track
     func retrieveCurrentlyPlaying() {
         spotify.api.currentPlayback()
             .receive(on: RunLoop.main)
@@ -201,6 +208,7 @@ struct PlaylistSorterView: View {
             .store(in: &cancellables)
     }
 
+    /// get playlists for user
     func retrievePlaylists() {
         
         // Don't try to load any playlists if we're in preview mode.
@@ -266,7 +274,7 @@ struct PlaylistsSelectorView_Previews: PreviewProvider {
 
     static var previews: some View {
         NavigationView {
-            PlaylistSorterView(samplePlaylists: playlists)
+            SorterOverView(samplePlaylists: playlists)
                 .environmentObject(spotify)
         }
     }
