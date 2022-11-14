@@ -32,12 +32,11 @@ struct TrackQueueableView: View {
                 .resizable()
                 .aspectRatio(1, contentMode: .fill)
                 .frame(width: 42, height: 42)
-            Spacer()
-                .frame(width: 15)
             Text(trackDisplayName())
                 .lineLimit(2)
                 .truncationMode(/*@START_MENU_TOKEN@*/.tail/*@END_MENU_TOKEN@*/)
                 .font(.system(size: 13))
+                .padding(.leading, 15)
             Spacer()
         }
         .animation(Animation.easeInOut(duration: 0.2), value: self.backgroundOpacity)
@@ -58,6 +57,7 @@ struct TrackQueueableView: View {
         }
     }
     
+    /// add track to end of queue
     func queueTrack() {
         if let uri = self.track.uri {
             spotify.api.addToQueue(uri)
@@ -82,6 +82,7 @@ struct TrackQueueableView: View {
         return displayName
     }
     
+    /// load album image
     func loadImage() {
         // Return early if the image has already been requested. We can't just
         // check if `self.image == nil` because the image might have already
