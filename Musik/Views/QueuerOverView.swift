@@ -71,7 +71,7 @@ struct QueuerOverView: View {
             }
             queuerNavigation
                 .frame(maxHeight: 42)
-                .padding(5)
+                .padding(10)
             
         }
         .navigationTitle("Queuer")
@@ -114,6 +114,7 @@ struct QueuerOverView: View {
         
     }
     
+    /// get playlists for user
     func retrievePlaylists() {
         
         // Don't try to load any playlists if we're in preview mode.
