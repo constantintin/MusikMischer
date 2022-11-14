@@ -21,6 +21,8 @@ struct PlaylistTrackSelectionView: View {
     
     @State private var selected: Bool = false
     @State private var operating: Bool = false
+    @State private var trackUris: [String] = []
+    @State private var tracksCached: Bool = false
     
     @ObservedObject var current: CurrentTrack
     @State private var snapshot: String
@@ -70,6 +72,7 @@ struct PlaylistTrackSelectionView: View {
     
     func delFromPlaylist() {
         self.operating = true
+        self.selected.toggle()
         if let uri = self.current.track.uri {
             self.spotify.api.removeAllOccurrencesFromPlaylist(self.playlist.uri, of: [uri], snapshotId: self.snapshot)
                 .receive(on: RunLoop.main)
@@ -78,8 +81,9 @@ struct PlaylistTrackSelectionView: View {
                         self.operating = false
                         switch completion {
                             case .finished:
-                                self.selected.toggle()
+                                print("Removed '\(self.current.track.name)' from '\(self.playlist.name)'")
                             case .failure(let error):
+                            self.selected.toggle()
                                 print("Deleting from playlist failed with \(error)")
                         }
                     },
@@ -94,6 +98,7 @@ struct PlaylistTrackSelectionView: View {
     
     func addToPlaylist() {
         self.operating = true
+        self.selected.toggle()
         if let uri = self.current.track.uri {
             self.spotify.api.addToPlaylist(self.playlist.uri, uris: [uri], position: nil)
                 .receive(on: RunLoop.main)
@@ -102,9 +107,9 @@ struct PlaylistTrackSelectionView: View {
                         self.operating = false
                         switch completion {
                             case .finished:
-                                self.selected.toggle()
                                 print("Added '\(self.current.track.name)' to '\(self.playlist.name)'")
                             case .failure(let error):
+                                self.selected.toggle()
                                 print("Adding to playlist failed with \(error)")
                         }
                     },
@@ -118,24 +123,35 @@ struct PlaylistTrackSelectionView: View {
     }
     
     func isInPlaylist(track: Track) {
-        self.spotify.api.playlistItems(self.playlist.uri)
-            .extendPagesConcurrently(self.spotify.api)
-            .receive(on: RunLoop.main)
-            .sink(
-                receiveCompletion: { completion in
-                    print("Getting playlist item completion: \(completion)")
-                },
-                receiveValue: { trackPage in
-                    for playlistTrack in trackPage.items {
-                        if track.uri == playlistTrack.item?.uri {
-                            self.selected = true
-                            return
+        if self.tracksCached {
+            print("Using cached tracks for \(self.playlist.name)")
+            if let trackUri = track.uri {
+                self.selected = self.trackUris.contains(trackUri)
+            } else {
+                print("Track \(track.name) has no uri??")
+            }
+        } else {
+            self.selected = false
+            self.spotify.api.playlistItems(self.playlist.uri)
+                .extendPagesConcurrently(self.spotify.api)
+                .receive(on: RunLoop.main)
+                .sink(
+                    receiveCompletion: { _ in
+                        self.tracksCached = true
+                    },
+                    receiveValue: { trackPage in
+                        for playlistTrack in trackPage.items {
+                            if track.uri == playlistTrack.item?.uri {
+                                self.selected = true
+                            }
+                            if let uri = playlistTrack.item?.uri {
+                                self.trackUris.append(uri)
+                            }
                         }
                     }
-                }
-            )
-            .store(in: &cancellables)
-        self.selected = false
+                )
+                .store(in: &cancellables)
+        }
     }
     
     /// Loads the image for the playlist.
