@@ -103,16 +103,20 @@ struct SorterOverView: View {
                     .padding(10)
                 }
             }
-            TrackView(opacity: $trackBackgroundOpacity, track: $currentTrack.track)
-                .onTapGesture {
-                    self.trackBackgroundOpacity = 0.7
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                        self.trackBackgroundOpacity = 0.1
+            HStack {
+                TrackView(opacity: $trackBackgroundOpacity, track: $currentTrack.track)
+                    .onTapGesture {
+                        self.trackBackgroundOpacity = 0.7
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                            self.trackBackgroundOpacity = 0.1
+                        }
+                        retrieveCurrentlyPlaying()
                     }
-                    retrieveCurrentlyPlaying()
-                }
-                .padding([.leading, .trailing], 10)
-                .padding([.top, .bottom], 5)
+                skipButton
+                    .padding(.leading, 10)
+            }
+            .padding([.leading, .trailing], 10)
+            .padding([.top, .bottom], 5)
         }
         .navigationBarTitle("Sorter")
         .navigationBarItems(trailing: refreshButton)
@@ -120,6 +124,16 @@ struct SorterOverView: View {
             Alert(title: alert.title, message: alert.message)
         }
         .onAppear(perform: retrieve)
+    }
+    
+    /// button to skip to next song
+    var skipButton: some View {
+        Button(action: skipToNext) {
+            Image(systemName: "forward.end.fill")
+                .font(.title)
+                .scaleEffect(0.8)
+                .foregroundColor(.green)
+        }
     }
 
     /// button to refresh playlists and tracks
@@ -131,6 +145,18 @@ struct SorterOverView: View {
         }
         .disabled(isLoadingPlaylists)
         
+    }
+    
+    /// skip to next song
+    func skipToNext() {
+        spotify.api.skipToNext()
+            .receive(on: RunLoop.main)
+            .sink(receiveCompletion: { completion in
+                print("Getting user completion: \(completion)")
+            }, receiveValue: { _ in
+                retrieveCurrentlyPlaying()
+            })
+            .store(in: &cancellables)
     }
     
     /// create playlist 'name' , add currentTrack and add it to self.playlists
