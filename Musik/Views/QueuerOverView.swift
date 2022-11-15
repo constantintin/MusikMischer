@@ -63,7 +63,7 @@ struct QueuerOverView: View {
                             } label: {
                                 PlaylistSquareView(spotify: self.spotify, playlist: playlist)
                             }
-                            .buttonStyle(PlainButtonStyle())
+                            .buttonStyle(.plain)
                         }
                     }
                     .padding(10)

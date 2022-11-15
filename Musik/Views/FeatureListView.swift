@@ -20,14 +20,17 @@ struct FeatureListView: View {
             }
             Spacer()
                 .frame(maxHeight: .infinity)
-            List {
-                NavigationLink {
-                    DebugMenuView()
-                } label: {
-                    Text("Debug")
-                }
+            NavigationLink {
+                DebugMenuView()
+            } label: {
+                Text("Debug")
+                    .font(.title2)
             }
-            .listStyle(.plain)
+            .frame(maxWidth: .infinity, maxHeight: 42)
+            .background(Color.gray.opacity(0.3))
+            .cornerRadius(5)
+            .buttonStyle(.plain)
+            .padding(13)
         }
     }
 }
