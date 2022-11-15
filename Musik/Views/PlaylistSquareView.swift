@@ -36,7 +36,9 @@ struct PlaylistSquareView: View {
         VStack {
             image
                 .resizable()
-                .aspectRatio(1, contentMode: .fill)
+                .aspectRatio(contentMode: .fill)
+                .frame(width: 111, height: 111, alignment: .center)
+                .clipped()
             Text(self.playlist.name)
                 .lineLimit(1)
                 .truncationMode(/*@START_MENU_TOKEN@*/.tail/*@END_MENU_TOKEN@*/)
