@@ -47,6 +47,7 @@ struct PlaylistSelectionView: View {
                 .frame(width: 111, height: 111, alignment: .center)
                 .saturation(self.selected ? 1.0 : 0.5)
                 .clipped()
+                .overlay(progressView, alignment: .center)
             Text(self.playlist.name)
                 .lineLimit(1)
                 .truncationMode(/*@START_MENU_TOKEN@*/.tail/*@END_MENU_TOKEN@*/)
@@ -68,6 +69,17 @@ struct PlaylistSelectionView: View {
                 } else {
                     addToPlaylist()
                 }
+            }
+        }
+    }
+    
+    /// progress view if operating
+    var progressView: some View {
+        Group {
+            if operating {
+                ProgressView()
+            } else {
+                EmptyView()
             }
         }
     }
