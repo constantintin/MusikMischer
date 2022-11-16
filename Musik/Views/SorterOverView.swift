@@ -116,7 +116,8 @@ struct SorterOverView: View {
                     .padding(.leading, 10)
             }
             .padding([.leading, .trailing], 10)
-            .padding([.top, .bottom], 5)
+            .padding(.top, 5)
+            .padding(.bottom, 10)
         }
         .navigationBarTitle("Sorter")
         .navigationBarItems(trailing: refreshButton)
