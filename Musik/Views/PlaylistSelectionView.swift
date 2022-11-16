@@ -62,6 +62,7 @@ struct PlaylistSelectionView: View {
         .onReceive(current.$track) { track in
             isInPlaylist(track: track)
         }
+        .contentShape(Rectangle())
         .onTapGesture {
             if !self.operating {
                 if self.selected {

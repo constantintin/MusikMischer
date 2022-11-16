@@ -50,6 +50,7 @@ struct PlaylistSquareView: View {
         .onAppear(perform: {
             loadImage()
         })
+        .contentShape(Rectangle())
     }
 
 
