@@ -22,6 +22,9 @@ struct QueuerOverView: View {
     
     @State private var alert: AlertItem? = nil
     @State private var playlists: [Playlist<PlaylistItemsReference>] = []
+    @State private var filteredPlaylists: [Playlist<PlaylistItemsReference>] = []
+    
+    @State private var searchText = ""
 
     @State private var cancellables: Set<AnyCancellable> = []
 
@@ -58,7 +61,7 @@ struct QueuerOverView: View {
                 else {
                     ScrollView(.vertical) {
                         LazyVGrid(columns: columns) {
-                            ForEach(playlists, id: \.uri) { playlist in
+                            ForEach(filteredPlaylists, id: \.uri) { playlist in
                                 NavigationLink {
                                     PlaylistQueuerView(spotify: self.spotify, playlist: playlist)
                                 } label: {
@@ -66,6 +69,13 @@ struct QueuerOverView: View {
                                 }
                                 .buttonStyle(.plain)
                             }
+                        }
+                        .searchable(text: $searchText, prompt: "Search By Playlist Name")
+                        .onChange(of: searchText) { _ in
+                          filterPlaylists()
+                        }
+                        .onSubmit(of: .search) {
+                            filterPlaylists()
                         }
                         .padding(10)
                     }
@@ -115,10 +125,19 @@ struct QueuerOverView: View {
         
     }
     
+    /// filter playlists based on search
+    func filterPlaylists() {
+        if searchText.isEmpty {
+            filteredPlaylists = playlists
+        } else {
+            filteredPlaylists = playlists.filter {
+                $0.name.localizedCaseInsensitiveContains(searchText)
+            }
+        }
+    }
+    
     /// get playlists for user
     func retrievePlaylists() {
-        print("Called refresh queuer")
-        
         // Don't try to load any playlists if we're in preview mode.
         if ProcessInfo.processInfo.isPreviewing { return }
         
@@ -157,6 +176,7 @@ struct QueuerOverView: View {
                 // pages have been retrieved.
                 receiveValue: { playlistsPage in
                     self.playlists += playlistsPage.items
+                    self.filteredPlaylists += playlistsPage.items
                 }
             )
             .store(in: &cancellables)

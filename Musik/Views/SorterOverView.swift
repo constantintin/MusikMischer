@@ -25,7 +25,9 @@ struct SorterOverView: View {
     
     @StateObject private var currentTrack: CurrentTrack = CurrentTrack(.comeTogether)
     @State private var playlists: [Playlist<PlaylistItemsReference>] = []
-    @State private var playlistViews: [PlaylistSelectionView] = []
+    @State private var filteredPlaylists: [Playlist<PlaylistItemsReference>] = []
+    
+    @State private var searchText = ""
     
     @State private var trackBgOpacity = 0.1
     @State private var trackBgColor: Color = .accentColor
@@ -58,21 +60,21 @@ struct SorterOverView: View {
         NavigationView {
             VStack { 
                 ScrollView(.vertical) {
-                    HStack() {
-                        TextField("New playlist's name", text: $newPlaylistName)
-                            .focused($newPlaylistFieldIsFocused)
-                            .padding(5)
-                        Button {
-                            addPlaylist(newPlaylistName)
-                        } label: {
-                            Image(systemName: "plus.square")
-                                .imageScale(Image.Scale.large)
-                                .foregroundColor(Color.green)
-                                .padding(5)
-                        }
-                    }
-                    .padding([.leading, .trailing], 10)
-                    
+//                    HStack() {
+//                        TextField("New playlist's name", text: $newPlaylistName)
+//                            .focused($newPlaylistFieldIsFocused)
+//                            .padding(5)
+//                        Button {
+//                            addPlaylist(newPlaylistName)
+//                        } label: {
+//                            Image(systemName: "plus.square")
+//                                .imageScale(Image.Scale.large)
+//                                .foregroundColor(Color.green)
+//                                .padding(5)
+//                        }
+//                    }
+//                    .padding([.leading, .trailing], 10)
+//
                     if playlists.isEmpty {
                         if isLoadingPlaylists {
                             HStack {
@@ -99,9 +101,39 @@ struct SorterOverView: View {
                     }
                     else {
                         LazyVGrid(columns: columns) {
-                            ForEach(playlists, id: \.uri) { playlist in
+                            ForEach(filteredPlaylists, id: \.uri) { playlist in
                                 PlaylistSelectionView(spotify: spotify, playlist: playlist, current: currentTrack)
                             }
+                            if !searchText.isEmpty {
+                                Button {
+                                    addPlaylist(searchText)
+                                } label: {
+                                    VStack {
+                                        Image(systemName: "plus.square")
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fill)
+                                            .frame(width: 111, height: 111, alignment: .center)
+                                            .clipped()
+                                            .foregroundColor(Color.green)
+                                        Text("'\(searchText)'")
+                                            .lineLimit(1)
+                                            .truncationMode(/*@START_MENU_TOKEN@*/.tail/*@END_MENU_TOKEN@*/)
+                                            .font(.system(size: 14))
+                                            .padding(5)
+                                    }
+                                    .background(Color.gray.opacity(0.3))
+                                    .cornerRadius(5)
+                                    .contentShape(Rectangle())
+                                }
+                                .buttonStyle(.plain)
+                            }
+                        }
+                        .searchable(text: $searchText, prompt: "Search By Playlist Name")
+                        .onChange(of: searchText) { _ in
+                          filterPlaylists()
+                        }
+                        .onSubmit(of: .search) {
+                            filterPlaylists()
                         }
                         .padding(10)
                     }
@@ -166,6 +198,17 @@ struct SorterOverView: View {
         
     }
     
+    /// filter playlists based on search
+    func filterPlaylists() {
+        if searchText.isEmpty {
+            filteredPlaylists = playlists
+        } else {
+            filteredPlaylists = playlists.filter {
+                $0.name.localizedCaseInsensitiveContains(searchText)
+            }
+        }
+    }
+    
     /// skip to next song
     func skipToNext() {
         spotify.api.skipToNext()
@@ -223,6 +266,7 @@ struct SorterOverView: View {
                         images: playlist.images
                     )
                     self.playlists.insert(playlistWithReference, at: 0)
+                    self.filteredPlaylists.insert(playlistWithReference, at: 0)
                 })
                 .store(in: &cancellables)
         }
@@ -299,6 +343,7 @@ struct SorterOverView: View {
                     for playlist in playlists {
                         if playlist.isCollaborative || playlist.owner?.uri == currentUser?.uri {
                             self.playlists.append(playlist)
+                            self.filteredPlaylists.append(playlist)
                         }
                     }
                 }
