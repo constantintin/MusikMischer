@@ -101,7 +101,7 @@ struct SorterOverView: View {
                     .onSubmit(of: .search) {
                         filterPlaylists()
                     }
-                    .padding(10)
+                    .padding([.leading, .trailing], 10)
                 }
                 HStack {
                     TrackView(bgColor: $trackBgColor, bgOpacity: $trackBgOpacity, track: $currentTrack.track)
@@ -129,9 +129,8 @@ struct SorterOverView: View {
                     skipButton
                         .padding(.leading, 10)
                 }
-                .padding([.leading, .trailing], 10)
+                .padding([.leading, .trailing, .bottom], 10)
                 .padding(.top, 5)
-                .padding(.bottom, 10)
             }
             .navigationBarTitle("Sorter")
             .navigationBarItems(trailing: refreshButton)

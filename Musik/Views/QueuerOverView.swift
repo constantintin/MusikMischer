@@ -77,12 +77,13 @@ struct QueuerOverView: View {
                         .onSubmit(of: .search) {
                             filterPlaylists()
                         }
-                        .padding(10)
+                        .padding([.leading, .trailing], 10)
                     }
                 }
                 queuerNavigation
                     .frame(maxHeight: 42)
-                    .padding(10)
+                    .padding([.leading, .trailing, .bottom], 10)
+                    .padding(.top, 5)
             }
             .navigationBarTitle("Queuer")
             .navigationBarItems(trailing: refreshButton)
