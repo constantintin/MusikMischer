@@ -73,8 +73,8 @@ struct RecoQueuerView: View {
             }
         }
         .onAppear(perform: loadTracks)
+        .navigationBarTitle("Recommendations")
         .navigationBarItems(trailing: reloadButton)
-        .navigationTitle("Q 'Recommendations'")
     }
     
     var reloadButton: some View {

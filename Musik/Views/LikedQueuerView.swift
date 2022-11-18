@@ -60,8 +60,8 @@ struct LikedQueuerView: View {
             }
         }
         .onAppear(perform: loadTracks)
+        .navigationBarTitle("Liked Songs")
         .navigationBarItems(trailing: shuffleButton)
-        .navigationTitle("Q 'Liked Songs'")
     }
     
     var shuffleButton: some View {

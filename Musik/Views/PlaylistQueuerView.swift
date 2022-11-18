@@ -31,8 +31,8 @@ struct PlaylistQueuerView: View {
             }
         }
         .onAppear(perform: loadTracks)
+        .navigationBarTitle(self.playlist.name)
         .navigationBarItems(trailing: shuffleButton)
-        .navigationTitle("Q '\(self.playlist.name)'")
     }
     
     var shuffleButton: some View {

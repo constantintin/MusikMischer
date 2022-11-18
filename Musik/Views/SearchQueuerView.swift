@@ -52,7 +52,7 @@ struct SearchQueuerView: View {
                 }
             }
         }
-        .navigationTitle("Q '\(self.searchText.isEmpty ? "Search" : self.searchText)'")
+        .navigationBarTitle("Search")
     }
     
     func loadTracks(_ searchText: String) {
