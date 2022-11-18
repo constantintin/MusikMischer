@@ -7,9 +7,10 @@
 
 import Foundation
 import SwiftUI
+import Combine
+import UniformTypeIdentifiers
 import SpotifyWebAPI
 import SpotifyExampleContent
-import Combine
 
 class CurrentTrack: ObservableObject {
     @Published var track: Track
@@ -26,7 +27,8 @@ struct SorterOverView: View {
     @State private var playlists: [Playlist<PlaylistItemsReference>] = []
     @State private var playlistViews: [PlaylistSelectionView] = []
     
-    @State private var trackBackgroundOpacity = 0.1
+    @State private var trackBgOpacity = 0.1
+    @State private var trackBgColor: Color = .accentColor
     
     @State private var cancellables: Set<AnyCancellable> = []
     
@@ -54,7 +56,7 @@ struct SorterOverView: View {
     
     var body: some View {
         NavigationView {
-            VStack {
+            VStack { 
                 ScrollView(.vertical) {
                     HStack() {
                         TextField("New playlist's name", text: $newPlaylistName)
@@ -105,14 +107,28 @@ struct SorterOverView: View {
                     }
                 }
                 HStack {
-                    TrackView(opacity: $trackBackgroundOpacity, track: $currentTrack.track)
+                    TrackView(bgColor: $trackBgColor, bgOpacity: $trackBgOpacity, track: $currentTrack.track)
                         .onTapGesture {
-                            self.trackBackgroundOpacity = 0.7
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                self.trackBackgroundOpacity = 0.1
+                            self.trackBgColor = .green
+                            self.trackBgOpacity = 0.7
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                self.trackBgOpacity = 0.1
+                                self.trackBgColor = .accentColor
                             }
                             retrieveCurrentlyPlaying()
                         }
+                        .onLongPressGesture(perform: {
+                            self.trackBgColor = .blue
+                            self.trackBgOpacity = 0.7
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                self.trackBgOpacity = 0.1
+                                self.trackBgColor = .accentColor
+                            }
+                            if let link = currentTrack.track.externalURLs?["spotify"] {
+                                UIPasteboard.general.setValue(link.absoluteString,
+                                            forPasteboardType: UTType.plainText.identifier)
+                            }
+                        })
                     skipButton
                         .padding(.leading, 10)
                 }

@@ -10,7 +10,8 @@ struct TrackView: View {
     @State private var loadImageCancellable: AnyCancellable? = nil
     @State private var cancellables: Set<AnyCancellable> = []
     
-    @Binding var opacity: Double
+    @Binding var bgColor: Color
+    @Binding var bgOpacity: Double
     @Binding var track: Track
     
     @State private var liked = false
@@ -49,8 +50,9 @@ struct TrackView: View {
         // Ensure the hit box extends across the entire width of the frame.
         // See https://bit.ly/2HqNk4S
         .contentShape(Rectangle())
-        .animation(Animation.easeInOut(duration: 0.3), value: self.opacity)
-        .background(Color.green.opacity(self.opacity))
+        .animation(Animation.easeInOut(duration: 0.2), value: self.bgOpacity)
+        .animation(Animation.easeInOut(duration: 0.2), value: self.bgColor)
+        .background(self.bgColor.opacity(self.bgOpacity))
         .cornerRadius(13)
         .fixedSize(horizontal: false, vertical: true)
         .contentShape(Rectangle())
@@ -67,16 +69,18 @@ struct TrackView: View {
     
     /// heart either filled or empty
     var likedImage: some View {
-        if liked {
-            return Image(systemName: "heart.fill")
-                .font(.title)
-                .scaleEffect(0.8)
-                .foregroundColor(.green)
-        } else {
-            return Image(systemName: "heart")
-                .font(.title)
-                .scaleEffect(0.8)
-                .foregroundColor(.green)
+        Group {
+            if liked {
+                Image(systemName: "heart.fill")
+                    .font(.title)
+                    .scaleEffect(0.8)
+                    .foregroundColor(.green)
+            } else {
+                Image(systemName: "heart")
+                    .font(.title)
+                    .scaleEffect(0.8)
+                    .foregroundColor(.green)
+            }
         }
     }
     

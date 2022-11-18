@@ -8,21 +8,26 @@
 import Foundation
 import SwiftUI
 import Combine
+import UniformTypeIdentifiers
 import SpotifyWebAPI
 import SpotifyExampleContent
 
 struct TrackQueueableView: View {
     
     @EnvironmentObject var spotify: Spotify
+    @Environment(\.openURL) var openURL
     
     @State private var loadImageCancellable: AnyCancellable? = nil
     @State private var cancellables: Set<AnyCancellable> = []
-    @State private var backgroundOpacity = 0.1
+    
+    @State private var bgOpacity = 0.1
+    @State private var bgColor: Color = .accentColor
     
     @State private var didRequestImage = false
     @State private var image = Image(.spotifyAlbumPlaceholder)
 
     @State private var alert: AlertItem? = nil
+    
     
     let track: Track
     
@@ -39,8 +44,9 @@ struct TrackQueueableView: View {
                 .padding(.leading, 15)
             Spacer()
         }
-        .animation(Animation.easeInOut(duration: 0.2), value: self.backgroundOpacity)
-        .background(Color.green.opacity(self.backgroundOpacity))
+        .animation(Animation.easeInOut(duration: 0.2), value: self.bgOpacity)
+        .animation(Animation.easeInOut(duration: 0.2), value: self.bgColor)
+        .background(bgColor.opacity(self.bgOpacity))
         .fixedSize(horizontal: false, vertical: true)
         .cornerRadius(13)
         .padding([.trailing, .leading], 13)
@@ -49,12 +55,26 @@ struct TrackQueueableView: View {
             loadImage()
         }
         .onTapGesture {
-            self.backgroundOpacity = 0.7
+            self.bgColor = .green
+            self.bgOpacity = 0.7
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                self.backgroundOpacity = 0.1
+                self.bgOpacity = 0.1
+                self.bgColor = .accentColor
             }
             queueTrack()
         }
+        .onLongPressGesture(perform: {
+            self.bgColor = .blue
+            self.bgOpacity = 0.7
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                self.bgOpacity = 0.1
+                self.bgColor = .accentColor
+            }
+            if let link = track.externalURLs?["spotify"] {
+                UIPasteboard.general.setValue(link.absoluteString,
+                            forPasteboardType: UTType.plainText.identifier)
+            }
+        })
     }
     
     /// add track to end of queue
