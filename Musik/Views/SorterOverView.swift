@@ -58,85 +58,50 @@ struct SorterOverView: View {
     
     var body: some View {
         NavigationView {
-            VStack { 
-                ScrollView(.vertical) {
-//                    HStack() {
-//                        TextField("New playlist's name", text: $newPlaylistName)
-//                            .focused($newPlaylistFieldIsFocused)
-//                            .padding(5)
-//                        Button {
-//                            addPlaylist(newPlaylistName)
-//                        } label: {
-//                            Image(systemName: "plus.square")
-//                                .imageScale(Image.Scale.large)
-//                                .foregroundColor(Color.green)
-//                                .padding(5)
-//                        }
-//                    }
-//                    .padding([.leading, .trailing], 10)
-//
-                    if playlists.isEmpty {
-                        if isLoadingPlaylists {
-                            HStack {
-                                ProgressView()
-                                    .padding()
-                                Text("Loading Playlists")
-                                    .font(.title)
-                                    .foregroundColor(.secondary)
-                            }
+            VStack {
+                if playlists.isEmpty {
+                    if isLoadingPlaylists {
+                        HStack {
+                            ProgressView()
+                                .padding()
+                            Text("Loading Playlists")
+                                .font(.title)
+                                .foregroundColor(.secondary)
+                        }
+                        .frame(maxHeight: .infinity)
+                    }
+                    else if couldntLoadPlaylists {
+                        Text("Couldn't Load Playlists")
+                            .font(.title)
+                            .foregroundColor(.secondary)
                             .frame(maxHeight: .infinity)
-                        }
-                        else if couldntLoadPlaylists {
-                            Text("Couldn't Load Playlists")
-                                .font(.title)
-                                .foregroundColor(.secondary)
-                                .frame(maxHeight: .infinity)
-                        }
-                        else {
-                            Text("No Playlists Found")
-                                .font(.title)
-                                .foregroundColor(.secondary)
-                                .frame(maxHeight: .infinity)
-                        }
                     }
                     else {
+                        Text("No Playlists Found")
+                            .font(.title)
+                            .foregroundColor(.secondary)
+                            .frame(maxHeight: .infinity)
+                    }
+                }
+                else {
+                    ScrollView(.vertical) {
                         LazyVGrid(columns: columns) {
                             ForEach(filteredPlaylists, id: \.uri) { playlist in
                                 PlaylistSelectionView(spotify: spotify, playlist: playlist, current: currentTrack)
                             }
                             if !searchText.isEmpty {
-                                Button {
-                                    addPlaylist(searchText)
-                                } label: {
-                                    VStack {
-                                        Image(systemName: "plus.square")
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fill)
-                                            .frame(width: 111, height: 111, alignment: .center)
-                                            .clipped()
-                                            .foregroundColor(Color.green)
-                                        Text("'\(searchText)'")
-                                            .lineLimit(1)
-                                            .truncationMode(/*@START_MENU_TOKEN@*/.tail/*@END_MENU_TOKEN@*/)
-                                            .font(.system(size: 14))
-                                            .padding(5)
-                                    }
-                                    .background(Color.gray.opacity(0.3))
-                                    .cornerRadius(5)
-                                    .contentShape(Rectangle())
-                                }
-                                .buttonStyle(.plain)
+                                newPlaylistButton
                             }
                         }
-                        .searchable(text: $searchText, prompt: "Search By Playlist Name")
-                        .onChange(of: searchText) { _ in
-                          filterPlaylists()
-                        }
-                        .onSubmit(of: .search) {
-                            filterPlaylists()
-                        }
-                        .padding(10)
                     }
+                    .searchable(text: $searchText, prompt: "Search By Playlist Name")
+                    .onChange(of: searchText) { _ in
+                        filterPlaylists()
+                    }
+                    .onSubmit(of: .search) {
+                        filterPlaylists()
+                    }
+                    .padding(10)
                 }
                 HStack {
                     TrackView(bgColor: $trackBgColor, bgOpacity: $trackBgOpacity, track: $currentTrack.track)
@@ -158,7 +123,7 @@ struct SorterOverView: View {
                             }
                             if let link = currentTrack.track.externalURLs?["spotify"] {
                                 UIPasteboard.general.setValue(link.absoluteString,
-                                            forPasteboardType: UTType.plainText.identifier)
+                                                              forPasteboardType: UTType.plainText.identifier)
                             }
                         })
                     skipButton
@@ -175,6 +140,31 @@ struct SorterOverView: View {
             }
             .onAppear(perform: retrieve)
         }
+    }
+    
+    /// button to create new playlist
+    var newPlaylistButton: some View {
+        Button {
+            addPlaylist(searchText)
+        } label: {
+            VStack {
+                Image(systemName: "plus.square")
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 111, height: 111, alignment: .center)
+                    .clipped()
+                    .foregroundColor(Color.green)
+                Text("'\(searchText)'")
+                    .lineLimit(1)
+                    .truncationMode(/*@START_MENU_TOKEN@*/.tail/*@END_MENU_TOKEN@*/)
+                    .font(.system(size: 14))
+                    .padding(5)
+            }
+            .background(Color.gray.opacity(0.3))
+            .cornerRadius(5)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
     }
     
     /// button to skip to next song
@@ -229,44 +219,44 @@ struct SorterOverView: View {
                 .receive(on: RunLoop.main)
                 .sink(receiveCompletion: { completion in
                     print("Getting user completion: \(completion)")
-                }, receiveValue: { playlist in
-                    var snapshot = playlist.snapshotId
+                }, receiveValue: { newPlaylist in
+                    // add current track to new playlist
                     if let uri = self.currentTrack.track.uri {
-                        self.spotify.api.addToPlaylist(playlist.uri, uris: [uri], position: nil)
+                        self.spotify.api.addToPlaylist(newPlaylist.uri, uris: [uri], position: nil)
                             .receive(on: RunLoop.main)
                             .sink(
                                 receiveCompletion: { completion in
                                     switch completion {
                                         case .finished:
-                                            print("Added '\(self.currentTrack.track.name)' to '\(playlist.name)'")
+                                            print("Added '\(self.currentTrack.track.name)' to '\(newPlaylist.name)'")
                                         case .failure(let error):
                                             print("Adding to playlist failed with \(error)")
                                     }
                                 },
-                                receiveValue: { newSnapshot in
-                                    snapshot = newSnapshot
-                                }
+                                receiveValue: { _ in }
                             ).store(in: &cancellables)
                     } else {
                         print("Current track \(self.currentTrack.track) has no uri")
                     }
-                    let playlistWithReference = Playlist<PlaylistItemsReference>(
-                        name: playlist.name,
-                        items: PlaylistItemsReference(href: nil, total: 0),
-                        owner: playlist.owner,
-                        isPublic: playlist.isPublic,
-                        isCollaborative: playlist.isCollaborative,
-                        description: playlist.description,
-                        snapshotId: snapshot,
-                        externalURLs: playlist.externalURLs,
-                        followers: playlist.followers,
-                        href: playlist.href,
-                        id: playlist.id,
-                        uri: playlist.uri,
-                        images: playlist.images
-                    )
-                    self.playlists.insert(playlistWithReference, at: 0)
-                    self.filteredPlaylists.insert(playlistWithReference, at: 0)
+                    
+                    // add new playlist to view
+                    spotify.api.currentUserPlaylists()
+                        // Gets all pages of playlists.
+                        .extendPages(spotify.api)
+                        .receive(on: RunLoop.main)
+                        .sink(
+                            receiveCompletion: { _ in },
+                            receiveValue: { playlistsPage in
+                                let playlists = playlistsPage.items
+                                for playlist in playlists {
+                                    if playlist.uri == newPlaylist.uri {
+                                        self.playlists.insert(playlist, at: 0)
+                                        self.filteredPlaylists.insert(playlist, at: 0)
+                                    }
+                                }
+                            }
+                        )
+                        .store(in: &cancellables)
                 })
                 .store(in: &cancellables)
         }
@@ -339,13 +329,11 @@ struct SorterOverView: View {
                 // use Combine's `collect()` operator to wait until all of the
                 // pages have been retrieved.
                 receiveValue: { playlistsPage in
-                    let playlists = playlistsPage.items
-                    for playlist in playlists {
-                        if playlist.isCollaborative || playlist.owner?.uri == currentUser?.uri {
-                            self.playlists.append(playlist)
-                            self.filteredPlaylists.append(playlist)
-                        }
+                    let editablePlaylists = playlistsPage.items.filter {
+                        $0.isCollaborative || $0.owner?.uri == currentUser?.uri
                     }
+                    self.playlists += editablePlaylists
+                    self.filteredPlaylists += editablePlaylists
                 }
             )
             .store(in: &cancellables)
