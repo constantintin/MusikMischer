@@ -12,10 +12,24 @@ struct RootView: View {
     
     var body: some View {
         NavigationView {
-            FeatureListView()
-                .navigationBarTitle("Musik")
-                .navigationBarItems(trailing: logoutButton)
-                .disabled(!spotify.isAuthorized)
+            TabView {
+                QueuerOverView()
+                    .tabItem {
+                        Image(systemName: "text.append")
+                        Text("Queuer")
+                    }
+                SorterOverView()
+                    .tabItem {
+                        Image(systemName: "folder.fill.badge.questionmark")
+                        Text("Sorter")
+                    }
+                SettingsView()
+                    .tabItem {
+                        Image(systemName: "gear")
+                        Text("Settings")
+                    }
+            }
+            .disabled(!spotify.isAuthorized)
         }
         // The login view is presented if `Spotify.isAuthorized` == `false. When
         // the login button is tapped, `Spotify.authorize()` is called. After
@@ -113,22 +127,6 @@ struct RootView: View {
         
     }
     
-    /// Removes the authorization information for the user.
-    var logoutButton: some View {
-        // Calling `spotify.api.authorizationManager.deauthorize` will cause
-        // `SpotifyAPI.authorizationManagerDidDeauthorize` to emit a signal,
-        // which will cause `Spotify.authorizationManagerDidDeauthorize()` to be
-        // called.
-        Button(action: spotify.api.authorizationManager.deauthorize, label: {
-            Text("Logout")
-                .foregroundColor(.white)
-                .padding(7)
-                .background(Color(#colorLiteral(red: 0.3923448698, green: 0.7200681584, blue: 0.19703095, alpha: 1)))
-                .cornerRadius(10)
-                .shadow(radius: 3)
-            
-        })
-    }
 }
 
 struct RootView_Previews: PreviewProvider {

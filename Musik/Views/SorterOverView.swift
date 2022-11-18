@@ -53,78 +53,80 @@ struct SorterOverView: View {
     ]
     
     var body: some View {
-        VStack {
-            ScrollView(.vertical) {
-                HStack() {
-                    TextField("New playlist's name", text: $newPlaylistName)
-                        .focused($newPlaylistFieldIsFocused)
-                        .padding(5)
-                    Button {
-                        addPlaylist(newPlaylistName)
-                    } label: {
-                        Image(systemName: "plus.square")
-                            .imageScale(Image.Scale.large)
-                            .foregroundColor(Color.green)
+        NavigationView {
+            VStack {
+                ScrollView(.vertical) {
+                    HStack() {
+                        TextField("New playlist's name", text: $newPlaylistName)
+                            .focused($newPlaylistFieldIsFocused)
                             .padding(5)
+                        Button {
+                            addPlaylist(newPlaylistName)
+                        } label: {
+                            Image(systemName: "plus.square")
+                                .imageScale(Image.Scale.large)
+                                .foregroundColor(Color.green)
+                                .padding(5)
+                        }
                     }
-                }
-                .padding([.leading, .trailing], 10)
-                
-                if playlists.isEmpty {
-                    if isLoadingPlaylists {
-                        HStack {
-                            ProgressView()
-                                .padding()
-                            Text("Loading Playlists")
+                    .padding([.leading, .trailing], 10)
+                    
+                    if playlists.isEmpty {
+                        if isLoadingPlaylists {
+                            HStack {
+                                ProgressView()
+                                    .padding()
+                                Text("Loading Playlists")
+                                    .font(.title)
+                                    .foregroundColor(.secondary)
+                            }
+                            .frame(maxHeight: .infinity)
+                        }
+                        else if couldntLoadPlaylists {
+                            Text("Couldn't Load Playlists")
                                 .font(.title)
                                 .foregroundColor(.secondary)
+                                .frame(maxHeight: .infinity)
                         }
-                        .frame(maxHeight: .infinity)
-                    }
-                    else if couldntLoadPlaylists {
-                        Text("Couldn't Load Playlists")
-                            .font(.title)
-                            .foregroundColor(.secondary)
-                            .frame(maxHeight: .infinity)
+                        else {
+                            Text("No Playlists Found")
+                                .font(.title)
+                                .foregroundColor(.secondary)
+                                .frame(maxHeight: .infinity)
+                        }
                     }
                     else {
-                        Text("No Playlists Found")
-                            .font(.title)
-                            .foregroundColor(.secondary)
-                            .frame(maxHeight: .infinity)
+                        LazyVGrid(columns: columns) {
+                            ForEach(playlists, id: \.uri) { playlist in
+                                PlaylistSelectionView(spotify: spotify, playlist: playlist, current: currentTrack)
+                            }
+                        }
+                        .padding(10)
                     }
                 }
-                else {
-                    LazyVGrid(columns: columns) {
-                        ForEach(playlists, id: \.uri) { playlist in
-                            PlaylistSelectionView(spotify: spotify, playlist: playlist, current: currentTrack)
+                HStack {
+                    TrackView(opacity: $trackBackgroundOpacity, track: $currentTrack.track)
+                        .onTapGesture {
+                            self.trackBackgroundOpacity = 0.7
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                self.trackBackgroundOpacity = 0.1
+                            }
+                            retrieveCurrentlyPlaying()
                         }
-                    }
-                    .padding(10)
+                    skipButton
+                        .padding(.leading, 10)
                 }
+                .padding([.leading, .trailing], 10)
+                .padding(.top, 5)
+                .padding(.bottom, 10)
             }
-            HStack {
-                TrackView(opacity: $trackBackgroundOpacity, track: $currentTrack.track)
-                    .onTapGesture {
-                        self.trackBackgroundOpacity = 0.7
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                            self.trackBackgroundOpacity = 0.1
-                        }
-                        retrieveCurrentlyPlaying()
-                    }
-                skipButton
-                    .padding(.leading, 10)
+            .navigationBarTitle("Sorter")
+            .navigationBarItems(trailing: refreshButton)
+            .alert(item: $alert) { alert in
+                Alert(title: alert.title, message: alert.message)
             }
-            .padding([.leading, .trailing], 10)
-            .padding(.top, 5)
-            .padding(.bottom, 10)
+            .onAppear(perform: retrieve)
         }
-        .navigationBarTitle("Sorter")
-        .navigationBarItems(trailing: refreshButton)
-        .alert(item: $alert) { alert in
-            Alert(title: alert.title, message: alert.message)
-        }
-        .onAppear(perform: retrieve)
     }
     
     /// button to skip to next song
@@ -214,6 +216,8 @@ struct SorterOverView: View {
     
     /// retrieve all spotify info
     func retrieve() {
+        print("Called refresh sorter")
+
         retrieveCurrentlyPlaying()
         retrievePlaylists()
     }

@@ -29,57 +29,58 @@ struct QueuerOverView: View {
     @State private var couldntLoadPlaylists = false
     
     var body: some View {
-        VStack {
-            if playlists.isEmpty {
-                if isLoadingPlaylists {
-                    HStack {
-                        ProgressView()
-                            .padding()
-                        Text("Loading Playlists")
+        NavigationView {
+            VStack {
+                if playlists.isEmpty {
+                    if isLoadingPlaylists {
+                        HStack {
+                            ProgressView()
+                                .padding()
+                            Text("Loading Playlists")
+                                .font(.title)
+                                .foregroundColor(.secondary)
+                        }
+                        .frame(maxHeight: .infinity)
+                    }
+                    else if couldntLoadPlaylists {
+                        Text("Couldn't Load Playlists")
                             .font(.title)
                             .foregroundColor(.secondary)
+                            .frame(maxHeight: .infinity)
                     }
-                    .frame(maxHeight: .infinity)
-                }
-                else if couldntLoadPlaylists {
-                    Text("Couldn't Load Playlists")
-                        .font(.title)
-                        .foregroundColor(.secondary)
-                        .frame(maxHeight: .infinity)
+                    else {
+                        Text("No Playlists Found")
+                            .font(.title)
+                            .foregroundColor(.secondary)
+                            .frame(maxHeight: .infinity)
+                    }
                 }
                 else {
-                    Text("No Playlists Found")
-                        .font(.title)
-                        .foregroundColor(.secondary)
-                        .frame(maxHeight: .infinity)
-                }
-            }
-            else {
-                ScrollView(.vertical) {
-                    LazyVGrid(columns: columns) {
-                        ForEach(playlists, id: \.uri) { playlist in
-                            NavigationLink {
-                                PlaylistQueuerView(spotify: self.spotify, playlist: playlist)
-                            } label: {
-                                PlaylistSquareView(spotify: self.spotify, playlist: playlist)
+                    ScrollView(.vertical) {
+                        LazyVGrid(columns: columns) {
+                            ForEach(playlists, id: \.uri) { playlist in
+                                NavigationLink {
+                                    PlaylistQueuerView(spotify: self.spotify, playlist: playlist)
+                                } label: {
+                                    PlaylistSquareView(spotify: self.spotify, playlist: playlist)
+                                }
+                                .buttonStyle(.plain)
                             }
-                            .buttonStyle(.plain)
                         }
+                        .padding(10)
                     }
-                    .padding(10)
                 }
+                queuerNavigation
+                    .frame(maxHeight: 42)
+                    .padding(10)
             }
-            queuerNavigation
-                .frame(maxHeight: 42)
-                .padding(10)
-            
+            .navigationBarTitle("Queuer")
+            .navigationBarItems(trailing: refreshButton)
+            .alert(item: $alert) { alert in
+                Alert(title: alert.title, message: alert.message)
+            }
+            .onAppear(perform: retrievePlaylists)
         }
-        .navigationTitle("Queuer")
-        .navigationBarItems(trailing: refreshButton)
-        .alert(item: $alert) { alert in
-            Alert(title: alert.title, message: alert.message)
-        }
-        .onAppear(perform: retrievePlaylists)
     }
     
     var queuerNavigation: some View {
@@ -116,6 +117,7 @@ struct QueuerOverView: View {
     
     /// get playlists for user
     func retrievePlaylists() {
+        print("Called refresh queuer")
         
         // Don't try to load any playlists if we're in preview mode.
         if ProcessInfo.processInfo.isPreviewing { return }
