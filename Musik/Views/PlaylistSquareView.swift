@@ -20,8 +20,6 @@ struct PlaylistSquareView: View {
     @State private var didRequestImage = false
     @State private var snapshot: String
     
-    @State private var shouldNavigate = false
-    
     init(spotify: Spotify, playlist: Playlist<PlaylistItemsReference>) {
         self.spotify = spotify
         self.playlist = playlist
@@ -88,19 +86,5 @@ struct PlaylistSquareView: View {
                     self.image = image
                 }
             )
-    }
-}
-
-struct PlaylistSquare_Previews: PreviewProvider {
-    static let spotify = Spotify()
-    
-    static var previews: some View {
-        ScrollView(.vertical) {
-            VStack {
-                PlaylistSquareView(spotify: spotify, playlist: .rockClassics)
-                PlaylistSquareView(spotify: spotify, playlist: .thisIsRadiohead)
-            }
-            .environmentObject(spotify)
-        }
     }
 }
