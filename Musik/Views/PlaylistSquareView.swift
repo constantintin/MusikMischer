@@ -45,7 +45,9 @@ struct PlaylistSquareView: View {
                 .padding([.leading, .trailing, .bottom], 5)
         }
         .frame(maxWidth: 111)
-        .background(Color.gray.opacity(0.3))
+        .background(
+            LinearGradient(colors: [.blue.opacity(0.7), .clear, .clear, .blue.opacity(0.7)], startPoint: .leading, endPoint: .trailing)
+        )
         .cornerRadius(5)
         .shadow(radius: 3)
         .onAppear(perform: {

@@ -118,7 +118,9 @@ struct QueuerOverView: View {
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color.gray.opacity(0.3))
+            .background(
+                RadialGradient(colors: [.clear, .blue.opacity(0.7)], center: .center, startRadius: 0, endRadius: 100)
+            )
             .cornerRadius(5)
             .shadow(radius: 3)
             .buttonStyle(.plain)

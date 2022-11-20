@@ -56,7 +56,9 @@ struct PlaylistSelectionView: View {
                 .padding([.leading, .trailing, .bottom], 5)
         }
         .frame(maxWidth: 111)
-        .background(self.selected ? Color.green : Color.gray.opacity(0.3))
+        .background(
+            LinearGradient(colors: [self.selected ? Color.green.opacity(0.7) : Color.gray.opacity(0.3), .clear, self.selected ? Color.green.opacity(0.7) : Color.gray.opacity(0.3)], startPoint: .leading, endPoint: .trailing)
+        )
         .cornerRadius(5)
         .shadow(radius: 3)
         .onAppear(perform: {
