@@ -29,11 +29,18 @@ struct TrackView: View {
                 .resizable()
                 .aspectRatio(1, contentMode: .fill)
                 .frame(width: 42, height: 42)
-            Text(trackDisplayName())
-                .lineLimit(2)
-                .truncationMode(/*@START_MENU_TOKEN@*/.tail/*@END_MENU_TOKEN@*/)
-                .padding(.leading, 15)
-                .font(.system(size: 13))
+            VStack(alignment: .leading) {
+                Text(track.name)
+                    .lineLimit(1)
+                    .truncationMode(.tail)
+                    .font(.system(size: 13))
+                    .foregroundColor(.primary)
+                Text(trackArtists())
+                    .lineLimit(1)
+                    .truncationMode(.tail)
+                    .font(.system(size: 13))
+                    .foregroundColor(.secondary)
+            }
             Spacer()
             likedImage
                 .onTapGesture {
@@ -119,12 +126,15 @@ struct TrackView: View {
     }
     
     /// The display name for the track. E.g., "Eclipse - Pink Floyd".
-    func trackDisplayName() -> String {
-        var displayName = track.name
-        if let artistName = track.artists?.first?.name {
-            displayName += " - \(artistName)"
+    func trackArtists() -> String {
+        var display = ""
+        if let artists = track.artists {
+            for artist in artists {
+                display += "\(artist.name), "
+            }
+            display = String(display.dropLast(2))
         }
-        return displayName
+        return display
     }
     
     /// check whether track is saved or not and store in self.liked
