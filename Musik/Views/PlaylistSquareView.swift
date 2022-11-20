@@ -42,11 +42,12 @@ struct PlaylistSquareView: View {
                 .lineLimit(1)
                 .truncationMode(.tail)
                 .font(.system(size: 14))
-                .padding(5)
+                .padding([.leading, .trailing, .bottom], 5)
         }
         .frame(maxWidth: 111)
         .background(Color.gray.opacity(0.3))
         .cornerRadius(5)
+        .shadow(radius: 3)
         .onAppear(perform: {
             loadImage()
         })
