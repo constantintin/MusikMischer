@@ -124,10 +124,11 @@ struct SorterOverView: View {
                     .padding(.top, 5)
                 }
                 .navigationBarTitle("Sorter")
-                .navigationBarItems(leading:
-                                        SpotifyButtonView(),
-                                    trailing:
-                                        refreshButton)
+                .navigationBarItems(trailing:
+                                        HStack {
+                    SpotifyButtonView(uriString: "spotify:")
+                    refreshButton
+                })
                 .alert(item: $alert) { alert in
                     Alert(title: alert.title, message: alert.message)
                 }
@@ -165,8 +166,8 @@ struct SorterOverView: View {
     var skipButton: some View {
         Button(action: skipToNext) {
             Image(systemName: "forward.end.fill")
-                .font(.title)
-                .scaleEffect(0.8)
+                .font(.body)
+                .imageScale(.large)
                 .foregroundColor(.green)
         }
     }
@@ -176,7 +177,7 @@ struct SorterOverView: View {
         Button(action: retrieve) {
             Image(systemName: "arrow.clockwise")
                 .font(.title)
-                .scaleEffect(0.8)
+                .imageScale(.medium)
         }
         .disabled(isLoadingPlaylists)
         

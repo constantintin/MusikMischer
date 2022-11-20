@@ -71,7 +71,11 @@ struct LikedQueuerView: View {
         }
         .onAppear(perform: loadTracks)
         .navigationBarTitle("Liked Songs")
-        .navigationBarItems(trailing: shuffleButton)
+        .navigationBarItems(trailing:
+                                HStack {
+            SpotifyButtonView(uriString: "https://open.spotify.com/collection/tracks")
+            shuffleButton
+        })
     }
     
     /// filter tracks based on search
@@ -96,7 +100,7 @@ struct LikedQueuerView: View {
         Button(action: shuffleTracks) {
             Image(systemName: "shuffle")
                 .font(.title)
-                .scaleEffect(0.8)
+                .imageScale(.medium)
         }
     }
     

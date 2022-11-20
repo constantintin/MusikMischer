@@ -32,7 +32,11 @@ struct PlaylistQueuerView: View {
         }
         .onAppear(perform: loadTracks)
         .navigationBarTitle(self.playlist.name)
-        .navigationBarItems(trailing: shuffleButton)
+        .navigationBarItems(trailing:
+                                HStack {
+            SpotifyButtonView(uriString: playlist.uri)
+            shuffleButton
+        })
     }
     
     var shuffleButton: some View {

@@ -63,11 +63,6 @@ struct QueuerOverView: View {
                                         PlaylistQueuerView(spotify: self.spotify, playlist: playlist)
                                     } label: {
                                         PlaylistSquareView(spotify: self.spotify, playlist: playlist)
-                                            .onLongPressGesture(perform: {
-                                                if let url = URL(string: playlist.uri) {
-                                                    openURL(url)
-                                                }
-                                            })
                                     }
                                     .buttonStyle(.plain)
                                 }
@@ -88,10 +83,11 @@ struct QueuerOverView: View {
                         .padding(.top, 5)
                 }
                 .navigationBarTitle("Queuer")
-                .navigationBarItems(leading:
-                                        SpotifyButtonView(),
-                                    trailing:
-                                        refreshButton)
+                .navigationBarItems(trailing:
+                                        HStack {
+                    SpotifyButtonView(uriString: "spotify:")
+                    refreshButton
+                })
                 .alert(item: $alert) { alert in
                     Alert(title: alert.title, message: alert.message)
                 }
@@ -126,7 +122,7 @@ struct QueuerOverView: View {
         Button(action: retrievePlaylists) {
             Image(systemName: "arrow.clockwise")
                 .font(.title)
-                .scaleEffect(0.8)
+                .imageScale(.medium)
         }
         .disabled(isLoadingPlaylists)
         

@@ -11,9 +11,11 @@ import SwiftUI
 struct SpotifyButtonView: View {
     @Environment(\.openURL) var openURL
     
+    let uriString: String
+    
     var body: some View {
         Button {
-            if let url = URL(string: "https://open.spotify.com") {
+            if let url = URL(string: uriString) {
                 openURL(url)
             }
         } label: {

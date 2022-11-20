@@ -90,13 +90,13 @@ struct TrackView: View {
         Group {
             if liked {
                 Image(systemName: "heart.fill")
-                    .font(.title)
-                    .scaleEffect(0.8)
+                    .font(.body)
+                    .imageScale(.large)
                     .foregroundColor(.green)
             } else {
                 Image(systemName: "heart")
-                    .font(.title)
-                    .scaleEffect(0.8)
+                    .font(.body)
+                    .imageScale(.large)
                     .foregroundColor(.green)
             }
         }

@@ -12,6 +12,7 @@ import SpotifyWebAPI
 
 struct PlaylistSquareView: View {
     var spotify: Spotify
+    @Environment(\.openURL) var openURL
     
     private let playlist: Playlist<PlaylistItemsReference>
     /// The cover image for the playlist.
