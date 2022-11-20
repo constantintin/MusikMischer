@@ -14,6 +14,9 @@ struct LikedQueuerView: View {
     var spotify: Spotify
     
     @State private var tracks: [Track] = []
+    @State private var filteredTracks: [Track] = []
+    
+    @State private var searchText = ""
     
     @State private var cancellables: Set<AnyCancellable> = []
     
@@ -52,16 +55,41 @@ struct LikedQueuerView: View {
             else {
                 ScrollView(.vertical) {
                     LazyVStack(alignment: .leading, spacing: 10) {
-                        ForEach(self.tracks, id: \.uri) { track in
+                        ForEach(self.filteredTracks, id: \.uri) { track in
                             TrackQueueableView(track: track)
                         }
                     }
+                }
+                .searchable(text: $searchText, prompt: "Search By Song Name")
+                .onChange(of: searchText) { _ in
+                    filterTracks()
+                }
+                .onSubmit(of: .search) {
+                    filterTracks()
                 }
             }
         }
         .onAppear(perform: loadTracks)
         .navigationBarTitle("Liked Songs")
         .navigationBarItems(trailing: shuffleButton)
+    }
+    
+    /// filter tracks based on search
+    func filterTracks() {
+        if searchText.isEmpty {
+            filteredTracks = tracks
+        } else {
+            filteredTracks = tracks.filter {
+                var trackTextToSearch = $0.name
+                if let artists = $0.artists {
+                    for artist in artists {
+                        trackTextToSearch += " \(artist.name)"
+                            
+                    }
+                }
+                return trackTextToSearch.localizedCaseInsensitiveContains(searchText)
+            }
+        }
     }
     
     var shuffleButton: some View {
@@ -73,7 +101,7 @@ struct LikedQueuerView: View {
     }
     
     func shuffleTracks() {
-        self.tracks.shuffle()
+        self.filteredTracks.shuffle()
     }
     
     func loadTracks() {
@@ -98,6 +126,7 @@ struct LikedQueuerView: View {
                 },
                 receiveValue: { savedTracksPage in
                     self.tracks += savedTracksPage.items.map(\.item)
+                    self.filteredTracks += savedTracksPage.items.map(\.item)
                 }
             )
             .store(in: &cancellables)
