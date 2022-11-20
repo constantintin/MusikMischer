@@ -10,8 +10,6 @@ struct TrackView: View {
     @State private var loadImageCancellable: AnyCancellable? = nil
     @State private var cancellables: Set<AnyCancellable> = []
     
-    @Binding var bgColor: Color
-    @Binding var bgOpacity: Double
     @Binding var track: Track
     
     @Binding var loading: Bool
@@ -31,6 +29,7 @@ struct TrackView: View {
                 .resizable()
                 .aspectRatio(1, contentMode: .fill)
                 .frame(width: 42, height: 42)
+                .overlay(progressView, alignment: .center)
             VStack(alignment: .leading) {
                 Text(track.name)
                     .lineLimit(1)
@@ -44,6 +43,7 @@ struct TrackView: View {
                     .foregroundColor(.secondary)
             }
             Spacer()
+                .overlay(progressView, alignment: .center)
             likedImage
                 .onTapGesture {
                     if !self.operating {
@@ -56,14 +56,11 @@ struct TrackView: View {
                 }
                 .padding(.trailing, 5)
         }
-        .overlay(progressView, alignment: .center)
         // Ensure the hit box extends across the entire width of the frame.
         // See https://bit.ly/2HqNk4S
         .contentShape(Rectangle())
-        .animation(Animation.easeInOut(duration: 0.2), value: self.bgOpacity)
-        .animation(Animation.easeInOut(duration: 0.2), value: self.bgColor)
-        .background(self.bgColor.opacity(self.bgOpacity))
-        .cornerRadius(13)
+        .cornerRadius(5)
+        .shadow(radius: 3)
         .fixedSize(horizontal: false, vertical: true)
         .contentShape(Rectangle())
         .onAppear {

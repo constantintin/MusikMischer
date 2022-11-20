@@ -30,8 +30,6 @@ struct SorterOverView: View {
     
     @State private var searchText = ""
     
-    @State private var trackBgOpacity = 0.1
-    @State private var trackBgColor: Color = .gray
     @State private var trackIsLoading: Bool = false
     
     @State private var cancellables: Set<AnyCancellable> = []
@@ -107,7 +105,7 @@ struct SorterOverView: View {
                         .padding([.leading, .trailing], 10)
                     }
                     HStack {
-                        TrackView(bgColor: $trackBgColor, bgOpacity: $trackBgOpacity, track: $currentTrack.track, loading: $trackIsLoading)
+                        TrackView(track: $currentTrack.track, loading: $trackIsLoading)
                             .onTapGesture {
                                 self.trackIsLoading = true
                                 retrieveCurrentlyPlaying()
