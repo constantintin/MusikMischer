@@ -20,7 +20,7 @@ struct SpotifyButtonView: View {
             Image("spotify logo green")
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-                .frame(maxWidth: 42, maxHeight: 42)
+                .frame(maxWidth: 33, maxHeight: 33)
         }
         .buttonStyle(.plain)
     }
