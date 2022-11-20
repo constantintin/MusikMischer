@@ -58,90 +58,92 @@ struct SorterOverView: View {
     ]
     
     var body: some View {
-        NavigationView {
-            VStack {
-                if playlists.isEmpty {
-                    if isLoadingPlaylists {
-                        HStack {
-                            ProgressView()
-                                .padding()
-                            Text("Loading Playlists")
+        GeometryReader { geo in
+            NavigationView {
+                VStack {
+                    if playlists.isEmpty {
+                        if isLoadingPlaylists {
+                            HStack {
+                                ProgressView()
+                                    .padding()
+                                Text("Loading Playlists")
+                                    .font(.title)
+                                    .foregroundColor(.secondary)
+                            }
+                            .frame(maxHeight: .infinity)
+                        }
+                        else if couldntLoadPlaylists {
+                            Text("Couldn't Load Playlists")
                                 .font(.title)
                                 .foregroundColor(.secondary)
+                                .frame(maxHeight: .infinity)
                         }
-                        .frame(maxHeight: .infinity)
-                    }
-                    else if couldntLoadPlaylists {
-                        Text("Couldn't Load Playlists")
-                            .font(.title)
-                            .foregroundColor(.secondary)
-                            .frame(maxHeight: .infinity)
+                        else {
+                            Text("No Playlists Found")
+                                .font(.title)
+                                .foregroundColor(.secondary)
+                                .frame(maxHeight: .infinity)
+                        }
                     }
                     else {
-                        Text("No Playlists Found")
-                            .font(.title)
-                            .foregroundColor(.secondary)
-                            .frame(maxHeight: .infinity)
-                    }
-                }
-                else {
-                    ScrollView(.vertical) {
-                        LazyVGrid(columns: columns) {
-                            ForEach(filteredPlaylists, id: \.uri) { playlist in
-                                PlaylistSelectionView(spotify: spotify, playlist: playlist, current: currentTrack)
-                            }
-                            if !searchText.isEmpty {
-                                newPlaylistButton
+                        ScrollView(.vertical) {
+                            LazyVGrid(columns: [GridItem](repeating: GridItem(.flexible()), count: numColumns(geo.size.width))) {
+                                ForEach(filteredPlaylists, id: \.uri) { playlist in
+                                    PlaylistSelectionView(spotify: spotify, playlist: playlist, current: currentTrack)
+                                }
+                                if !searchText.isEmpty {
+                                    newPlaylistButton
+                                }
                             }
                         }
-                    }
-                    .searchable(text: $searchText, prompt: "Search By Playlist Name")
-                    .onChange(of: searchText) { _ in
-                        filterPlaylists()
-                    }
-                    .onSubmit(of: .search) {
-                        filterPlaylists()
-                    }
-                    .padding([.leading, .trailing], 10)
-                }
-                HStack {
-                    TrackView(bgColor: $trackBgColor, bgOpacity: $trackBgOpacity, track: $currentTrack.track)
-                        .onTapGesture {
-                            self.trackBgColor = .green
-                            self.trackBgOpacity = 0.7
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                                self.trackBgOpacity = 0.1
-                                self.trackBgColor = .gray
-                            }
-                            retrieveCurrentlyPlaying()
+                        .searchable(text: $searchText, prompt: "Search By Playlist Name")
+                        .onChange(of: searchText) { _ in
+                            filterPlaylists()
                         }
-                        .onLongPressGesture(perform: {
-                            self.trackBgColor = .blue
-                            self.trackBgOpacity = 0.7
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                                self.trackBgOpacity = 0.1
-                                self.trackBgColor = .gray
+                        .onSubmit(of: .search) {
+                            filterPlaylists()
+                        }
+                        .padding([.leading, .trailing], 10)
+                    }
+                    HStack {
+                        TrackView(bgColor: $trackBgColor, bgOpacity: $trackBgOpacity, track: $currentTrack.track)
+                            .onTapGesture {
+                                self.trackBgColor = .green
+                                self.trackBgOpacity = 0.7
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                    self.trackBgOpacity = 0.1
+                                    self.trackBgColor = .gray
+                                }
+                                retrieveCurrentlyPlaying()
                             }
-                            if let link = currentTrack.track.externalURLs?["spotify"] {
-                                UIPasteboard.general.setValue(link.absoluteString,
-                                                              forPasteboardType: UTType.plainText.identifier)
-                            }
-                        })
-                    skipButton
-                        .padding(.leading, 10)
+                            .onLongPressGesture(perform: {
+                                self.trackBgColor = .blue
+                                self.trackBgOpacity = 0.7
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                    self.trackBgOpacity = 0.1
+                                    self.trackBgColor = .gray
+                                }
+                                if let link = currentTrack.track.externalURLs?["spotify"] {
+                                    UIPasteboard.general.setValue(link.absoluteString,
+                                                                  forPasteboardType: UTType.plainText.identifier)
+                                }
+                            })
+                        skipButton
+                            .padding(.leading, 10)
+                    }
+                    .padding([.leading, .trailing, .bottom], 10)
+                    .padding(.top, 5)
                 }
-                .padding([.leading, .trailing, .bottom], 10)
-                .padding(.top, 5)
+                .navigationBarTitle("Sorter")
+                .navigationBarItems(leading:
+                                        SpotifyButtonView(),
+                                    trailing:
+                                        refreshButton)
+                .alert(item: $alert) { alert in
+                    Alert(title: alert.title, message: alert.message)
+                }
+                .onAppear(perform: retrieve)
             }
-            .navigationBarTitle("Sorter")
-            .navigationBarItems(leading:
-                                    SpotifyButtonView(),
-                                trailing:
-                                    refreshButton)
-            .alert(item: $alert) { alert in
-                Alert(title: alert.title, message: alert.message)
-            }
-            .onAppear(perform: retrieve)
         }
     }
     
@@ -189,6 +191,11 @@ struct SorterOverView: View {
         }
         .disabled(isLoadingPlaylists)
         
+    }
+    
+    /// calculate columns based on device width
+    func numColumns(_ width: Double) -> Int {
+        Int((width / (111 + 5)).rounded(.down))
     }
     
     /// filter playlists based on search

@@ -11,14 +11,6 @@ import SpotifyWebAPI
 import Combine
 
 struct QueuerOverView: View {
-    let columns = [
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-        GridItem(.flexible())
-    ]
-    
-    
-    
     @EnvironmentObject var spotify: Spotify
     @State private var currentUser: SpotifyUser? = nil
     
@@ -34,68 +26,70 @@ struct QueuerOverView: View {
     @State private var couldntLoadPlaylists = false
     
     var body: some View {
-        NavigationView {
-            VStack {
-                if playlists.isEmpty {
-                    if isLoadingPlaylists {
-                        HStack {
-                            ProgressView()
-                                .padding()
-                            Text("Loading Playlists")
+        GeometryReader { geo in
+            NavigationView {
+                VStack {
+                    if playlists.isEmpty {
+                        if isLoadingPlaylists {
+                            HStack {
+                                ProgressView()
+                                    .padding()
+                                Text("Loading Playlists")
+                                    .font(.title)
+                                    .foregroundColor(.secondary)
+                            }
+                            .frame(maxHeight: .infinity)
+                        }
+                        else if couldntLoadPlaylists {
+                            Text("Couldn't Load Playlists")
                                 .font(.title)
                                 .foregroundColor(.secondary)
+                                .frame(maxHeight: .infinity)
                         }
-                        .frame(maxHeight: .infinity)
-                    }
-                    else if couldntLoadPlaylists {
-                        Text("Couldn't Load Playlists")
-                            .font(.title)
-                            .foregroundColor(.secondary)
-                            .frame(maxHeight: .infinity)
+                        else {
+                            Text("No Playlists Found")
+                                .font(.title)
+                                .foregroundColor(.secondary)
+                                .frame(maxHeight: .infinity)
+                        }
                     }
                     else {
-                        Text("No Playlists Found")
-                            .font(.title)
-                            .foregroundColor(.secondary)
-                            .frame(maxHeight: .infinity)
-                    }
-                }
-                else {
-                    ScrollView(.vertical) {
-                        LazyVGrid(columns: columns) {
-                            ForEach(filteredPlaylists, id: \.uri) { playlist in
-                                NavigationLink {
-                                    PlaylistQueuerView(spotify: self.spotify, playlist: playlist)
-                                } label: {
-                                    PlaylistSquareView(spotify: self.spotify, playlist: playlist)
+                        ScrollView(.vertical) {
+                            LazyVGrid(columns: [GridItem](repeating: GridItem(.flexible()), count: numColumns(geo.size.width))) {
+                                ForEach(filteredPlaylists, id: \.uri) { playlist in
+                                    NavigationLink {
+                                        PlaylistQueuerView(spotify: self.spotify, playlist: playlist)
+                                    } label: {
+                                        PlaylistSquareView(spotify: self.spotify, playlist: playlist)
+                                    }
+                                    .buttonStyle(.plain)
                                 }
-                                .buttonStyle(.plain)
                             }
+                            .searchable(text: $searchText, prompt: "Search By Playlist Name")
+                            .onChange(of: searchText) { _ in
+                                filterPlaylists()
+                            }
+                            .onSubmit(of: .search) {
+                                filterPlaylists()
+                            }
+                            .padding([.leading, .trailing], 10)
                         }
-                        .searchable(text: $searchText, prompt: "Search By Playlist Name")
-                        .onChange(of: searchText) { _ in
-                          filterPlaylists()
-                        }
-                        .onSubmit(of: .search) {
-                            filterPlaylists()
-                        }
-                        .padding([.leading, .trailing], 10)
                     }
+                    queuerNavigation
+                        .frame(maxHeight: 42)
+                        .padding([.leading, .trailing, .bottom], 10)
+                        .padding(.top, 5)
                 }
-                queuerNavigation
-                    .frame(maxHeight: 42)
-                    .padding([.leading, .trailing, .bottom], 10)
-                    .padding(.top, 5)
+                .navigationBarTitle("Queuer")
+                .navigationBarItems(leading:
+                                        SpotifyButtonView(),
+                                    trailing:
+                                        refreshButton)
+                .alert(item: $alert) { alert in
+                    Alert(title: alert.title, message: alert.message)
+                }
+                .onAppear(perform: retrievePlaylists)
             }
-            .navigationBarTitle("Queuer")
-            .navigationBarItems(leading:
-                                    SpotifyButtonView(),
-                                trailing:
-                                    refreshButton)
-            .alert(item: $alert) { alert in
-                Alert(title: alert.title, message: alert.message)
-            }
-            .onAppear(perform: retrievePlaylists)
         }
     }
     
@@ -129,6 +123,11 @@ struct QueuerOverView: View {
         }
         .disabled(isLoadingPlaylists)
         
+    }
+    
+    /// calculate columns based on device width
+    func numColumns(_ screenWidth: Double) -> Int {
+        Int((screenWidth / (111 + 5)).rounded(.down))
     }
     
     /// filter playlists based on search
