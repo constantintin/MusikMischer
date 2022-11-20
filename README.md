@@ -1,5 +1,5 @@
-# Musik
-Extended functionality and sleak graphical interfaces for Spotify as an iOS app.
+# Musik for Spotify
+iOS app to extend functionality of Spotify.
 ## Sorter
 Sort currently playing song into owned playlists by selecting them graphically.
 ## Queuer
