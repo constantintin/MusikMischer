@@ -97,6 +97,9 @@ struct PlaylistSelectionView: View {
                         self.operating = false
                         switch completion {
                             case .finished:
+                                self.trackUris.removeAll { value in
+                                    value == uri
+                                }
                                 print("Removed '\(self.current.track.name)' from '\(self.playlist.name)'")
                             case .failure(let error):
                             self.selected.toggle()
@@ -124,6 +127,7 @@ struct PlaylistSelectionView: View {
                         self.operating = false
                         switch completion {
                             case .finished:
+                                self.trackUris.append(uri)
                                 print("Added '\(self.current.track.name)' to '\(self.playlist.name)'")
                             case .failure(let error):
                                 self.selected.toggle()
