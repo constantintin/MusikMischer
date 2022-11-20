@@ -32,6 +32,7 @@ struct SorterOverView: View {
     
     @State private var trackBgOpacity = 0.1
     @State private var trackBgColor: Color = .gray
+    @State private var trackIsLoading: Bool = false
     
     @State private var cancellables: Set<AnyCancellable> = []
     
@@ -106,14 +107,9 @@ struct SorterOverView: View {
                         .padding([.leading, .trailing], 10)
                     }
                     HStack {
-                        TrackView(bgColor: $trackBgColor, bgOpacity: $trackBgOpacity, track: $currentTrack.track)
+                        TrackView(bgColor: $trackBgColor, bgOpacity: $trackBgOpacity, track: $currentTrack.track, loading: $trackIsLoading)
                             .onTapGesture {
-                                self.trackBgColor = .green
-                                self.trackBgOpacity = 0.7
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                                    self.trackBgOpacity = 0.1
-                                    self.trackBgColor = .gray
-                                }
+                                self.trackIsLoading = true
                                 retrieveCurrentlyPlaying()
                             }
                             .onLongPressGesture(perform: {
@@ -292,6 +288,7 @@ struct SorterOverView: View {
                 switch context?.item {
                 case let .some(.track(track)):
                     self.currentTrack.track = track
+                    self.trackIsLoading = false
                 default:
                     ()
                 }

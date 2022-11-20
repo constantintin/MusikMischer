@@ -14,6 +14,8 @@ struct TrackView: View {
     @Binding var bgOpacity: Double
     @Binding var track: Track
     
+    @Binding var loading: Bool
+    
     @State private var liked = false
     @State private var operating: Bool = false
     
@@ -54,6 +56,7 @@ struct TrackView: View {
                 }
                 .padding(.trailing, 5)
         }
+        .overlay(progressView, alignment: .center)
         // Ensure the hit box extends across the entire width of the frame.
         // See https://bit.ly/2HqNk4S
         .contentShape(Rectangle())
@@ -72,6 +75,17 @@ struct TrackView: View {
             self.didRequestImage = false
             loadImage()
         })
+    }
+    
+    /// progress view if loading
+    var progressView: some View {
+        Group {
+            if loading {
+                ProgressView()
+            } else {
+                EmptyView()
+            }
+        }
     }
     
     /// heart either filled or empty
