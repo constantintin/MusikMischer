@@ -170,9 +170,10 @@ struct QueuerOverView: View {
         
         self.isLoadingPlaylists = true
         self.playlists = []
+        self.filteredPlaylists = []
         spotify.api.currentUserPlaylists()
             // Gets all pages of playlists.
-            .extendPagesConcurrently(spotify.api)
+            .extendPages(spotify.api)
             .receive(on: RunLoop.main)
             .sink(
                 receiveCompletion: { completion in
