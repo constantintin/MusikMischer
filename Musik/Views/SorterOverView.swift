@@ -245,7 +245,7 @@ struct SorterOverView: View {
                     // add new playlist to view
                     spotify.api.currentUserPlaylists()
                         // Gets all pages of playlists.
-                        .extendPages(spotify.api)
+                        .extendPagesConcurrently(spotify.api)
                         .receive(on: RunLoop.main)
                         .sink(
                             receiveCompletion: { _ in },
@@ -312,7 +312,7 @@ struct SorterOverView: View {
         self.playlists = []
         spotify.api.currentUserPlaylists()
             // Gets all pages of playlists.
-            .extendPages(spotify.api)
+            .extendPagesConcurrently(spotify.api)
             .receive(on: RunLoop.main)
             .sink(
                 receiveCompletion: { completion in

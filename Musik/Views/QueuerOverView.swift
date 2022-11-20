@@ -161,7 +161,7 @@ struct QueuerOverView: View {
         self.playlists = []
         spotify.api.currentUserPlaylists()
             // Gets all pages of playlists.
-            .extendPages(spotify.api)
+            .extendPagesConcurrently(spotify.api)
             .receive(on: RunLoop.main)
             .sink(
                 receiveCompletion: { completion in

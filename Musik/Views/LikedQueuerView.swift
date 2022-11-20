@@ -80,7 +80,7 @@ struct LikedQueuerView: View {
         self.isLoadingTracks = true
         
         spotify.api.currentUserSavedTracks()
-            .extendPages(spotify.api)
+            .extendPagesConcurrently(spotify.api)
             .receive(on: RunLoop.main)
             .sink(
                 receiveCompletion: { completion in
