@@ -24,6 +24,7 @@ struct QueuerOverView: View {
 
     @State private var cancellables: Set<AnyCancellable> = []
 
+    @State private var loadedPlaylists = false
     @State private var isLoadingPlaylists = false
     @State private var couldntLoadPlaylists = false
     
@@ -91,7 +92,12 @@ struct QueuerOverView: View {
                 .alert(item: $alert) { alert in
                     Alert(title: alert.title, message: alert.message)
                 }
-                .onAppear(perform: retrievePlaylists)
+                .onAppear {
+                    if !loadedPlaylists {
+                        retrievePlaylists()
+                        loadedPlaylists = true
+                    }
+                }
             }
         }
     }
@@ -114,6 +120,7 @@ struct QueuerOverView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Color.gray.opacity(0.3))
             .cornerRadius(5)
+            .shadow(radius: 3)
             .buttonStyle(.plain)
         }
     }

@@ -34,6 +34,7 @@ struct SorterOverView: View {
     
     @State private var cancellables: Set<AnyCancellable> = []
     
+    @State private var loadedPlaylists = false
     @State private var isLoadingPlaylists = false
     @State private var couldntLoadPlaylists = false
     
@@ -132,7 +133,12 @@ struct SorterOverView: View {
                 .alert(item: $alert) { alert in
                     Alert(title: alert.title, message: alert.message)
                 }
-                .onAppear(perform: retrieve)
+                .onAppear {
+                    if !loadedPlaylists {
+                        retrievePlaylists()
+                        loadedPlaylists = true
+                    }
+                }
             }
         }
     }
