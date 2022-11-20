@@ -119,7 +119,7 @@ struct QueuerOverView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(
-                RadialGradient(colors: [.clear, .blue.opacity(0.7)], center: .center, startRadius: 0, endRadius: 100)
+                RadialGradient(colors: [.clear, .gray.opacity(0.7)], center: .center, startRadius: 0, endRadius: 100)
             )
             .cornerRadius(5)
             .shadow(radius: 3)
