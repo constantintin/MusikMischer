@@ -159,7 +159,7 @@ struct SorterOverView: View {
                     .foregroundColor(Color.green)
                 Text("'\(searchText)'")
                     .lineLimit(1)
-                    .truncationMode(/*@START_MENU_TOKEN@*/.tail/*@END_MENU_TOKEN@*/)
+                    .truncationMode(.tail)
                     .font(.system(size: 14))
                     .padding(5)
             }

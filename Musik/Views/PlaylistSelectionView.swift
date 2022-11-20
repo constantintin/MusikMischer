@@ -50,7 +50,7 @@ struct PlaylistSelectionView: View {
                 .overlay(progressView, alignment: .center)
             Text(self.playlist.name)
                 .lineLimit(1)
-                .truncationMode(/*@START_MENU_TOKEN@*/.tail/*@END_MENU_TOKEN@*/)
+                .truncationMode(.tail)
                 .font(.system(size: 14))
                 .padding(5)
         }
