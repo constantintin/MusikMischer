@@ -12,6 +12,8 @@ import Combine
 
 struct QueuerOverView: View {
     @EnvironmentObject var spotify: Spotify
+    @Environment(\.openURL) var openURL
+    
     @State private var currentUser: SpotifyUser? = nil
     
     @State private var alert: AlertItem? = nil
@@ -61,6 +63,11 @@ struct QueuerOverView: View {
                                         PlaylistQueuerView(spotify: self.spotify, playlist: playlist)
                                     } label: {
                                         PlaylistSquareView(spotify: self.spotify, playlist: playlist)
+                                            .onLongPressGesture(perform: {
+                                                if let url = URL(string: playlist.uri) {
+                                                    openURL(url)
+                                                }
+                                            })
                                     }
                                     .buttonStyle(.plain)
                                 }

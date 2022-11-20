@@ -12,6 +12,7 @@ import SpotifyWebAPI
 
 struct PlaylistSelectionView: View {
     var spotify: Spotify
+    @Environment(\.openURL) var openURL
     
     private let playlist: Playlist<PlaylistItemsReference>
     /// The cover image for the playlist.
@@ -73,6 +74,11 @@ struct PlaylistSelectionView: View {
                 }
             }
         }
+        .onLongPressGesture(perform: {
+            if let url = URL(string: playlist.uri) {
+                openURL(url)
+            }
+        })
     }
     
     /// progress view if operating

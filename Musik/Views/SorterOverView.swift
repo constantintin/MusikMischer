@@ -113,15 +113,10 @@ struct SorterOverView: View {
                                 retrieveCurrentlyPlaying()
                             }
                             .onLongPressGesture(perform: {
-                                self.trackBgColor = .blue
-                                self.trackBgOpacity = 0.7
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                                    self.trackBgOpacity = 0.1
-                                    self.trackBgColor = .gray
-                                }
-                                if let link = currentTrack.track.externalURLs?["spotify"] {
-                                    UIPasteboard.general.setValue(link.absoluteString,
-                                                                  forPasteboardType: UTType.plainText.identifier)
+                                if let artistUri = currentTrack.track.album?.uri {
+                                    if let url = URL(string: artistUri) {
+                                        openURL(url)
+                                    }
                                 }
                             })
                         skipButton

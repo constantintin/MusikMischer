@@ -72,15 +72,10 @@ struct TrackQueueableView: View {
             queueTrack()
         }
         .onLongPressGesture(perform: {
-            self.bgColor = .blue
-            self.bgOpacity = 0.7
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                self.bgOpacity = 0.1
-                self.bgColor = .gray
-            }
-            if let link = track.externalURLs?["spotify"] {
-                UIPasteboard.general.setValue(link.absoluteString,
-                            forPasteboardType: UTType.plainText.identifier)
+            if let artistUri = track.album?.uri {
+                if let url = URL(string: artistUri) {
+                    openURL(url)
+                }
             }
         })
     }
