@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		380F8D4C292A27F000968871 /* SpotifyButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 380F8D4B292A27F000968871 /* SpotifyButtonView.swift */; };
 		382BB8AB291E859B00C9AC81 /* SearchQueuerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 382BB8AA291E859B00C9AC81 /* SearchQueuerView.swift */; };
 		383BF816291A561500947742 /* QueuerOverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 383BF815291A561500947742 /* QueuerOverView.swift */; };
 		383BF818291A586700947742 /* PlaylistSquareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 383BF817291A586700947742 /* PlaylistSquareView.swift */; };
@@ -33,6 +34,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		380F8D4B292A27F000968871 /* SpotifyButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyButtonView.swift; sourceTree = "<group>"; };
 		382BB8AA291E859B00C9AC81 /* SearchQueuerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchQueuerView.swift; sourceTree = "<group>"; };
 		383BF815291A561500947742 /* QueuerOverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueuerOverView.swift; sourceTree = "<group>"; };
 		383BF817291A586700947742 /* PlaylistSquareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistSquareView.swift; sourceTree = "<group>"; };
@@ -126,6 +128,7 @@
 				38FE2B5F291CD91F003DE4FD /* LikedQueuerView.swift */,
 				38FE2B61291D5FC3003DE4FD /* RecoQueuerView.swift */,
 				382BB8AA291E859B00C9AC81 /* SearchQueuerView.swift */,
+				380F8D4B292A27F000968871 /* SpotifyButtonView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -238,6 +241,7 @@
 				4708130E2515EB6B00794934 /* ImageNames.swift in Sources */,
 				47D86875266A26D2006F971B /* SettingsView.swift in Sources */,
 				384B2F08277EF5A900EDBB1B /* TrackView.swift in Sources */,
+				380F8D4C292A27F000968871 /* SpotifyButtonView.swift in Sources */,
 				470812EF2515E4D700794934 /* RootView.swift in Sources */,
 				383BF816291A561500947742 /* QueuerOverView.swift in Sources */,
 				47AAFC4325A0098900DC1A02 /* AlertItem.swift in Sources */,

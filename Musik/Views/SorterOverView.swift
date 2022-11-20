@@ -20,6 +20,7 @@ class CurrentTrack: ObservableObject {
 }
 
 struct SorterOverView: View {
+    @Environment(\.openURL) var openURL
     @EnvironmentObject var spotify: Spotify
     @State private var currentUser: SpotifyUser? = nil
     
@@ -133,7 +134,10 @@ struct SorterOverView: View {
                 .padding(.top, 5)
             }
             .navigationBarTitle("Sorter")
-            .navigationBarItems(trailing: refreshButton)
+            .navigationBarItems(leading:
+                                    SpotifyButtonView(),
+                                trailing:
+                                    refreshButton)
             .alert(item: $alert) { alert in
                 Alert(title: alert.title, message: alert.message)
             }

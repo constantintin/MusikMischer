@@ -17,6 +17,8 @@ struct QueuerOverView: View {
         GridItem(.flexible())
     ]
     
+    
+    
     @EnvironmentObject var spotify: Spotify
     @State private var currentUser: SpotifyUser? = nil
     
@@ -86,7 +88,10 @@ struct QueuerOverView: View {
                     .padding(.top, 5)
             }
             .navigationBarTitle("Queuer")
-            .navigationBarItems(trailing: refreshButton)
+            .navigationBarItems(leading:
+                                    SpotifyButtonView(),
+                                trailing:
+                                    refreshButton)
             .alert(item: $alert) { alert in
                 Alert(title: alert.title, message: alert.message)
             }
@@ -112,7 +117,7 @@ struct QueuerOverView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Color.gray.opacity(0.3))
             .cornerRadius(5)
-            .buttonStyle(PlainButtonStyle())
+            .buttonStyle(.plain)
         }
     }
     
