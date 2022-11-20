@@ -31,7 +31,7 @@ struct SorterOverView: View {
     @State private var searchText = ""
     
     @State private var trackBgOpacity = 0.1
-    @State private var trackBgColor: Color = .accentColor
+    @State private var trackBgColor: Color = .gray
     
     @State private var cancellables: Set<AnyCancellable> = []
     
@@ -111,7 +111,7 @@ struct SorterOverView: View {
                             self.trackBgOpacity = 0.7
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                                 self.trackBgOpacity = 0.1
-                                self.trackBgColor = .accentColor
+                                self.trackBgColor = .gray
                             }
                             retrieveCurrentlyPlaying()
                         }
@@ -120,7 +120,7 @@ struct SorterOverView: View {
                             self.trackBgOpacity = 0.7
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                                 self.trackBgOpacity = 0.1
-                                self.trackBgColor = .accentColor
+                                self.trackBgColor = .gray
                             }
                             if let link = currentTrack.track.externalURLs?["spotify"] {
                                 UIPasteboard.general.setValue(link.absoluteString,

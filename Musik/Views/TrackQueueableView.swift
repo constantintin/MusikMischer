@@ -21,7 +21,7 @@ struct TrackQueueableView: View {
     @State private var cancellables: Set<AnyCancellable> = []
     
     @State private var bgOpacity = 0.1
-    @State private var bgColor: Color = .accentColor
+    @State private var bgColor: Color = .gray
     
     @State private var didRequestImage = false
     @State private var image = Image(.spotifyAlbumPlaceholder)
@@ -59,7 +59,7 @@ struct TrackQueueableView: View {
             self.bgOpacity = 0.7
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                 self.bgOpacity = 0.1
-                self.bgColor = .accentColor
+                self.bgColor = .gray
             }
             queueTrack()
         }
@@ -68,7 +68,7 @@ struct TrackQueueableView: View {
             self.bgOpacity = 0.7
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                 self.bgOpacity = 0.1
-                self.bgColor = .accentColor
+                self.bgColor = .gray
             }
             if let link = track.externalURLs?["spotify"] {
                 UIPasteboard.general.setValue(link.absoluteString,
