@@ -134,6 +134,7 @@ struct SorterOverView: View {
                     Alert(title: alert.title, message: alert.message)
                 }
                 .onAppear {
+                    retrieveCurrentlyPlaying()
                     if !loadedPlaylists {
                         retrievePlaylists()
                         loadedPlaylists = true
@@ -180,7 +181,10 @@ struct SorterOverView: View {
 
     /// button to refresh playlists and tracks
     var refreshButton: some View {
-        Button(action: retrieve) {
+        Button{
+            retrievePlaylists()
+            retrieveCurrentlyPlaying()
+        } label: {
             Image(systemName: "arrow.clockwise")
                 .font(.title)
                 .imageScale(.medium)
@@ -268,14 +272,6 @@ struct SorterOverView: View {
         }
         self.newPlaylistFieldIsFocused = false
         self.newPlaylistName = ""
-    }
-    
-    /// retrieve all spotify info
-    func retrieve() {
-        print("Called refresh sorter")
-
-        retrieveCurrentlyPlaying()
-        retrievePlaylists()
     }
     
     /// get currently playing track
