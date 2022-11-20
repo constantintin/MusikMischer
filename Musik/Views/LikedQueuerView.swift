@@ -54,7 +54,7 @@ struct LikedQueuerView: View {
             }
             else {
                 ScrollView(.vertical) {
-                    LazyVStack(alignment: .leading, spacing: 10) {
+                    LazyVStack(alignment: .leading, spacing: 5) {
                         ForEach(self.filteredTracks, id: \.uri) { track in
                             TrackQueueableView(track: track)
                         }

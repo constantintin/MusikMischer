@@ -46,7 +46,7 @@ struct SearchQueuerView: View {
             .cornerRadius(13)
             .padding()
             
-            LazyVStack(alignment: .leading, spacing: 10) {
+            LazyVStack(alignment: .leading, spacing: 5) {
                 ForEach(self.tracks, id: \.uri) { track in
                     TrackQueueableView(track: track)
                 }

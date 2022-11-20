@@ -21,7 +21,6 @@ struct TrackQueueableView: View {
     @State private var cancellables: Set<AnyCancellable> = []
     
     @State private var bgOpacity = 0.1
-    @State private var bgColor: Color = .gray
     
     @State private var didRequestImage = false
     @State private var image = Image(.spotifyAlbumPlaceholder)
@@ -52,24 +51,24 @@ struct TrackQueueableView: View {
             .padding(.leading, 15)
             Spacer()
         }
-        .animation(Animation.easeInOut(duration: 0.2), value: self.bgOpacity)
-        .animation(Animation.easeInOut(duration: 0.2), value: self.bgColor)
-        .background(bgColor.opacity(self.bgOpacity))
+        .animation(Animation.easeInOut(duration: 0.1), value: self.bgOpacity)
+        .background(
+            LinearGradient(colors: [.clear, .green.opacity(bgOpacity)], startPoint: .leading, endPoint: .trailing)
+        )
         .fixedSize(horizontal: false, vertical: true)
-        .cornerRadius(13)
+        .cornerRadius(5)
+        .shadow(radius: 3)
         .padding([.trailing, .leading], 13)
         .contentShape(Rectangle())
         .onAppear {
             loadImage()
         }
-        .onTapGesture {
-            self.bgColor = .green
-            self.bgOpacity = 0.7
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                self.bgOpacity = 0.1
-                self.bgColor = .gray
-            }
+        .onTapGesture{
             queueTrack()
+            self.bgOpacity = 1.0
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                self.bgOpacity = 0.1
+            }
         }
         .onLongPressGesture(perform: {
             if let artistUri = track.album?.uri {
