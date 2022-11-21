@@ -344,22 +344,3 @@ struct SorterOverView: View {
 
     }
 }
-
-struct PlaylistsSelectorView_Previews: PreviewProvider {
-
-    static let spotify = Spotify()
-
-    static let playlists: [Playlist<PlaylistItemsReference>] = [
-        .menITrust, .modernPsychedelia, .menITrust,
-        .lucyInTheSkyWithDiamonds, .rockClassics,
-        .thisIsMFDoom, .thisIsSonicYouth, .thisIsMildHighClub,
-        .thisIsSkinshape
-    ]
-
-    static var previews: some View {
-        NavigationView {
-            SorterOverView(samplePlaylists: playlists)
-                .environmentObject(spotify)
-        }
-    }
-}

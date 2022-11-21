@@ -221,18 +221,3 @@ struct PlaylistSelectionView: View {
             )
     }
 }
-
-struct PlaylistTrackSelectionView_Previews: PreviewProvider {
-    static let spotify = Spotify()
-    @State static var selected = false
-    
-    static var previews: some View {
-        ScrollView(.vertical) {
-            VStack {
-                PlaylistSelectionView(spotify: spotify, playlist: .rockClassics, current: CurrentTrack(.comeTogether))
-                PlaylistSelectionView(spotify: spotify, playlist: .thisIsRadiohead, current: CurrentTrack(.comeTogether))
-            }
-            .environmentObject(spotify)
-        }
-    }
-}
