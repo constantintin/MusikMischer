@@ -176,7 +176,7 @@ struct TrackView: View {
         }
         self.didRequestImage = true
         
-        guard let spotifyImage = self.track.album?.images?.largest else {
+        guard let spotifyImage = self.track.album?.images?.last else {
             // print("no image found for '\(self.track.name)'")
             return
         }
