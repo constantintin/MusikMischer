@@ -110,8 +110,10 @@ struct SorterOverView: View {
                                     }
                                 }
                             })
-                        skipButton
-                            .padding(.leading, 10)
+                        if currentTrack.track != nil {
+                            skipButton
+                                .padding(.leading, 10)
+                        }
                     }
                     .padding([.leading, .trailing, .bottom], 10)
                     .padding(.top, 5)
