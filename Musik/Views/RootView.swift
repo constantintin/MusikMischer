@@ -15,17 +15,17 @@ struct RootView: View {
             TabView {
                 QueuerOverView()
                     .tabItem {
-                        Image(systemName: "text.append")
+                        Image(systemName: "text.line.last.and.arrowtriangle.forward")
                         Text("Queuer")
                     }
                 SorterOverView()
                     .tabItem {
-                        Image(systemName: "folder.fill.badge.questionmark")
+                        Image(systemName: "archivebox.fill")
                         Text("Sorter")
                     }
                 SettingsView()
                     .tabItem {
-                        Image(systemName: "gear")
+                        Image(systemName: "gearshape.fill")
                         Text("Settings")
                     }
             }
