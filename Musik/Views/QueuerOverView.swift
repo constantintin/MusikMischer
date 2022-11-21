@@ -110,11 +110,11 @@ struct QueuerOverView: View {
         ]
         
         return HStack(alignment: .center) {
-            ForEach(viewsAndTexts, id: \.text) { vt in
+            ForEach(viewsAndTexts, id: \.text) { view, text in
                 NavigationLink() {
-                    vt.view
+                    view
                 } label: {
-                    Text(vt.text)
+                    Text(text)
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
