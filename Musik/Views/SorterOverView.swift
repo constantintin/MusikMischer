@@ -13,9 +13,9 @@ import SpotifyWebAPI
 import SpotifyExampleContent
 
 class CurrentTrack: ObservableObject {
-    @Published var track: Track
-    init(_ track: Track) {
-        self.track = track
+    @Published var track: Track?
+    init() {
+        self.track = nil
     }
 }
 
@@ -24,7 +24,7 @@ struct SorterOverView: View {
     @EnvironmentObject var spotify: Spotify
     @State private var currentUser: SpotifyUser? = nil
     
-    @StateObject private var currentTrack: CurrentTrack = CurrentTrack(.comeTogether)
+    @StateObject private var currentTrack: CurrentTrack = CurrentTrack()
     @State private var playlists: [Playlist<PlaylistItemsReference>] = []
     @State private var filteredPlaylists: [Playlist<PlaylistItemsReference>] = []
     
@@ -42,14 +42,6 @@ struct SorterOverView: View {
     @FocusState private var newPlaylistFieldIsFocused: Bool
     
     @State private var alert: AlertItem? = nil
-    
-    init() { }
-    
-    /// Used only by the preview provider to provide sample data.
-    fileprivate init(samplePlaylists: [Playlist<PlaylistItemsReference>]) {
-        self._playlists = State(initialValue: samplePlaylists)
-    }
-    
     
     let columns = [
         GridItem(.flexible()),
@@ -112,7 +104,7 @@ struct SorterOverView: View {
                                 retrieveCurrentlyPlaying()
                             }
                             .onLongPressGesture(perform: {
-                                if let artistUri = currentTrack.track.album?.uri {
+                                if let artistUri = currentTrack.track?.album?.uri {
                                     if let url = URL(string: artistUri) {
                                         openURL(url)
                                     }
@@ -231,14 +223,14 @@ struct SorterOverView: View {
                     print("Getting user completion: \(completion)")
                 }, receiveValue: { newPlaylist in
                     // add current track to new playlist
-                    if let uri = self.currentTrack.track.uri {
+                    if let uri = self.currentTrack.track?.uri {
                         self.spotify.api.addToPlaylist(newPlaylist.uri, uris: [uri], position: nil)
                             .receive(on: RunLoop.main)
                             .sink(
                                 receiveCompletion: { completion in
                                     switch completion {
                                         case .finished:
-                                            print("Added '\(self.currentTrack.track.name)' to '\(newPlaylist.name)'")
+                                            print("Added '\(self.currentTrack.track?.name)' to '\(newPlaylist.name)'")
                                         case .failure(let error):
                                             print("Adding to playlist failed with \(error)")
                                     }
@@ -286,7 +278,8 @@ struct SorterOverView: View {
                     self.currentTrack.track = track
                     self.trackIsLoading = false
                 default:
-                    ()
+                    self.currentTrack.track = nil
+                    self.trackIsLoading = false
                 }
             })
             .store(in: &cancellables)

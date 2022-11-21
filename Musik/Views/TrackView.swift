@@ -10,7 +10,7 @@ struct TrackView: View {
     @State private var loadImageCancellable: AnyCancellable? = nil
     @State private var cancellables: Set<AnyCancellable> = []
     
-    @Binding var track: Track
+    @Binding var track: Track?
     
     @Binding var loading: Bool
     
@@ -24,37 +24,49 @@ struct TrackView: View {
 
     
     var body: some View {
-        HStack {
-            image
-                .resizable()
-                .aspectRatio(1, contentMode: .fill)
-                .frame(width: 42, height: 42)
-                .overlay(progressView, alignment: .center)
-            VStack(alignment: .leading) {
-                Text(track.name)
-                    .lineLimit(1)
-                    .truncationMode(.tail)
-                    .font(.system(size: 13))
-                    .foregroundColor(.primary)
-                Text(trackArtists())
-                    .lineLimit(1)
-                    .truncationMode(.tail)
-                    .font(.system(size: 13))
-                    .foregroundColor(.secondary)
-            }
-            Spacer()
-                .overlay(progressView, alignment: .center)
-            likedImage
-                .onTapGesture {
-                    if !self.operating {
-                        if liked {
-                            unlike()
-                        } else {
-                            like()
-                        }
+        Group {
+            if let track = track {
+                HStack {
+                    image
+                        .resizable()
+                        .aspectRatio(1, contentMode: .fill)
+                        .frame(width: 42, height: 42)
+                        .overlay(progressView, alignment: .center)
+                    VStack(alignment: .leading) {
+                        Text(track.name)
+                            .lineLimit(1)
+                            .truncationMode(.tail)
+                            .font(.system(size: 13))
+                            .foregroundColor(.primary)
+                        Text(trackArtists())
+                            .lineLimit(1)
+                            .truncationMode(.tail)
+                            .font(.system(size: 13))
+                            .foregroundColor(.secondary)
                     }
+                    Spacer()
+                        .overlay(progressView, alignment: .center)
+                    likedImage
+                        .onTapGesture {
+                            if !self.operating {
+                                if liked {
+                                    unlike()
+                                } else {
+                                    like()
+                                }
+                            }
+                        }
+                        .padding(.trailing, 5)
                 }
-                .padding(.trailing, 5)
+            } else {
+                Text("No song playing")
+                    .lineLimit(1)
+                    .truncationMode(.tail)
+                    .font(.system(size: 20))
+                    .foregroundColor(.secondary)
+                Spacer()
+                    .overlay(progressView, alignment: .center)
+            }
         }
         // Ensure the hit box extends across the entire width of the frame.
         // See https://bit.ly/2HqNk4S
@@ -106,7 +118,7 @@ struct TrackView: View {
     func like() {
         self.operating = true
         self.liked.toggle()
-        if let uri = track.uri {
+        if let uri = track?.uri {
             spotify.api.saveTracksForCurrentUser([uri])
                 .receive(on: RunLoop.main)
                 .sink(
@@ -123,7 +135,7 @@ struct TrackView: View {
     func unlike() {
         self.operating = true
         self.liked.toggle()
-        if let uri = track.uri {
+        if let uri = track?.uri {
             spotify.api.removeSavedTracksForCurrentUser([uri])
                 .receive(on: RunLoop.main)
                 .sink(
@@ -139,7 +151,7 @@ struct TrackView: View {
     /// The display name for the track. E.g., "Eclipse - Pink Floyd".
     func trackArtists() -> String {
         var display = ""
-        if let artists = track.artists {
+        if let artists = track?.artists {
             for artist in artists {
                 display += "\(artist.name), "
             }
@@ -150,7 +162,7 @@ struct TrackView: View {
     
     /// check whether track is saved or not and store in self.liked
     func isLiked() {
-        if let uri = track.uri {
+        if let uri = track?.uri {
             spotify.api.currentUserSavedTracksContains([uri])
                 .receive(on: RunLoop.main)
                 .sink(
@@ -176,7 +188,7 @@ struct TrackView: View {
         }
         self.didRequestImage = true
         
-        guard let spotifyImage = self.track.album?.images?.last else {
+        guard let spotifyImage = self.track?.album?.images?.last else {
             // print("no image found for '\(self.track.name)'")
             return
         }

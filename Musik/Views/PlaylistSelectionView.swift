@@ -99,7 +99,7 @@ struct PlaylistSelectionView: View {
     func delFromPlaylist() {
         self.operating = true
         self.selected.toggle()
-        if let uri = self.current.track.uri {
+        if let uri = self.current.track?.uri {
             self.spotify.api.removeAllOccurrencesFromPlaylist(self.playlist.uri, of: [uri], snapshotId: self.snapshot)
                 .receive(on: RunLoop.main)
                 .sink(
@@ -110,7 +110,7 @@ struct PlaylistSelectionView: View {
                                 self.trackUris.removeAll { value in
                                     value == uri
                                 }
-                                print("Removed '\(self.current.track.name)' from '\(self.playlist.name)'")
+                                print("Removed '\(self.current.track?.name)' from '\(self.playlist.name)'")
                             case .failure(let error):
                             self.selected.toggle()
                                 print("Deleting from playlist failed with \(error)")
@@ -129,7 +129,7 @@ struct PlaylistSelectionView: View {
     func addToPlaylist() {
         self.operating = true
         self.selected.toggle()
-        if let uri = self.current.track.uri {
+        if let uri = self.current.track?.uri {
             self.spotify.api.addToPlaylist(self.playlist.uri, uris: [uri], position: nil)
                 .receive(on: RunLoop.main)
                 .sink(
@@ -138,7 +138,7 @@ struct PlaylistSelectionView: View {
                         switch completion {
                             case .finished:
                                 self.trackUris.append(uri)
-                                print("Added '\(self.current.track.name)' to '\(self.playlist.name)'")
+                                print("Added '\(self.current.track?.name)' to '\(self.playlist.name)'")
                             case .failure(let error):
                                 self.selected.toggle()
                                 print("Adding to playlist failed with \(error)")
@@ -155,13 +155,13 @@ struct PlaylistSelectionView: View {
     
     /// check if track is in the playlist
     /// after first runthrough results are cached in self.trackUris
-    func isInPlaylist(track: Track) {
+    func isInPlaylist(track: Track?) {
         if self.tracksCached {
             print("Using cached tracks for \(self.playlist.name)")
-            if let trackUri = track.uri {
+            if let trackUri = track?.uri {
                 self.selected = self.trackUris.contains(trackUri)
             } else {
-                print("Track \(track.name) has no uri??")
+                print("Track \(track?.name) has no uri??")
             }
         } else {
             self.selected = false
@@ -174,7 +174,7 @@ struct PlaylistSelectionView: View {
                     },
                     receiveValue: { trackPage in
                         for playlistTrack in trackPage.items {
-                            if track.uri == playlistTrack.item?.uri {
+                            if track?.uri == playlistTrack.item?.uri {
                                 self.selected = true
                             }
                             if let uri = playlistTrack.item?.uri {

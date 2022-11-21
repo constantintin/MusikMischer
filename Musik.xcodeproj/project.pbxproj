@@ -116,19 +116,19 @@
 			isa = PBXGroup;
 			children = (
 				470812EE2515E4D700794934 /* RootView.swift */,
-				386530BB26ADA2ED007FD3E8 /* SorterOverView.swift */,
 				4725249A253F8B9B00F3FD13 /* LoginView.swift */,
 				47D86874266A26D2006F971B /* SettingsView.swift */,
+				380F8D4B292A27F000968871 /* SpotifyButtonView.swift */,
+				386530BB26ADA2ED007FD3E8 /* SorterOverView.swift */,
 				388CB4AE26ADC025002BB269 /* PlaylistSelectionView.swift */,
 				384B2F07277EF5A900EDBB1B /* TrackView.swift */,
-				383BF81B291A6DFD00947742 /* TrackQueueableView.swift */,
 				383BF815291A561500947742 /* QueuerOverView.swift */,
 				383BF817291A586700947742 /* PlaylistSquareView.swift */,
 				383BF819291A5AA000947742 /* PlaylistQueuerView.swift */,
 				38FE2B5F291CD91F003DE4FD /* LikedQueuerView.swift */,
 				38FE2B61291D5FC3003DE4FD /* RecoQueuerView.swift */,
 				382BB8AA291E859B00C9AC81 /* SearchQueuerView.swift */,
-				380F8D4B292A27F000968871 /* SpotifyButtonView.swift */,
+				383BF81B291A6DFD00947742 /* TrackQueueableView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
