@@ -14,8 +14,6 @@ struct QueuerOverView: View {
     @EnvironmentObject var spotify: Spotify
     @Environment(\.openURL) var openURL
     
-    @State private var currentUser: SpotifyUser? = nil
-    
     @State private var alert: AlertItem? = nil
     @State private var playlists: [Playlist<PlaylistItemsReference>] = []
     @State private var filteredPlaylists: [Playlist<PlaylistItemsReference>] = []
@@ -83,7 +81,7 @@ struct QueuerOverView: View {
                         .padding([.leading, .trailing, .bottom], 10)
                         .padding(.top, 5)
                 }
-                .navigationBarTitle("Queuer")
+                .navigationBarTitle("Queue")
                 .navigationBarItems(trailing:
                                         HStack {
                     SpotifyButtonView(uriString: "spotify:")
@@ -155,19 +153,6 @@ struct QueuerOverView: View {
     
     /// get playlists for user
     func retrievePlaylists() {
-        // Don't try to load any playlists if we're in preview mode.
-        if ProcessInfo.processInfo.isPreviewing { return }
-        
-        
-        spotify.api.currentUserProfile()
-            .receive(on: RunLoop.main)
-            .sink(receiveCompletion: { completion in
-                print("Getting user completion: \(completion)")
-            }, receiveValue: { user in
-                currentUser = user
-            })
-            .store(in: &cancellables)
-        
         self.isLoadingPlaylists = true
         self.playlists = []
         self.filteredPlaylists = []
@@ -198,7 +183,6 @@ struct QueuerOverView: View {
                 }
             )
             .store(in: &cancellables)
-
     }
 }
 

@@ -117,7 +117,7 @@ struct SorterOverView: View {
                     .padding([.leading, .trailing, .bottom], 10)
                     .padding(.top, 5)
                 }
-                .navigationBarTitle("Sorter")
+                .navigationBarTitle("Sort")
                 .navigationBarItems(trailing:
                                         HStack {
                     SpotifyButtonView(uriString: "spotify:")

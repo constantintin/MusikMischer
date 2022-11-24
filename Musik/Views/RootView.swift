@@ -16,12 +16,12 @@ struct RootView: View {
                 QueuerOverView()
                     .tabItem {
                         Image(systemName: "text.line.last.and.arrowtriangle.forward")
-                        Text("Queuer")
+                        Text("Queue")
                     }
                 SorterOverView()
                     .tabItem {
                         Image(systemName: "archivebox.fill")
-                        Text("Sorter")
+                        Text("Sort")
                     }
                 SettingsView()
                     .tabItem {
