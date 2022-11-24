@@ -169,6 +169,7 @@ struct SorterOverView: View {
                 .font(.body)
                 .imageScale(.large)
                 .foregroundColor(.green)
+                .shadow(radius: 3)
         }
     }
 
