@@ -22,7 +22,6 @@ class CurrentTrack: ObservableObject {
 struct SorterOverView: View {
     @Environment(\.openURL) var openURL
     @EnvironmentObject var spotify: Spotify
-    @State private var currentUser: SpotifyUser? = nil
     
     @StateObject private var currentTrack: CurrentTrack = CurrentTrack()
     @State private var playlists: [Playlist<PlaylistItemsReference>] = []
@@ -217,7 +216,7 @@ struct SorterOverView: View {
     
     /// create playlist 'name' , add currentTrack and add it to self.playlists
     func addPlaylist(_ name: String) {
-        if let uri = currentUser?.uri {
+        if let uri = spotify.currentUser?.uri {
             spotify.api.createPlaylist(for: uri,
                                           PlaylistDetails(name: name, isPublic: false, isCollaborative: nil, description: nil))
                 .receive(on: RunLoop.main)
@@ -293,16 +292,6 @@ struct SorterOverView: View {
         // Don't try to load any playlists if we're in preview mode.
         if ProcessInfo.processInfo.isPreviewing { return }
         
-        
-        spotify.api.currentUserProfile()
-            .receive(on: RunLoop.main)
-            .sink(receiveCompletion: { completion in
-                print("Getting user completion: \(completion)")
-            }, receiveValue: { user in
-                currentUser = user
-            })
-            .store(in: &cancellables)
-        
         self.isLoadingPlaylists = true
         self.playlists = []
         self.filteredPlaylists = []
@@ -329,7 +318,7 @@ struct SorterOverView: View {
                 // pages have been retrieved.
                 receiveValue: { playlistsPage in
                     let editablePlaylists = playlistsPage.items.filter {
-                        $0.isCollaborative || $0.owner?.uri == currentUser?.uri
+                        $0.isCollaborative || $0.owner?.uri == spotify.currentUser?.uri
                     }
                     self.playlists += editablePlaylists
                     self.filteredPlaylists += editablePlaylists
