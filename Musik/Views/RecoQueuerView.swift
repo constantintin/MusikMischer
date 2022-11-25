@@ -81,8 +81,9 @@ struct RecoQueuerView: View {
         Button(action: loadTracks) {
             Image(systemName: "arrow.clockwise")
                 .font(.title)
-                .scaleEffect(0.8)
+                .imageScale(.medium)
         }
+        .frame(width: 42)
     }
     
     func loadTracks() {

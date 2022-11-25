@@ -102,6 +102,7 @@ struct LikedQueuerView: View {
                 .font(.title)
                 .imageScale(.medium)
         }
+        .frame(width: 42)
     }
     
     func shuffleTracks() {

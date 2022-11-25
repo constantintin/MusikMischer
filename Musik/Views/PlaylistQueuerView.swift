@@ -43,8 +43,9 @@ struct PlaylistQueuerView: View {
         Button(action: shuffleTracks) {
             Image(systemName: "shuffle")
                 .font(.title)
-                .scaleEffect(0.8)
+                .imageScale(.medium)
         }
+        .frame(width: 42)
     }
     
     func shuffleTracks() {

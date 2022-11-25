@@ -184,6 +184,7 @@ struct SorterOverView: View {
                 .imageScale(.medium)
         }
         .disabled(isLoadingPlaylists)
+        .frame(width: 42)
         
     }
     

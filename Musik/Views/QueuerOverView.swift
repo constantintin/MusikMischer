@@ -132,6 +132,7 @@ struct QueuerOverView: View {
                 .imageScale(.medium)
         }
         .disabled(isLoadingPlaylists)
+        .frame(width: 42)
         
     }
     
