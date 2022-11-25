@@ -61,13 +61,24 @@ struct TrackView: View {
                     .padding(.trailing, 5)
                 }
             } else {
-                Text("No song playing")
-                    .lineLimit(1)
-                    .truncationMode(.tail)
-                    .font(.system(size: 20))
-                    .foregroundColor(.secondary)
-                Spacer()
+                HStack {
+                    Spacer()
+                    VStack {
+                        Text("No song playing")
+                            .lineLimit(1)
+                            .truncationMode(.tail)
+                            .font(.system(size: 20))
+                            .foregroundColor(.primary)
+                        Text("Tap to load")
+                            .lineLimit(1)
+                            .truncationMode(.tail)
+                            .font(.system(size: 13))
+                            .foregroundColor(.secondary)
+                    }
                     .overlay(progressView, alignment: .center)
+                    Spacer()
+                }
+                .frame(maxHeight: 42)
             }
         }
         // Ensure the hit box extends across the entire width of the frame.
