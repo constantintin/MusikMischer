@@ -46,17 +46,19 @@ struct TrackView: View {
                     }
                     Spacer()
                         .overlay(progressView, alignment: .center)
-                    likedImage
-                        .onTapGesture {
-                            if !self.operating {
-                                if liked {
-                                    unlike()
-                                } else {
-                                    like()
-                                }
+                    Button {
+                        if !self.operating {
+                            if liked {
+                                unlike()
+                            } else {
+                                like()
                             }
                         }
-                        .padding(.trailing, 5)
+                    } label: {
+                        likedImage
+                    }
+                    .buttonStyle(.plain)
+                    .padding(.trailing, 5)
                 }
             } else {
                 Text("No song playing")
