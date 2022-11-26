@@ -30,6 +30,7 @@ struct SorterOverView: View {
     @State private var searchText = ""
     
     @State private var trackIsLoading: Bool = false
+    @State private var retrieveTimer: Timer? = nil
     
     @State private var cancellables: Set<AnyCancellable> = []
     
@@ -275,14 +276,25 @@ struct SorterOverView: View {
             .receive(on: RunLoop.main)
             .sink(receiveCompletion: { completion in
                 print("Getting context completion: \(completion)")
-            }, receiveValue: { context in
-                switch context?.item {
-                case let .some(.track(track)):
-                    self.currentTrack.track = track
-                    self.trackIsLoading = false
-                default:
-                    self.currentTrack.track = nil
-                    self.trackIsLoading = false
+            }, receiveValue: { optionalContext in
+                if let context = optionalContext {
+                    switch context.item {
+                    case let .some(.track(track)):
+                        self.currentTrack.track = track
+                        self.trackIsLoading = false
+                        
+                        // if playing, queue retrieve after finished
+                        if context.isPlaying {
+                            let timeRemaining = (track.durationMS ?? 0) - (context.progressMS ?? 0)
+                            self.retrieveTimer = Timer.scheduledTimer(withTimeInterval: Double(timeRemaining) / 1000.0,
+                                                             repeats: false) { timer in
+                                retrieveCurrentlyPlaying()
+                            }
+                        }
+                    default:
+                        self.currentTrack.track = nil
+                        self.trackIsLoading = false
+                    }
                 }
             })
             .store(in: &cancellables)
