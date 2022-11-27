@@ -75,7 +75,7 @@ struct TrackView: View {
         // See https://bit.ly/2HqNk4S
         .contentShape(Rectangle())
         .background(
-            LinearGradient(colors: [Color.gray.opacity(0.3), .clear, Color.gray.opacity(0.3)], startPoint: .leading, endPoint: .trailing))
+            LinearGradient(colors: [Color.gray.opacity(0.1), .clear, Color.gray.opacity(0.1)], startPoint: .leading, endPoint: .trailing))
         .cornerRadius(5)
         .shadow(radius: 3)
         .fixedSize(horizontal: false, vertical: true)
