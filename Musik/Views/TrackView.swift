@@ -12,8 +12,6 @@ struct TrackView: View {
     
     @Binding var track: Track?
     
-    @Binding var loading: Bool
-    
     @State private var liked = false
     @State private var operating: Bool = false
     
@@ -31,7 +29,6 @@ struct TrackView: View {
                         .resizable()
                         .aspectRatio(1, contentMode: .fill)
                         .frame(width: 42, height: 42)
-                        .overlay(progressView, alignment: .center)
                     VStack(alignment: .leading) {
                         Text(track.name)
                             .lineLimit(1)
@@ -45,7 +42,6 @@ struct TrackView: View {
                             .foregroundColor(.secondary)
                     }
                     Spacer()
-                        .overlay(progressView, alignment: .center)
                     Button {
                         if !self.operating {
                             if liked {
@@ -64,26 +60,22 @@ struct TrackView: View {
                 HStack {
                     Spacer()
                     VStack {
-                        Text("No song playing")
+                        Text("No song selected")
                             .lineLimit(1)
                             .truncationMode(.tail)
                             .font(.system(size: 20))
                             .foregroundColor(.primary)
-                        Text("Tap to load")
-                            .lineLimit(1)
-                            .truncationMode(.tail)
-                            .font(.system(size: 13))
-                            .foregroundColor(.secondary)
                     }
-                    .overlay(progressView, alignment: .center)
                     Spacer()
                 }
-                .frame(maxHeight: 42)
+                .frame(height: 42)
             }
         }
         // Ensure the hit box extends across the entire width of the frame.
         // See https://bit.ly/2HqNk4S
         .contentShape(Rectangle())
+        .background(
+            LinearGradient(colors: [Color.gray.opacity(0.3), .clear, Color.gray.opacity(0.3)], startPoint: .leading, endPoint: .trailing))
         .cornerRadius(5)
         .shadow(radius: 3)
         .fixedSize(horizontal: false, vertical: true)
@@ -97,17 +89,6 @@ struct TrackView: View {
             self.didRequestImage = false
             loadImage()
         })
-    }
-    
-    /// progress view if loading
-    var progressView: some View {
-        Group {
-            if loading {
-                ProgressView()
-            } else {
-                EmptyView()
-            }
-        }
     }
     
     /// heart either filled or empty

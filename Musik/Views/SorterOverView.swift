@@ -31,6 +31,7 @@ struct SorterOverView: View {
     
     @State private var trackIsLoading: Bool = false
     @State private var retrieveTimer: Timer? = nil
+    @State private var syncing = false
     
     @State private var cancellables: Set<AnyCancellable> = []
     
@@ -98,11 +99,9 @@ struct SorterOverView: View {
                         .padding([.leading, .trailing], 10)
                     }
                     HStack {
-                        TrackView(track: $currentTrack.track, loading: $trackIsLoading)
-                            .onTapGesture {
-                                self.trackIsLoading = true
-                                retrieveCurrentlyPlaying()
-                            }
+                        syncButton
+                            .padding(.trailing, 5)
+                        TrackView(track: $currentTrack.track)
                             .onLongPressGesture(perform: {
                                 if let artistUri = currentTrack.track?.album?.uri {
                                     if let url = URL(string: artistUri) {
@@ -110,10 +109,8 @@ struct SorterOverView: View {
                                     }
                                 }
                             })
-                        if currentTrack.track != nil {
-                            skipButton
-                                .padding(.leading, 10)
-                        }
+                        skipButton
+                            .padding(.leading, 5)
                     }
                     .padding([.leading, .trailing, .bottom], 10)
                     .padding(.top, 5)
@@ -128,7 +125,9 @@ struct SorterOverView: View {
                     Alert(title: alert.title, message: alert.message)
                 }
                 .onAppear {
-                    retrieveCurrentlyPlaying()
+                    if self.syncing {
+                        retrieveCurrentlyPlaying()
+                    }
                     if !loadedPlaylists {
                         retrievePlaylists()
                         loadedPlaylists = true
@@ -161,6 +160,30 @@ struct SorterOverView: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
+    }
+    
+    /// progress view if loading
+    var progressView: some View {
+        Group {
+            if self.trackIsLoading {
+                ProgressView()
+            } else {
+                EmptyView()
+            }
+        }
+        .scaleEffect(0.7)
+    }
+    
+    var syncButton: some View {
+        Button {
+            retrieveCurrentlyPlaying()
+        } label: {
+            Image(systemName: "arrow.triangle.2.circlepath")
+                .font(.body)
+                .imageScale(.large)
+                .foregroundColor(self.syncing ? .blue : .gray)
+                .overlay(progressView, alignment: .center)
+        }
     }
     
     /// button to skip to next song
@@ -272,28 +295,32 @@ struct SorterOverView: View {
     
     /// get currently playing track
     func retrieveCurrentlyPlaying() {
+        self.syncing = true
+        self.trackIsLoading = true
         spotify.api.currentPlayback()
             .receive(on: RunLoop.main)
             .sink(receiveCompletion: { completion in
                 print("Getting context completion: \(completion)")
             }, receiveValue: { optionalContext in
-                if let context = optionalContext {
-                    switch context.item {
-                    case let .some(.track(track)):
-                        self.currentTrack.track = track
-                        self.trackIsLoading = false
-                        
-                        // if playing, queue retrieve after finished
-                        if context.isPlaying {
-                            let timeRemaining = (track.durationMS ?? 0) - (context.progressMS ?? 0)
-                            self.retrieveTimer = Timer.scheduledTimer(withTimeInterval: Double(timeRemaining) / 1000.0,
-                                                             repeats: false) { timer in
-                                retrieveCurrentlyPlaying()
+                if self.trackIsLoading {
+                    if let context = optionalContext {
+                        switch context.item {
+                        case let .some(.track(track)):
+                            self.currentTrack.track = track
+                            self.trackIsLoading = false
+                            
+                            // if playing, queue retrieve after finished
+                            if context.isPlaying {
+                                let timeRemaining = (track.durationMS ?? 0) - (context.progressMS ?? 0)
+                                self.retrieveTimer = Timer.scheduledTimer(withTimeInterval: Double(timeRemaining) / 1000.0,
+                                                                          repeats: false) { timer in
+                                    retrieveCurrentlyPlaying()
+                                }
                             }
+                        default:
+                            self.currentTrack.track = nil
+                            self.trackIsLoading = false
                         }
-                    default:
-                        self.currentTrack.track = nil
-                        self.trackIsLoading = false
                     }
                 }
             })
