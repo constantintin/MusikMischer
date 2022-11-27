@@ -110,8 +110,10 @@ struct SorterOverView: View {
                             .padding(.trailing, 5)
                         TrackView(track: $currentTrack.track)
                             .onTapGesture {
-                                self.focusTrackSearch.toggle()
-                                presentSearch.toggle()
+                                self.presentSearch = true
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                    self.focusTrackSearch = true
+                                }
                             }
                             .onLongPressGesture(perform: {
                                 if let artistUri = currentTrack.track?.album?.uri {
@@ -166,13 +168,14 @@ struct SorterOverView: View {
                 .overlay(
                     HStack {
                         Image(systemName: "magnifyingglass")
-                            .foregroundColor(.gray)
+                            .foregroundColor(.primary)
                             .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                             .padding(.leading, 8)
                         
                         if !self.trackSearchText.isEmpty {
                             Button(action: {
                                 self.trackSearchText = ""
+                                self.focusTrackSearch = true
                             }) {
                                 Image(systemName: "multiply.circle.fill")
                                     .foregroundColor(.gray)
@@ -192,7 +195,6 @@ struct SorterOverView: View {
                         self.trackIsLoading = false
                         self.currentTrack.track = track
                         self.presentSearch = false
-                        self.focusTrackSearch = false
                     } label: {
                         TrackSelectableView(track: track)
                     }
