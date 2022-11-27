@@ -21,6 +21,7 @@ struct SearchQueuerView: View {
     
     @State private var isLoadingTracks = false
     @State private var couldntLoadTracks = false
+    @FocusState private var focusSearch: Bool
     
     @State private var alert: AlertItem? = nil
     
@@ -30,26 +31,46 @@ struct SearchQueuerView: View {
     
     var body: some View {
         ScrollView(.vertical) {
-            ZStack {
-                Rectangle()
-                    .foregroundColor(Color.gray.opacity(0.3))
-                HStack {
-                    Image(systemName: "magnifyingglass")
-                    TextField("Search ..", text: $searchText)
-                        .onSubmit {
-                            loadTracks(searchText)
-                        }
+            TextField("Search ..", text: $searchText)
+                .focused(self.$focusSearch)
+                .onSubmit {
+                    loadTracks(searchText)
                 }
-                .padding(.leading, 13)
-            }
-            .frame(height: 40)
-            .cornerRadius(13)
-            .padding()
+                .padding(7)
+                .padding(.horizontal, 25)
+                .background(.gray.opacity(0.3))
+                .cornerRadius(8)
+                .overlay(
+                    HStack {
+                        Image(systemName: "magnifyingglass")
+                            .foregroundColor(.primary)
+                            .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                            .padding(.leading, 8)
+                        
+                        if !self.searchText.isEmpty {
+                            Button(action: {
+                                self.searchText = ""
+                                self.focusSearch = true
+                            }) {
+                                Image(systemName: "multiply.circle.fill")
+                                    .foregroundColor(.gray)
+                                    .padding(.trailing, 8)
+                            }
+                        }
+                    }
+                )
+                .padding(.horizontal, 10)
+                .padding(.vertical, 15)
             
             LazyVStack(alignment: .leading, spacing: 5) {
                 ForEach(self.tracks, id: \.uri) { track in
                     TrackQueueableView(track: track)
                 }
+            }
+        }
+        .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                focusSearch = true
             }
         }
         .navigationBarTitle("Search")
