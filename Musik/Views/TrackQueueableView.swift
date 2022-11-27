@@ -51,7 +51,7 @@ struct TrackQueueableView: View {
             .padding(.leading, 15)
             Spacer()
         }
-        .animation(Animation.easeInOut(duration: 0.1), value: self.bgOpacity)
+        .animation(Animation.easeInOut(duration: 0.3), value: self.bgOpacity)
         .background(
             LinearGradient(colors: [.clear, .green.opacity(bgOpacity)], startPoint: .leading, endPoint: .trailing)
         )
@@ -65,7 +65,7 @@ struct TrackQueueableView: View {
         }
         .onTapGesture{
             queueTrack()
-            self.bgOpacity = 1.0
+            self.bgOpacity = 0.8
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 self.bgOpacity = 0.1
             }
