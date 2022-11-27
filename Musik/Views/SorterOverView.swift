@@ -33,6 +33,12 @@ struct SorterOverView: View {
     @State private var retrieveTimer: Timer? = nil
     @State private var syncing = false
     
+    @State private var presentSearch = false
+    @State private var trackSearchText = ""
+    @State private var searchTracks: [Track] = []
+    @State private var isLoadingTracks = false
+    @State private var couldntLoadTracks = false
+    
     @State private var cancellables: Set<AnyCancellable> = []
     
     @State private var loadedPlaylists = false
@@ -102,6 +108,9 @@ struct SorterOverView: View {
                         syncButton
                             .padding(.trailing, 5)
                         TrackView(track: $currentTrack.track)
+                            .onTapGesture {
+                                presentSearch.toggle()
+                            }
                             .onLongPressGesture(perform: {
                                 if let artistUri = currentTrack.track?.album?.uri {
                                     if let url = URL(string: artistUri) {
@@ -134,6 +143,79 @@ struct SorterOverView: View {
                     }
                 }
             }
+            .sheet(isPresented: $presentSearch) {
+                trackSearchSelect
+                    .presentationDetents([.medium, .large])
+            }
+        }
+    }
+    
+    var trackSearchSelect: some View {
+        ScrollView(.vertical) {
+            ZStack {
+                Rectangle()
+                    .foregroundColor(Color.gray.opacity(0.3))
+                HStack {
+                    Image(systemName: "magnifyingglass")
+                    TextField("Search ..", text: $trackSearchText)
+                        .onSubmit {
+                            loadTracks(trackSearchText)
+                        }
+                }
+                .padding(.leading, 13)
+            }
+            .frame(height: 40)
+            .cornerRadius(13)
+            .padding()
+            
+            LazyVStack(alignment: .leading, spacing: 5) {
+                ForEach(self.searchTracks, id: \.uri) { track in
+                    Button {
+                        self.syncing = false
+                        self.retrieveTimer = nil
+                        self.currentTrack.track = track
+                        self.presentSearch = false
+                    } label: {
+                        TrackSelectableView(track: track)
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+        }
+    }
+    
+    func loadTracks(_ searchText: String) {
+        if !self.trackSearchText.isEmpty {
+            self.searchTracks = []
+            self.isLoadingTracks = true
+            
+            self.spotify.api.search(query: trackSearchText, categories: [.track])
+                .receive(on: RunLoop.main)
+                .sink(
+                    receiveCompletion: { completion in
+                        self.isLoadingTracks = false
+                        switch completion {
+                        case .finished:
+                            self.couldntLoadTracks = false
+                        case .failure(let error):
+                            self.couldntLoadTracks = true
+                            self.alert = AlertItem(
+                                title: "Couldn't Retrieve Tracks",
+                                message: error.localizedDescription
+                            )
+                        }
+                    },
+                    receiveValue: { searchResult in
+                        if let items = searchResult.tracks?.items {
+                            self.searchTracks += items
+                        } else {
+                            print("Search was empty")
+                            self.couldntLoadTracks = true
+                        }
+                        
+                    }
+                )
+                .store(in: &cancellables)
         }
     }
     
