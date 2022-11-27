@@ -38,6 +38,7 @@ struct SorterOverView: View {
     @State private var searchTracks: [Track] = []
     @State private var isLoadingTracks = false
     @State private var couldntLoadTracks = false
+    @FocusState private var focusTrackSearch: Bool
     
     @State private var cancellables: Set<AnyCancellable> = []
     
@@ -109,6 +110,7 @@ struct SorterOverView: View {
                             .padding(.trailing, 5)
                         TrackView(track: $currentTrack.track)
                             .onTapGesture {
+                                self.focusTrackSearch.toggle()
                                 presentSearch.toggle()
                             }
                             .onLongPressGesture(perform: {
@@ -145,36 +147,52 @@ struct SorterOverView: View {
             }
             .sheet(isPresented: $presentSearch) {
                 trackSearchSelect
-                    .presentationDetents([.medium, .large])
+                    .presentationDetents([.large])
             }
         }
     }
     
     var trackSearchSelect: some View {
         ScrollView(.vertical) {
-            ZStack {
-                Rectangle()
-                    .foregroundColor(Color.gray.opacity(0.3))
-                HStack {
-                    Image(systemName: "magnifyingglass")
-                    TextField("Search ..", text: $trackSearchText)
-                        .onSubmit {
-                            loadTracks(trackSearchText)
-                        }
+            TextField("Search ..", text: $trackSearchText)
+                .focused(self.$focusTrackSearch)
+                .onSubmit {
+                    loadTracks(trackSearchText)
                 }
-                .padding(.leading, 13)
-            }
-            .frame(height: 40)
-            .cornerRadius(13)
-            .padding()
+                .padding(7)
+                .padding(.horizontal, 25)
+                .background(.gray.opacity(0.3))
+                .cornerRadius(8)
+                .overlay(
+                    HStack {
+                        Image(systemName: "magnifyingglass")
+                            .foregroundColor(.gray)
+                            .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                            .padding(.leading, 8)
+                        
+                        if !self.trackSearchText.isEmpty {
+                            Button(action: {
+                                self.trackSearchText = ""
+                            }) {
+                                Image(systemName: "multiply.circle.fill")
+                                    .foregroundColor(.gray)
+                                    .padding(.trailing, 8)
+                            }
+                        }
+                    }
+                )
+                .padding(.horizontal, 10)
+                .padding(.vertical, 15)
             
             LazyVStack(alignment: .leading, spacing: 5) {
                 ForEach(self.searchTracks, id: \.uri) { track in
                     Button {
                         self.syncing = false
                         self.retrieveTimer = nil
+                        self.trackIsLoading = false
                         self.currentTrack.track = track
                         self.presentSearch = false
+                        self.focusTrackSearch = false
                     } label: {
                         TrackSelectableView(track: track)
                     }
