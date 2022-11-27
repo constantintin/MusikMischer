@@ -105,6 +105,8 @@ struct SorterOverView: View {
                         }
                         .padding([.leading, .trailing], 10)
                     }
+                    Divider()
+                        .padding(.horizontal, 23)
                     HStack {
                         syncButton
                             .padding(.trailing, 5)
@@ -125,8 +127,9 @@ struct SorterOverView: View {
                         skipButton
                             .padding(.leading, 5)
                     }
-                    .padding([.leading, .trailing, .bottom], 10)
-                    .padding(.top, 5)
+                    .padding([.horizontal], 10)
+                    .padding(.top, 2)
+                    .padding(.bottom, 7)
                 }
                 .navigationBarTitle("Sort")
                 .navigationBarItems(trailing:

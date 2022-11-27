@@ -76,10 +76,11 @@ struct QueuerOverView: View {
                             .padding([.leading, .trailing], 10)
                         }
                     }
+                    Divider()
+                        .padding(.horizontal, 23)
                     queuerNavigation
                         .frame(maxHeight: 42)
                         .padding([.leading, .trailing, .bottom], 10)
-                        .padding(.top, 5)
                 }
                 .navigationBarTitle("Queue")
                 .navigationBarItems(trailing:
