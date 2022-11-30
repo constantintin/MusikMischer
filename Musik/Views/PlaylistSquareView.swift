@@ -65,18 +65,14 @@ struct PlaylistSquareView: View {
         // check if `self.image == nil` because the image might have already
         // been requested, but not loaded yet.
         if self.didRequestImage {
-            // print("already requested image for '\(playlist.name)'")
             return
         }
         self.didRequestImage = true
         
         guard let spotifyImage = self.playlist.images.largest else {
-            // print("no image found for '\(playlist.name)'")
             return
         }
 
-        // print("loading image for '\(playlist.name)'")
-        
         // Note that a `Set<AnyCancellable>` is NOT being used so that each time
         // a request to load the image is made, the previous cancellable
         // assigned to `loadImageCancellable` is deallocated, which cancels the
@@ -86,7 +82,6 @@ struct PlaylistSquareView: View {
             .sink(
                 receiveCompletion: { _ in },
                 receiveValue: { image in
-                    // print("received image for '\(playlist.name)'")
                     self.image = image
                 }
             )

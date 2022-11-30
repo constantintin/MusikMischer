@@ -92,9 +92,8 @@ struct RecoQueuerView: View {
         
         spotify.api.queue()
             .receive(on: RunLoop.main)
-            .sink(receiveCompletion: { completion in
-                print("Getting context completion: \(completion)")
-            }, receiveValue: { context in
+            .sink(receiveCompletion: { _ in },
+                  receiveValue: { context in
                 switch context.currentlyPlaying {
                 case let .some(.track(track)):
                     if let uri = track.uri {

@@ -57,9 +57,7 @@ struct PlaylistQueuerView: View {
             .extendPagesConcurrently(self.spotify.api)
             .receive(on: RunLoop.main)
             .sink(
-                receiveCompletion: { completion in
-                    print("Getting playlist item completion: \(completion)")
-                },
+                receiveCompletion: { _ in },
                 receiveValue: { trackPage in
                     for playlistTrack in trackPage.items {
                         switch playlistTrack.item {

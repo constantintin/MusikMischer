@@ -84,14 +84,13 @@ struct TrackQueueableView: View {
         if let uri = self.track.uri {
             spotify.api.addToQueue(uri)
             .receive(on: RunLoop.main)
-            .sink(receiveCompletion: { completion in
-                print("Getting context completion: \(completion)")
-            }, receiveValue: { context in
-                print("Got context: \(context)")
-            })
+            .sink(receiveCompletion: { _ in
+                print("Added \(self.track.name) to queue")
+            },
+                  receiveValue: { _ in })
             .store(in: &cancellables)
         } else {
-            print("\(self.track) has no uri?")
+            print("\(self.track.name) has no uri, not adding to queue")
         }
     }
     
@@ -113,18 +112,14 @@ struct TrackQueueableView: View {
         // check if `self.image == nil` because the image might have already
         // been requested, but not loaded yet.
         if self.didRequestImage {
-            // print("already requested image for '\(self.track.name)'")
             return
         }
         self.didRequestImage = true
         
         guard let spotifyImage = self.track.album?.images?.last else {
-            // print("no image found for '\(self.track.name)'")
             return
         }
 
-        // print("loading image for '\(self.track.name)'")
-        
         // Note that a `Set<AnyCancellable>` is NOT being used so that each time
         // a request to load the image is made, the previous cancellable
         // assigned to `loadImageCancellable` is deallocated, which cancels the
@@ -134,7 +129,6 @@ struct TrackQueueableView: View {
             .sink(
                 receiveCompletion: { _ in },
                 receiveValue: { image in
-                    // print("received image for '\(self.track.name)'")
                     self.image = image
                 }
             )

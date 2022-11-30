@@ -232,7 +232,7 @@ struct SorterOverView: View {
                         if let items = searchResult.tracks?.items {
                             self.searchTracks += items
                         } else {
-                            print("Search was empty")
+                            print("Track search was empty")
                             self.couldntLoadTracks = true
                         }
                         
@@ -337,9 +337,8 @@ struct SorterOverView: View {
     func skipToNext() {
         spotify.api.skipToNext()
             .receive(on: RunLoop.main)
-            .sink(receiveCompletion: { completion in
-                print("Getting user completion: \(completion)")
-            }, receiveValue: { _ in
+            .sink(receiveCompletion: { _ in },
+                  receiveValue: { _ in
                 retrieveCurrentlyPlaying()
             })
             .store(in: &cancellables)
@@ -349,50 +348,49 @@ struct SorterOverView: View {
     func addPlaylist(_ name: String) {
         if let uri = spotify.currentUser?.uri {
             spotify.api.createPlaylist(for: uri,
-                                          PlaylistDetails(name: name, isPublic: false, isCollaborative: nil, description: nil))
-                .receive(on: RunLoop.main)
-                .sink(receiveCompletion: { completion in
-                    print("Getting user completion: \(completion)")
-                }, receiveValue: { newPlaylist in
-                    // add current track to new playlist
-                    if let uri = self.currentTrack.track?.uri {
-                        self.spotify.api.addToPlaylist(newPlaylist.uri, uris: [uri], position: nil)
-                            .receive(on: RunLoop.main)
-                            .sink(
-                                receiveCompletion: { completion in
-                                    switch completion {
-                                        case .finished:
-                                            print("Added '\(self.currentTrack.track?.name)' to '\(newPlaylist.name)'")
-                                        case .failure(let error):
-                                            print("Adding to playlist failed with \(error)")
-                                    }
-                                },
-                                receiveValue: { _ in }
-                            ).store(in: &cancellables)
-                    } else {
-                        print("Current track \(self.currentTrack.track) has no uri")
-                    }
-                    
-                    // add new playlist to view
-                    spotify.api.currentUserPlaylists()
-                        // Gets all pages of playlists.
-                        .extendPagesConcurrently(spotify.api)
+                                       PlaylistDetails(name: name, isPublic: false, isCollaborative: nil, description: nil))
+            .receive(on: RunLoop.main)
+            .sink(receiveCompletion: { _ in },
+                  receiveValue: { newPlaylist in
+                // add current track to new playlist
+                if let uri = self.currentTrack.track?.uri {
+                    self.spotify.api.addToPlaylist(newPlaylist.uri, uris: [uri], position: nil)
                         .receive(on: RunLoop.main)
                         .sink(
-                            receiveCompletion: { _ in },
-                            receiveValue: { playlistsPage in
-                                let playlists = playlistsPage.items
-                                for playlist in playlists {
-                                    if playlist.uri == newPlaylist.uri {
-                                        self.playlists.insert(playlist, at: 0)
-                                        self.filteredPlaylists.insert(playlist, at: 0)
-                                    }
+                            receiveCompletion: { completion in
+                                switch completion {
+                                case .finished:
+                                    print("Added '\(self.currentTrack.track?.name ?? "")' to '\(newPlaylist.name)'")
+                                case .failure(let error):
+                                    print("Adding '\(self.currentTrack.track?.name ?? "")' to playlist failed with \(error)")
+                                }
+                            },
+                            receiveValue: { _ in }
+                        ).store(in: &cancellables)
+                } else {
+                    print("Current track has no uri, not adding to playlist")
+                }
+                
+                // add new playlist to view
+                spotify.api.currentUserPlaylists()
+                // Gets all pages of playlists.
+                    .extendPagesConcurrently(spotify.api)
+                    .receive(on: RunLoop.main)
+                    .sink(
+                        receiveCompletion: { _ in },
+                        receiveValue: { playlistsPage in
+                            let playlists = playlistsPage.items
+                            for playlist in playlists {
+                                if playlist.uri == newPlaylist.uri {
+                                    self.playlists.insert(playlist, at: 0)
+                                    self.filteredPlaylists.insert(playlist, at: 0)
                                 }
                             }
-                        )
-                        .store(in: &cancellables)
-                })
-                .store(in: &cancellables)
+                        }
+                    )
+                    .store(in: &cancellables)
+            })
+            .store(in: &cancellables)
         }
         self.newPlaylistFieldIsFocused = false
         self.newPlaylistName = ""
@@ -404,9 +402,8 @@ struct SorterOverView: View {
         self.trackIsLoading = true
         spotify.api.currentPlayback()
             .receive(on: RunLoop.main)
-            .sink(receiveCompletion: { completion in
-                print("Getting context completion: \(completion)")
-            }, receiveValue: { optionalContext in
+            .sink(receiveCompletion: { _ in },
+                  receiveValue: { optionalContext in
                 if self.trackIsLoading {
                     if let context = optionalContext {
                         switch context.item {

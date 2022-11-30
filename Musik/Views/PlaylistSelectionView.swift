@@ -110,9 +110,9 @@ struct PlaylistSelectionView: View {
                                 self.trackUris.removeAll { value in
                                     value == uri
                                 }
-                                print("Removed '\(self.current.track?.name)' from '\(self.playlist.name)'")
+                                print("Removed '\(self.current.track?.name ?? "")' from '\(self.playlist.name)'")
                             case .failure(let error):
-                            self.selected.toggle()
+                                self.selected.toggle()
                                 print("Deleting from playlist failed with \(error)")
                         }
                     },
@@ -121,7 +121,7 @@ struct PlaylistSelectionView: View {
                     }
                 ).store(in: &cancellables)
         } else {
-            print("Current track \(self.current.track) has no uri")
+            print("Current track has no uri, not deleting from playlist")
         }
     }
     
@@ -138,7 +138,7 @@ struct PlaylistSelectionView: View {
                         switch completion {
                             case .finished:
                                 self.trackUris.append(uri)
-                                print("Added '\(self.current.track?.name)' to '\(self.playlist.name)'")
+                                print("Added '\(self.current.track?.name ?? "")' to '\(self.playlist.name)'")
                             case .failure(let error):
                                 self.selected.toggle()
                                 print("Adding to playlist failed with \(error)")
@@ -149,7 +149,7 @@ struct PlaylistSelectionView: View {
                     }
                 ).store(in: &cancellables)
         } else {
-            print("Current track \(self.current.track) has no uri??")
+            print("Current track has no uri, not adding to playlist")
         }
     }
     
@@ -161,7 +161,7 @@ struct PlaylistSelectionView: View {
             if let trackUri = track?.uri {
                 self.selected = self.trackUris.contains(trackUri)
             } else {
-                print("Track \(track?.name) has no uri??")
+                print("Track '\(track?.name ?? "")' has no uri, can't check if in playlist")
             }
         } else {
             self.selected = false
@@ -200,12 +200,9 @@ struct PlaylistSelectionView: View {
         self.didRequestImage = true
         
         guard let spotifyImage = self.playlist.images.largest else {
-            // print("no image found for '\(playlist.name)'")
             return
         }
 
-        // print("loading image for '\(playlist.name)'")
-        
         // Note that a `Set<AnyCancellable>` is NOT being used so that each time
         // a request to load the image is made, the previous cancellable
         // assigned to `loadImageCancellable` is deallocated, which cancels the
@@ -215,7 +212,6 @@ struct PlaylistSelectionView: View {
             .sink(
                 receiveCompletion: { _ in },
                 receiveValue: { image in
-                    // print("received image for '\(playlist.name)'")
                     self.image = image
                 }
             )
