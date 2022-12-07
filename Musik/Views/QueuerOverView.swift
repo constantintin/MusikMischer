@@ -12,6 +12,7 @@ import Combine
 
 struct QueuerOverView: View {
     @EnvironmentObject var spotify: Spotify
+    @EnvironmentObject var backend: Backend
     @Environment(\.openURL) var openURL
     
     @State private var alert: AlertItem? = nil

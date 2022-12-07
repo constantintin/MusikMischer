@@ -5,6 +5,8 @@ struct SettingsView: View {
     
     @EnvironmentObject var spotify: Spotify
     
+    @EnvironmentObject var backend: Backend
+    
     @State private var cancellables: Set<AnyCancellable> = []
 
     var body: some View {
@@ -33,6 +35,10 @@ struct SettingsView: View {
                         
                     })
                     .store(in: &self.cancellables)
+                }
+                Picker("Backend", selection: $backend.type) {
+                    Text("Spotify").tag(BackendType.spotify)
+                    Text("Apple Music").tag(BackendType.appleMusic)
                 }
             }
             .navigationBarTitle("Settings")

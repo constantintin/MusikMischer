@@ -5,6 +5,7 @@ import SpotifyWebAPI
 struct RootView: View {
     
     @EnvironmentObject var spotify: Spotify
+    @EnvironmentObject var backend: Backend
     
     @State private var alert: AlertItem? = nil
 

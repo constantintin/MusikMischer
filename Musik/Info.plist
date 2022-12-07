@@ -31,6 +31,8 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>Musik uses Apple Music to help you make the most of your music.</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<string>spotify</string>
 	<key>LSRequiresIPhoneOS</key>
