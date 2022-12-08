@@ -27,8 +27,12 @@ struct TrackQueueableView: View {
 
     @State private var alert: AlertItem? = nil
     
+    let track: MusikTrack
     
-    let track: Track
+    init(_ track: MusikTrack) {
+        self.track = track
+    }
+    
     
     var body: some View {
         HStack() {
@@ -37,7 +41,7 @@ struct TrackQueueableView: View {
                 .aspectRatio(1, contentMode: .fill)
                 .frame(width: 42, height: 42)
             VStack(alignment: .leading) {
-                Text(track.name)
+                Text(track.title)
                     .lineLimit(1)
                     .truncationMode(.tail)
                     .font(.system(size: 14))
@@ -70,67 +74,63 @@ struct TrackQueueableView: View {
                 self.bgOpacity = 0.1
             }
         }
-        .onLongPressGesture(perform: {
-            if let artistUri = track.album?.uri {
-                if let url = URL(string: artistUri) {
-                    openURL(url)
-                }
-            }
-        })
+//        .onLongPressGesture(perform: {
+//            if let artistUri = track.album?.uri {
+//                if let url = URL(string: artistUri) {
+//                    openURL(url)
+//                }
+//            }
+//        })
     }
     
     /// add track to end of queue
     func queueTrack() {
-        if let uri = self.track.uri {
-            spotify.api.addToQueue(uri)
+        let uri = "spotify:track:\(self.track.id)"
+        spotify.api.addToQueue(uri)
             .receive(on: RunLoop.main)
             .sink(receiveCompletion: { _ in
-                print("Added \(self.track.name) to queue")
+                print("Added \(self.track.title) to queue")
             },
                   receiveValue: { _ in })
             .store(in: &cancellables)
-        } else {
-            print("\(self.track.name) has no uri, not adding to queue")
-        }
     }
     
     /// The display name for the track. E.g., "Eclipse - Pink Floyd".
     func trackArtists() -> String {
         var display = ""
-        if let artists = track.artists {
-            for artist in artists {
-                display += "\(artist.name), "
-            }
-            display = String(display.dropLast(2))
+        for artist in track.artists {
+            display += "\(artist), "
         }
+        display = String(display.dropLast(2))
         return display
     }
     
     /// load album image
     func loadImage() {
+        return
         // Return early if the image has already been requested. We can't just
         // check if `self.image == nil` because the image might have already
         // been requested, but not loaded yet.
-        if self.didRequestImage {
-            return
-        }
-        self.didRequestImage = true
-        
-        guard let spotifyImage = self.track.album?.images?.last else {
-            return
-        }
-
-        // Note that a `Set<AnyCancellable>` is NOT being used so that each time
-        // a request to load the image is made, the previous cancellable
-        // assigned to `loadImageCancellable` is deallocated, which cancels the
-        // publisher.
-        self.loadImageCancellable = spotifyImage.load()
-            .receive(on: RunLoop.main)
-            .sink(
-                receiveCompletion: { _ in },
-                receiveValue: { image in
-                    self.image = image
-                }
-            )
+//        if self.didRequestImage {
+//            return
+//        }
+//        self.didRequestImage = true
+//
+//        guard let spotifyImage = self.track.album?.images?.last else {
+//            return
+//        }
+//
+//        // Note that a `Set<AnyCancellable>` is NOT being used so that each time
+//        // a request to load the image is made, the previous cancellable
+//        // assigned to `loadImageCancellable` is deallocated, which cancels the
+//        // publisher.
+//        self.loadImageCancellable = spotifyImage.load()
+//            .receive(on: RunLoop.main)
+//            .sink(
+//                receiveCompletion: { _ in },
+//                receiveValue: { image in
+//                    self.image = image
+//                }
+//            )
     }
 }

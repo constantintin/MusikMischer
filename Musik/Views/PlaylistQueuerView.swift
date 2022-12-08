@@ -13,7 +13,7 @@ import Combine
 struct PlaylistQueuerView: View {
     var spotify: Spotify
     private let playlist: Playlist<PlaylistItemsReference>
-    @State private var tracks: [Track] = []
+    @State private var tracks: [MusikTrack] = []
     
     @State private var cancellables: Set<AnyCancellable> = []
     
@@ -25,8 +25,8 @@ struct PlaylistQueuerView: View {
     var body: some View {
         ScrollView(.vertical) {
             LazyVStack(alignment: .leading, spacing: 10) {
-                ForEach(self.tracks, id: \.uri) { track in
-                    TrackQueueableView(track: track)
+                ForEach(self.tracks, id: \.id) { track in
+                    TrackQueueableView(track)
                 }
             }
         }
@@ -62,7 +62,7 @@ struct PlaylistQueuerView: View {
                     for playlistTrack in trackPage.items {
                         switch playlistTrack.item {
                         case .track(let track):
-                            self.tracks.append(track)
+                            self.tracks.append(MusikTrack(spotifyTrack: track))
                         default:
                             break
                         }

@@ -15,7 +15,7 @@ struct SearchQueuerView: View {
     
     @State var searchText = ""
     
-    @State private var tracks: [Track] = []
+    @State private var tracks: [MusikTrack] = []
     
     @State private var cancellables: Set<AnyCancellable> = []
     
@@ -63,8 +63,8 @@ struct SearchQueuerView: View {
                 .padding(.vertical, 15)
             
             LazyVStack(alignment: .leading, spacing: 5) {
-                ForEach(self.tracks, id: \.uri) { track in
-                    TrackQueueableView(track: track)
+                ForEach(self.tracks, id: \.id) { track in
+                    TrackQueueableView(track)
                 }
             }
         }
@@ -99,7 +99,7 @@ struct SearchQueuerView: View {
                     },
                     receiveValue: { searchResult in
                         if let items = searchResult.tracks?.items {
-                            self.tracks += items
+                            self.tracks += items.map { MusikTrack(spotifyTrack: $0 )}
                         } else {
                             print("Search was empty")
                             self.couldntLoadTracks = true

@@ -13,7 +13,7 @@ import Combine
 struct RecoQueuerView: View {
     var spotify: Spotify
     
-    @State private var tracks: [Track] = []
+    @State private var tracks: [MusikTrack] = []
     
     @State private var cancellables: Set<AnyCancellable> = []
     
@@ -65,8 +65,8 @@ struct RecoQueuerView: View {
             else {
                 ScrollView(.vertical) {
                     LazyVStack(alignment: .leading, spacing: 5) {
-                        ForEach(self.tracks, id: \.uri) { track in
-                            TrackQueueableView(track: track)
+                        ForEach(self.tracks, id: \.id) { track in
+                            TrackQueueableView(track)
                         }
                     }
                 }
@@ -120,7 +120,7 @@ struct RecoQueuerView: View {
                                     }
                                 },
                                 receiveValue: { recoResponse in
-                                    self.tracks += recoResponse.tracks
+                                    self.tracks += recoResponse.tracks.map { MusikTrack(spotifyTrack: $0) }
                                 }
                             )
                             .store(in: &cancellables)

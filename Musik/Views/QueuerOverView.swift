@@ -105,7 +105,7 @@ struct QueuerOverView: View {
     var queuerNavigation: some View {
         let viewsAndTexts: [(view: AnyView, text: String)] = [
             (AnyView(RecoQueuerView(spotify: self.spotify)), "📻  Recos"),
-            (AnyView(LikedQueuerView(spotify: self.spotify)), "❤️  Liked"),
+            (AnyView(LikedQueuerView()), "❤️  Liked"),
             (AnyView(SearchQueuerView(spotify: self.spotify)), "🔍  Search"),
         ]
         

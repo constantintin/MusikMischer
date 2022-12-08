@@ -8,13 +8,15 @@
 import Foundation
 import SwiftUI
 import SpotifyWebAPI
+import MusicKit
 import Combine
 
 struct LikedQueuerView: View {
-    var spotify: Spotify
+    @EnvironmentObject var spotify: Spotify
+    @EnvironmentObject var backend: Backend
     
-    @State private var tracks: [Track] = []
-    @State private var filteredTracks: [Track] = []
+    @State private var tracks: [MusikTrack] = []
+    @State private var filteredTracks: [MusikTrack] = []
     
     @State private var searchText = ""
     
@@ -24,10 +26,6 @@ struct LikedQueuerView: View {
     @State private var couldntLoadTracks = false
     
     @State private var alert: AlertItem? = nil
-    
-    init(spotify: Spotify) {
-        self.spotify = spotify
-    }
     
     var body: some View {
         VStack {
@@ -55,8 +53,8 @@ struct LikedQueuerView: View {
             else {
                 ScrollView(.vertical) {
                     LazyVStack(alignment: .leading, spacing: 5) {
-                        ForEach(self.filteredTracks, id: \.uri) { track in
-                            TrackQueueableView(track: track)
+                        ForEach(self.filteredTracks, id: \.id) { track in
+                            TrackQueueableView(track)
                         }
                     }
                 }
@@ -69,7 +67,9 @@ struct LikedQueuerView: View {
                 }
             }
         }
-        .onAppear(perform: loadTracks)
+        .onAppear {
+            loadLikedTracks(self.backend.type)
+        }
         .navigationBarTitle("Liked Songs")
         .navigationBarItems(trailing:
                                 HStack {
@@ -84,12 +84,10 @@ struct LikedQueuerView: View {
             filteredTracks = tracks
         } else {
             filteredTracks = tracks.filter {
-                var trackTextToSearch = $0.name
-                if let artists = $0.artists {
-                    for artist in artists {
-                        trackTextToSearch += " \(artist.name)"
-                            
-                    }
+                var trackTextToSearch = $0.title
+                for artist in $0.artists {
+                    trackTextToSearch += " \(artist)"
+                    
                 }
                 return trackTextToSearch.localizedCaseInsensitiveContains(searchText)
             }
@@ -109,7 +107,17 @@ struct LikedQueuerView: View {
         self.filteredTracks.shuffle()
     }
     
-    func loadTracks() {
+    
+    func loadLikedTracks(_ backend: BackendType) {
+        switch backend {
+        case .spotify:
+            loadLikedTracksSpotify()
+        case .appleMusic:
+            loadLikedTracksAppleMusic()
+        }
+    }
+    
+    func loadLikedTracksSpotify() {
         self.isLoadingTracks = true
         
         spotify.api.currentUserSavedTracks()
@@ -119,21 +127,27 @@ struct LikedQueuerView: View {
                 receiveCompletion: { completion in
                     self.isLoadingTracks = false
                     switch completion {
-                        case .finished:
-                            self.couldntLoadTracks = false
-                        case .failure(let error):
-                            self.couldntLoadTracks = true
-                            self.alert = AlertItem(
-                                title: "Couldn't Retrieve Tracks",
-                                message: error.localizedDescription
-                            )
+                    case .finished:
+                        self.couldntLoadTracks = false
+                    case .failure(let error):
+                        self.couldntLoadTracks = true
+                        self.alert = AlertItem(
+                            title: "Couldn't Retrieve Tracks",
+                            message: error.localizedDescription
+                        )
                     }
                 },
                 receiveValue: { savedTracksPage in
-                    self.tracks += savedTracksPage.items.map(\.item)
-                    self.filteredTracks += savedTracksPage.items.map(\.item)
+                    self.tracks += savedTracksPage.items.map { MusikTrack(spotifyTrack: $0.item) }
+                    self.filteredTracks += savedTracksPage.items.map { MusikTrack(spotifyTrack: $0.item) }
                 }
             )
             .store(in: &cancellables)
+        
     }
+    
+    func loadLikedTracksAppleMusic() {
+        print("Load apple music liked tracks")
+    }
+
 }
