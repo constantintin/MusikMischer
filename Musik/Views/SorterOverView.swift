@@ -113,6 +113,7 @@ struct SorterOverView: View {
                         TrackView(track: $currentTrack.track)
                             .onTapGesture {
                                 self.presentSearch = true
+                                loadRecentTracks()
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                                     self.focusTrackSearch = true
                                 }
@@ -205,6 +206,19 @@ struct SorterOverView: View {
                 }
             }
         }
+    }
+    
+    func loadRecentTracks() {
+        self.spotify.api.recentlyPlayed(limit: 7)
+            .extendPages(self.spotify.api)
+            .receive(on: RunLoop.main)
+            .sink(
+                receiveCompletion: { _ in },
+                receiveValue: { recentlyPlayedPage in
+                    self.searchTracks += recentlyPlayedPage.items.map(\.track)
+                }
+            )
+            .store(in: &cancellables)
     }
     
     func loadTracks(_ searchText: String) {
