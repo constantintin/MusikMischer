@@ -16,7 +16,7 @@ struct TrackView: View {
     @State private var operating: Bool = false
     
     @State private var didRequestImage = false
-    @State private var image = Image(.spotifyAlbumPlaceholder)
+    @State private var image = Image(ImageName.spotifyAlbumPlaceholder)
 
     @State private var alert: AlertItem? = nil
 

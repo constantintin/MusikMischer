@@ -18,7 +18,7 @@ struct TrackSelectableView: View {
     @State private var cancellables: Set<AnyCancellable> = []
     
     @State private var didRequestImage = false
-    @State private var image = Image(.spotifyAlbumPlaceholder)
+    @State private var image = Image(ImageName.spotifyAlbumPlaceholder)
 
     @State private var alert: AlertItem? = nil
     
@@ -28,7 +28,7 @@ struct TrackSelectableView: View {
         HStack() {
             image
                 .resizable()
-                .aspectRatio(1, contentMode: .fill)
+                .aspectRatio(1, contentMode: ContentMode.fill)
                 .frame(width: 42, height: 42)
             VStack(alignment: .leading) {
                 Text(track.name)

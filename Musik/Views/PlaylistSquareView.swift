@@ -16,7 +16,7 @@ struct PlaylistSquareView: View {
     
     private let playlist: Playlist<PlaylistItemsReference>
     /// The cover image for the playlist.
-    @State private var image = Image(.spotifyAlbumPlaceholder)
+    @State private var image = Image(ImageName.spotifyAlbumPlaceholder)
 
     @State private var didRequestImage = false
     @State private var snapshot: String

@@ -23,7 +23,7 @@ struct TrackQueueableView: View {
     @State private var bgOpacity = 0.1
     
     @State private var didRequestImage = false
-    @State private var image = Image(.spotifyAlbumPlaceholder)
+    @State private var image = Image(ImageName.spotifyAlbumPlaceholder)
 
     @State private var alert: AlertItem? = nil
     
