@@ -2,6 +2,12 @@ import SwiftUI
 import Combine
 import SpotifyWebAPI
 
+enum Tabs: String {
+    case queuer
+    case sorter
+    case settings
+}
+
 struct RootView: View {
     
     @EnvironmentObject var spotify: Spotify
@@ -9,10 +15,11 @@ struct RootView: View {
     @State private var alert: AlertItem? = nil
 
     @State private var cancellables: Set<AnyCancellable> = []
-    
+
+    @State private var selectedTab = Tabs.queuer
+
     var body: some View {
-        NavigationView {
-            TabView {
+            TabView(selection: $selectedTab) {
                 QueuerOverView()
                     .tabItem {
                         Image(systemName: "text.line.last.and.arrowtriangle.forward")
@@ -30,20 +37,19 @@ struct RootView: View {
                     }
             }
             .disabled(!spotify.isAuthorized)
-        }
         // The login view is presented if `Spotify.isAuthorized` == `false. When
         // the login button is tapped, `Spotify.authorize()` is called. After
         // the login process successfully completes, `Spotify.isAuthorized` will
         // be set to `true` and `LoginView` will be dismissed, allowing the user
         // to interact with the rest of the app.
-        .modifier(LoginView())
+            .modifier(LoginView())
         // Presented if an error occurs during the process of authorizing with
         // the user's Spotify account.
-        .alert(item: $alert) { alert in
-            Alert(title: alert.title, message: alert.message)
-        }
+            .alert(item: $alert) { alert in
+                Alert(title: alert.title, message: alert.message)
+            }
         // Called when a redirect is received from Spotify.
-        .onOpenURL(perform: handleURL(_:))
+            .onOpenURL(perform: handleURL(_:))
         
     }
     

@@ -28,7 +28,7 @@ struct QueuerOverView: View {
     
     var body: some View {
         GeometryReader { geo in
-            NavigationView {
+            NavigationStack {
                 VStack {
                     if playlists.isEmpty {
                         if isLoadingPlaylists {
@@ -86,12 +86,14 @@ struct QueuerOverView: View {
                         .frame(maxHeight: 42)
                         .padding([.leading, .trailing, .bottom], 10)
                 }
-                .navigationBarTitle("Queue")
-                .navigationBarItems(trailing:
-                                        HStack {
-                    SpotifyButtonView(uriString: "spotify:")
-                    refreshButton
-                })
+                .navigationTitle("Queue")
+                .toolbarTitleDisplayMode(.inlineLarge)
+                .toolbar {
+                    ToolbarItemGroup(placement: .topBarTrailing) {
+                        SpotifyButtonView(uriString: "spotify:")
+                        refreshButton
+                    }
+                }
                 .alert(item: $alert) { alert in
                     Alert(title: alert.title, message: alert.message)
                 }

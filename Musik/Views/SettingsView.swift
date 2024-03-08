@@ -8,7 +8,7 @@ struct SettingsView: View {
     @State private var cancellables: Set<AnyCancellable> = []
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List {
                 Button(action: spotify.api.authorizationManager.deauthorize, label: {
                     Text("Logout")
@@ -35,7 +35,7 @@ struct SettingsView: View {
                     .store(in: &self.cancellables)
                 }
             }
-            .navigationBarTitle("Settings")
+            .navigationTitle("Settings")
         }
     }
 }

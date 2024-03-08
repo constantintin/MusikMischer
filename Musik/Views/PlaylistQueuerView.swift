@@ -31,7 +31,8 @@ struct PlaylistQueuerView: View {
             }
         }
         .onAppear(perform: loadTracks)
-        .navigationBarTitle(self.playlist.name)
+        .navigationTitle(self.playlist.name)
+        .toolbarTitleDisplayMode(.inlineLarge)
         .navigationBarItems(trailing:
                                 HStack {
             SpotifyButtonView(uriString: playlist.uri)

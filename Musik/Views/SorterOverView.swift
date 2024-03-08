@@ -53,7 +53,7 @@ struct SorterOverView: View {
 
     var body: some View {
         GeometryReader { geo in
-            NavigationView {
+            NavigationStack {
                 VStack {
                     if playlists.isEmpty {
                         if isLoadingPlaylists {
@@ -126,12 +126,14 @@ struct SorterOverView: View {
                     .padding(.top, 2)
                     .padding(.bottom, 7)
                 }
-                .navigationBarTitle("Sort")
-                .navigationBarItems(trailing:
-                                        HStack {
-                    SpotifyButtonView(uriString: "spotify:")
-                    refreshButton
-                })
+                .navigationTitle("Sort")
+                .toolbarTitleDisplayMode(.inlineLarge)
+                .toolbar {
+                    ToolbarItemGroup(placement: .topBarTrailing) {
+                        SpotifyButtonView(uriString: "spotify:")
+                        refreshButton
+                    }
+                }
                 .alert(item: $alert) { alert in
                     Alert(title: alert.title, message: alert.message)
                 }

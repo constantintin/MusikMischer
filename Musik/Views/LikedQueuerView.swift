@@ -70,7 +70,8 @@ struct LikedQueuerView: View {
             }
         }
         .onAppear(perform: loadTracks)
-        .navigationBarTitle("Liked Songs")
+        .navigationTitle("Liked Songs")
+        .toolbarTitleDisplayMode(.inlineLarge)
         .navigationBarItems(trailing:
                                 HStack {
             SpotifyButtonView(uriString: "https://open.spotify.com/collection/tracks")

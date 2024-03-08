@@ -73,7 +73,8 @@ struct SearchQueuerView: View {
                 focusSearch = true
             }
         }
-        .navigationBarTitle("Search")
+        .navigationTitle("Search")
+        .toolbarTitleDisplayMode(.inlineLarge)
     }
     
     func loadTracks(_ searchText: String) {
