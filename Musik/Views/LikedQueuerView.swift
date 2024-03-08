@@ -61,7 +61,7 @@ struct LikedQueuerView: View {
                     }
                 }
                 .searchable(text: $searchText, prompt: "Search By Song Name")
-                .onChange(of: searchText) { _ in
+                .onChange(of: searchText) {
                     filterTracks()
                 }
                 .onSubmit(of: .search) {

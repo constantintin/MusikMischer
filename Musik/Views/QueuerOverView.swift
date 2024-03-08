@@ -52,6 +52,10 @@ struct QueuerOverView: View {
                                 .font(.title)
                                 .foregroundColor(.secondary)
                                 .frame(maxHeight: .infinity)
+                                .onTapGesture {
+                                    retrievePlaylists()
+                                    loadedPlaylists = true
+                                }
                         }
                     }
                     else {
@@ -67,7 +71,7 @@ struct QueuerOverView: View {
                                 }
                             }
                             .searchable(text: $searchText, prompt: "Search By Playlist Name")
-                            .onChange(of: searchText) { _ in
+                            .onChange(of: searchText) {
                                 filterPlaylists()
                             }
                             .onSubmit(of: .search) {
@@ -96,6 +100,10 @@ struct QueuerOverView: View {
                         retrievePlaylists()
                         loadedPlaylists = true
                     }
+                }
+                .onChange(of: self.spotify.isAuthorized, initial: false) {
+                    retrievePlaylists()
+                    loadedPlaylists = true
                 }
             }
         }
@@ -155,6 +163,10 @@ struct QueuerOverView: View {
     
     /// get playlists for user
     func retrievePlaylists() {
+        guard self.spotify.isAuthorized else {
+            return
+        }
+
         self.isLoadingPlaylists = true
         self.playlists = []
         self.filteredPlaylists = []

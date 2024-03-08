@@ -84,11 +84,11 @@ struct TrackView: View {
             isLiked()
             loadImage()
         }
-        .onChange(of: self.track, perform: { _ in
+        .onChange(of: self.track) {
             isLiked()
             self.didRequestImage = false
             loadImage()
-        })
+        }
     }
     
     /// heart either filled or empty

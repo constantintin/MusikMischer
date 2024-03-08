@@ -31,7 +31,7 @@ struct RecoQueuerView: View {
     var body: some View {
         VStack {
             Toggle("**Reco with Queue**", isOn: $isWithQueue)
-                .onChange(of: isWithQueue) { _ in
+                .onChange(of: isWithQueue) {
                     loadTracks()
                 }
                 .tint(.green)

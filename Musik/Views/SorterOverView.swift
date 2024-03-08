@@ -50,13 +50,7 @@ struct SorterOverView: View {
     @FocusState private var newPlaylistFieldIsFocused: Bool
     
     @State private var alert: AlertItem? = nil
-    
-    let columns = [
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-        GridItem(.flexible())
-    ]
-    
+
     var body: some View {
         GeometryReader { geo in
             NavigationView {
@@ -97,7 +91,7 @@ struct SorterOverView: View {
                             }
                         }
                         .searchable(text: $searchText, prompt: "Search By Playlist Name")
-                        .onChange(of: searchText) { _ in
+                        .onChange(of: searchText) {
                             filterPlaylists()
                         }
                         .onSubmit(of: .search) {
