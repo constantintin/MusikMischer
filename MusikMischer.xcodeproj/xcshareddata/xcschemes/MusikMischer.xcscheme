@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "470812E82515E4D700794934"
-               BuildableName = "MusikMixer.app"
-               BlueprintName = "MusikMixer"
-               ReferencedContainer = "container:Musik.xcodeproj">
+               BuildableName = "MusikMischer.app"
+               BlueprintName = "MusikMischer"
+               ReferencedContainer = "container:MusikMischer.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -46,9 +46,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "470812E82515E4D700794934"
-            BuildableName = "MusikMixer.app"
-            BlueprintName = "MusikMixer"
-            ReferencedContainer = "container:Musik.xcodeproj">
+            BuildableName = "MusikMischer.app"
+            BlueprintName = "MusikMischer"
+            ReferencedContainer = "container:MusikMischer.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <EnvironmentVariables>
@@ -75,9 +75,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "470812E82515E4D700794934"
-            BuildableName = "MusikMixer.app"
-            BlueprintName = "MusikMixer"
-            ReferencedContainer = "container:Musik.xcodeproj">
+            BuildableName = "MusikMischer.app"
+            BlueprintName = "MusikMischer"
+            ReferencedContainer = "container:MusikMischer.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

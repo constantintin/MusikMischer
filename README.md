@@ -1,4 +1,4 @@
-# Musik for Spotify
+# MusikMischer for Spotify
 iOS app to extend functionality of Spotify.
 ## Sort
 Sort currently playing song into owned playlists by selecting them graphically.

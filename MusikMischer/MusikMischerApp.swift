@@ -3,7 +3,7 @@ import Combine
 import SpotifyWebAPI
 
 @main
-struct MusikApp: App {
+struct MusikMischerApp: App {
 
     @StateObject var spotify = Spotify()
 

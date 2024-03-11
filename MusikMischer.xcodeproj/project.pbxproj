@@ -19,7 +19,7 @@
 		388CB4AF26ADC025002BB269 /* PlaylistSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388CB4AE26ADC025002BB269 /* PlaylistSelectionView.swift */; };
 		38FE2B60291CD91F003DE4FD /* LikedQueuerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38FE2B5F291CD91F003DE4FD /* LikedQueuerView.swift */; };
 		38FE2B62291D5FC3003DE4FD /* RecoQueuerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38FE2B61291D5FC3003DE4FD /* RecoQueuerView.swift */; };
-		470812ED2515E4D700794934 /* MusikApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470812EC2515E4D700794934 /* MusikApp.swift */; };
+		470812ED2515E4D700794934 /* MusikMischerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470812EC2515E4D700794934 /* MusikMischerApp.swift */; };
 		470812EF2515E4D700794934 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470812EE2515E4D700794934 /* RootView.swift */; };
 		470812F12515E4DA00794934 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 470812F02515E4DA00794934 /* Assets.xcassets */; };
 		470812F42515E4DA00794934 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 470812F32515E4DA00794934 /* Preview Assets.xcassets */; };
@@ -47,8 +47,8 @@
 		388CB4AE26ADC025002BB269 /* PlaylistSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistSelectionView.swift; sourceTree = "<group>"; };
 		38FE2B5F291CD91F003DE4FD /* LikedQueuerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikedQueuerView.swift; sourceTree = "<group>"; };
 		38FE2B61291D5FC3003DE4FD /* RecoQueuerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecoQueuerView.swift; sourceTree = "<group>"; };
-		470812E92515E4D700794934 /* MusikMixer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MusikMixer.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		470812EC2515E4D700794934 /* MusikApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusikApp.swift; sourceTree = "<group>"; };
+		470812E92515E4D700794934 /* MusikMischer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MusikMischer.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		470812EC2515E4D700794934 /* MusikMischerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusikMischerApp.swift; sourceTree = "<group>"; };
 		470812EE2515E4D700794934 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		470812F02515E4DA00794934 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		470812F32515E4DA00794934 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -78,7 +78,7 @@
 		470812E02515E4D700794934 = {
 			isa = PBXGroup;
 			children = (
-				470812EB2515E4D700794934 /* Musik */,
+				470812EB2515E4D700794934 /* MusikMischer */,
 				470812EA2515E4D700794934 /* Products */,
 				47A93557261A7FF500134BC3 /* Frameworks */,
 			);
@@ -87,15 +87,15 @@
 		470812EA2515E4D700794934 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				470812E92515E4D700794934 /* MusikMixer.app */,
+				470812E92515E4D700794934 /* MusikMischer.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		470812EB2515E4D700794934 /* Musik */ = {
+		470812EB2515E4D700794934 /* MusikMischer */ = {
 			isa = PBXGroup;
 			children = (
-				470812EC2515E4D700794934 /* MusikApp.swift */,
+				470812EC2515E4D700794934 /* MusikMischerApp.swift */,
 				470813112515EB8000794934 /* Model */,
 				470813082515E9F500794934 /* Views */,
 				4708130C2515EB6200794934 /* Project Utilities */,
@@ -103,7 +103,7 @@
 				470812F52515E4DA00794934 /* Info.plist */,
 				470812F22515E4DA00794934 /* Preview Content */,
 			);
-			path = Musik;
+			path = MusikMischer;
 			sourceTree = "<group>";
 		};
 		470812F22515E4DA00794934 /* Preview Content */ = {
@@ -165,9 +165,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		470812E82515E4D700794934 /* MusikMixer */ = {
+		470812E82515E4D700794934 /* MusikMischer */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 470812F82515E4DA00794934 /* Build configuration list for PBXNativeTarget "MusikMixer" */;
+			buildConfigurationList = 470812F82515E4DA00794934 /* Build configuration list for PBXNativeTarget "MusikMischer" */;
 			buildPhases = (
 				470812E52515E4D700794934 /* Sources */,
 				470812E62515E4D700794934 /* Frameworks */,
@@ -179,13 +179,13 @@
 				387BE39826B0257F001823FC /* PBXTargetDependency */,
 				387BE39626B0257A001823FC /* PBXTargetDependency */,
 			);
-			name = MusikMixer;
+			name = MusikMischer;
 			packageProductDependencies = (
 				470813022515E8A200794934 /* KeychainAccess */,
 				47A93561261A808600134BC3 /* SpotifyAPI */,
 			);
 			productName = SpotifyAPIExampleApp;
-			productReference = 470812E92515E4D700794934 /* MusikMixer.app */;
+			productReference = 470812E92515E4D700794934 /* MusikMischer.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -202,7 +202,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 470812E42515E4D700794934 /* Build configuration list for PBXProject "Musik" */;
+			buildConfigurationList = 470812E42515E4D700794934 /* Build configuration list for PBXProject "MusikMischer" */;
 			compatibilityVersion = "Xcode 12.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -219,7 +219,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				470812E82515E4D700794934 /* MusikMixer */,
+				470812E82515E4D700794934 /* MusikMischer */,
 			);
 		};
 /* End PBXProject section */
@@ -259,7 +259,7 @@
 				382BB8AB291E859B00C9AC81 /* SearchQueuerView.swift in Sources */,
 				47C5818C255B1858007EE0CA /* SpotifyAPIExtensions.swift in Sources */,
 				38FE2B62291D5FC3003DE4FD /* RecoQueuerView.swift in Sources */,
-				470812ED2515E4D700794934 /* MusikApp.swift in Sources */,
+				470812ED2515E4D700794934 /* MusikMischerApp.swift in Sources */,
 				386530BC26ADA2ED007FD3E8 /* SorterOverView.swift in Sources */,
 				383BF81A291A5AA000947742 /* PlaylistQueuerView.swift in Sources */,
 			);
@@ -417,15 +417,15 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Musik/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"MusikMischer/Preview Content\"";
 				DEVELOPMENT_TEAM = 6N28793MH7;
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
-				INFOPLIST_FILE = Musik/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = MusikMixer;
+				INFOPLIST_FILE = MusikMischer/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = MusikMischer;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -449,15 +449,15 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Musik/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"MusikMischer/Preview Content\"";
 				DEVELOPMENT_TEAM = 6N28793MH7;
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
-				INFOPLIST_FILE = Musik/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = MusikMixer;
+				INFOPLIST_FILE = MusikMischer/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = MusikMischer;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -476,7 +476,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		470812E42515E4D700794934 /* Build configuration list for PBXProject "Musik" */ = {
+		470812E42515E4D700794934 /* Build configuration list for PBXProject "MusikMischer" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				470812F62515E4DA00794934 /* Debug */,
@@ -485,7 +485,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		470812F82515E4DA00794934 /* Build configuration list for PBXNativeTarget "MusikMixer" */ = {
+		470812F82515E4DA00794934 /* Build configuration list for PBXNativeTarget "MusikMischer" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				470812F92515E4DA00794934 /* Debug */,
